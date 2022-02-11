@@ -1,14 +1,18 @@
-import "dotenv/config";
 import { connect, connection, Error as MongooseError } from "mongoose";
 
 class DB {
-      constructor(private uri: string) {}
+      public constructor(private _uri?: string) {}
 
-      connect(): void {
-            connect(this.uri);
+      public set uri(uri: string) {
+            this._uri = uri;
       }
 
-      track(): void {
+      public async connect(): Promise<void> {
+            if (!this._uri) return;
+            connect(this._uri);
+      }
+
+      public async track(): Promise<void> {
             connection.on("connected", (): void => {
                   console.log("\nConnected to mongoDB ...");
             });
@@ -28,4 +32,4 @@ class DB {
       }
 }
 
-export const db = new DB(process.env.MONGO_URI!);
+export const db = new DB();

@@ -5,5 +5,4 @@
 ### Run the following commands before starting:
 
 - `npm install`
-- `npx tsc`
-- `npm run start`
+- `npm run build` or `npm run serve`

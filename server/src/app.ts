@@ -20,11 +20,16 @@ app.use(express.json());
 
 import { db } from "./db";
 
-let start = (port: number): void => {
+let start = async (port: number): Promise<void> => {
       try {
-            db.track();
+            let uri = process.env.MONGO_URI;
+            if (!uri) return console.log("can't connect to database! ");
 
-            db.connect();
+            db.uri = uri;
+
+            await db.track();
+
+            await db.connect();
 
             server.listen(port, (): void => {
                   console.log(
