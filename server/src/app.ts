@@ -1,6 +1,6 @@
-import "dotenv/config";
 import express from "express";
 import { createServer } from "http";
+import { MONGO, SERVER } from "./config/config";
 
 const app = express();
 const server = createServer(app);
@@ -22,18 +22,13 @@ import { db } from "./db";
 
 let start = async (port: number): Promise<void> => {
       try {
-            let uri = process.env.MONGO_URI;
-            if (!uri) return console.log("can't connect to database! ");
-
-            db.uri = uri;
-
+            db.uri = MONGO.uri;
             await db.track();
-
             await db.connect();
 
             server.listen(port, (): void => {
                   console.log(
-                        `Server listening on port; ${port}. visit http://localhost:${port}`
+                        `Server listening on port; ${port}. visit http://${SERVER.hostname}:${port}`
                   );
             });
       } catch (error) {
@@ -42,4 +37,4 @@ let start = async (port: number): Promise<void> => {
       }
 };
 
-start(Number(process.env.PORT) || 3000);
+start(SERVER.port);
