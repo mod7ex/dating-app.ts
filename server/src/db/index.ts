@@ -26,7 +26,7 @@ class DB {
             });
 
             process.on("SIGINT", async (): Promise<void> => {
-                  await connection.close();
+                  await connection.close(true);
                   process.exit(0);
             });
       }

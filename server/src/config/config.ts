@@ -1,5 +1,4 @@
 import dotenv from "dotenv";
-
 dotenv.config();
 
 const MONGO_HOST = process.env.MONGO_HOST || "cluster0.jp8ac.mongodb.net";
