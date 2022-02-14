@@ -1,23 +1,22 @@
 <template>
       <Guest>
             <h1>Login page</h1>
-            <p>
-                  Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                  Tempore, officiis minima quos harum quasi cumque ipsam amet
-                  debitis vel dignissimos quam, natus suscipit cupiditate animi
-                  aliquam totam unde, voluptates at.
-            </p>
+            <form action="">
+                  <BaseInput />
+            </form>
       </Guest>
 </template>
 
 <script>
 import Guest from "../../layouts/views/Guest.vue";
+import BaseInput from "../../components/forms/BaseInput.vue";
 
 export default {
       name: "Login",
 
       components: {
             Guest,
+            BaseInput,
       },
 };
 </script>

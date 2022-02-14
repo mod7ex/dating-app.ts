@@ -1,6 +1,7 @@
 import express from "express";
 import { createServer } from "http";
 import { MONGO, SERVER } from "./config/config";
+import middleware from "./middlewares";
 
 const app = express();
 const server = createServer(app);
@@ -16,15 +17,21 @@ app.disable("x-powered-by");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.use(middleware.request);
+
+app.use(middleware.notFound, middleware.errorHandler);
+
 /***************************************************/
 
-import { db } from "./db";
+import { db, trackRedis } from "./db";
 
 let start = async (port: number): Promise<void> => {
       try {
             db.uri = MONGO.uri;
             await db.track();
             await db.connect();
+
+            await trackRedis();
 
             server.listen(port, (): void => {
                   console.log(

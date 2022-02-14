@@ -9,4 +9,14 @@ export default class CustomError implements IError {
             public render?: boolean,
             public stack?: string | undefined
       ) {}
+
+      toObject() {
+            return {
+                  message: this.message,
+                  status_code: this.status_code,
+                  name: this.name,
+                  render: this.render,
+                  stack: this.stack,
+            };
+      }
 }

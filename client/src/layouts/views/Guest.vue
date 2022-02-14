@@ -29,16 +29,9 @@ export default {
 
 <style lang="scss">
 .container-guest {
-      max-width: $screen-max-width;
       min-height: 100vh;
-
-      margin: 0 auto;
 
       display: grid;
       grid-template-rows: auto 1fr auto;
-
-      .content {
-            padding: 0.5em;
-      }
 }
 </style>

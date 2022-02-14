@@ -1,9 +1,13 @@
-export const wrap = (fn: (...args: any[]) => any) => {
-      try {
-            fn();
-      } catch (error) {
-            console.log("error in wrap function; ", error);
-      }
+type FnType = (...args: any[]) => any;
+
+export const wrap = (fn: FnType): FnType => {
+      return (...args: any[]) => {
+            try {
+                  fn(...args);
+            } catch (error) {
+                  console.log("error in wrap function; ", error);
+            }
+      };
 };
 
 export const emailRegex = new RegExp(

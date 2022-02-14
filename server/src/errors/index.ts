@@ -3,28 +3,40 @@ import CustomError from "./Custom";
 import NotFoundError from "./NotFound";
 import BadRequestError from "./BadRequest";
 
-export const Err = {
-      errs: {
-            default: CustomError,
-            notFound: NotFoundError,
-            badRequest: BadRequestError,
-            unauthorized: UnauthorizedError,
-      },
+type ErrType =
+      | "CustomError"
+      | "NotFoundError"
+      | "BadRequestError"
+      | "UnauthorizedError";
 
-      throw(name, ...args: any[]): never {
-            let Cls = this.errs[name] || this.errs.default;
+class Err {
+      static create(
+            name: ErrType,
+            ...args: [
+                  message?: string,
+                  render?: boolean,
+                  status_code?: number,
+                  name?: string,
+                  stack?: string | undefined
+            ]
+      ): CustomError {
+            let Cls = eval(name);
+            return new Cls(...args);
+      }
+
+      static throw(
+            name: ErrType,
+            ...args: [
+                  message?: string,
+                  render?: boolean,
+                  status_code?: number,
+                  name?: string,
+                  stack?: string | undefined
+            ]
+      ): never {
+            let Cls = eval(name);
             throw new Cls(...args);
-      },
-};
+      }
+}
 
-// const throwError = (err: Err, ...args: any[]): never => {
-//       let Cls = eval(err);
-//       throw new Cls(...args);
-// };
-
-export default {
-      UnauthorizedError,
-      CustomError,
-      NotFoundError,
-      BadRequestError,
-};
+export { UnauthorizedError, CustomError, NotFoundError, BadRequestError, Err };

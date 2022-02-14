@@ -1,6 +1,8 @@
 <template>
       <footer>
-            <h3>Brand dating site</h3>
+            <div class="content">
+                  <h3>Brand dating site</h3>
+            </div>
       </footer>
 </template>
 
@@ -14,6 +16,5 @@ export default {
 footer {
       background-color: $brand-color;
       color: $white;
-      padding: 1.5em;
 }
 </style>

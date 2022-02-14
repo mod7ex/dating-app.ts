@@ -1,4 +1,6 @@
-import { connect, connection, Error as MongooseError } from "mongoose";
+import { connect, connection, Error } from "mongoose";
+import { createClient, defineScript } from "redis";
+import { REDIS } from "../config/config";
 
 class DB {
       public constructor(private _uri?: string) {}
@@ -17,7 +19,7 @@ class DB {
                   console.log("\nConnected to mongoDB ...");
             });
 
-            connection.on("error", (err: MongooseError): void => {
+            connection.on("error", (err: Error): void => {
                   console.log("mongo error ==> ", err.message);
             });
 
@@ -33,3 +35,40 @@ class DB {
 }
 
 export const db = new DB();
+
+export const redisClient = createClient({
+      socket: {
+            host: REDIS.host,
+            port: REDIS.port,
+      },
+      username: REDIS.username,
+      password: REDIS.password,
+});
+
+export const trackRedis = async () => {
+      console.log("tracking redis now ....................");
+
+      redisClient.on("connect", () => {
+            console.error("\nClient connected to redis ...");
+      });
+
+      redisClient.on("ready", () => {
+            console.error("\nClient connected to redis and ready to use ...");
+      });
+
+      redisClient.on("error", (err) => {
+            console.error(err.message);
+            redisClient.quit();
+      });
+
+      redisClient.on("end", () => {
+            console.error("\nClient disconnected from redis ...");
+      });
+
+      process.on("SIGINT", () => {
+            redisClient.quit();
+            process.exit(0);
+      });
+
+      await redisClient.connect();
+};
