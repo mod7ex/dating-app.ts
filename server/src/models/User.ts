@@ -2,9 +2,7 @@ import bcrypt from "bcrypt";
 import { Schema, model } from "mongoose";
 import { IUser, IUserInput } from "../interfaces/IUser";
 import { emailRegex, passwordRegex } from "../helpers";
-import { JWT_TOKEN } from "../config/config";
-import { redisClient } from "../db";
-
+import { JWT_SECRET } from "../config/config";
 import jwt from "jsonwebtoken";
 
 const userSchema = new Schema<IUser>({
@@ -72,19 +70,13 @@ userSchema.methods = {
       generateJWTToken: async function (this: IUser, expIn: number = 60 * 60) {
             let token = jwt.sign(
                   { username: this.username, _id: this._id },
-                  JWT_TOKEN,
+                  JWT_SECRET,
                   {
                         expiresIn: expIn,
                   }
             );
 
-            await redisClient.setEx(this._id.toString(), expIn, token);
-
             return token;
-      },
-
-      killJWTToken: async function (this: IUser) {
-            await redisClient.del(this._id.toString());
       },
 };
 

@@ -23,15 +23,13 @@ app.use(middleware.notFound, middleware.errorHandler);
 
 /***************************************************/
 
-import { db, trackRedis } from "./db";
+import { db } from "./db";
 
 let start = async (port: number): Promise<void> => {
       try {
             db.uri = MONGO.uri;
             await db.track();
             await db.connect();
-
-            await trackRedis();
 
             server.listen(port, (): void => {
                   console.log(

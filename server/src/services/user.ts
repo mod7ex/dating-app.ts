@@ -20,18 +20,18 @@ export let loginUser = async ({
 }: {
       email: IUser["email"];
       password: IUser["password"];
-}): Promise<IUser | never> => {
+}): Promise<string | never> => {
       let user = await findUser({ email });
 
       if (!user) {
             Err.throw("NotFoundError", "No user found with this email");
       }
 
-      let isVlidPassword = user.comparePassword(password);
+      let isValidPassword = user.comparePassword(password);
 
-      if (!isVlidPassword) Err.throw("UnauthorizedError", "Wrong password");
+      if (!isValidPassword) Err.throw("UnauthorizedError", "Wrong password");
 
-      return user;
+      return user.generateJWTToken();
 };
 
 export let deleteAllUsers = async () => {

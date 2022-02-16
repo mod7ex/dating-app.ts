@@ -2,12 +2,14 @@ import UnauthorizedError from "./Unauthorized";
 import CustomError from "./Custom";
 import NotFoundError from "./NotFound";
 import BadRequestError from "./BadRequest";
+import ForbiddenError from "./Forbidden";
 
 type ErrType =
       | "CustomError"
       | "NotFoundError"
       | "BadRequestError"
-      | "UnauthorizedError";
+      | "UnauthorizedError"
+      | "ForbiddenError";
 
 class Err {
       static create(
@@ -29,8 +31,8 @@ class Err {
             ...args: [
                   message?: string,
                   render?: boolean,
-                  status_code?: number,
                   name?: string,
+                  status_code?: number,
                   stack?: string | undefined
             ]
       ): never {
@@ -39,4 +41,11 @@ class Err {
       }
 }
 
-export { UnauthorizedError, CustomError, NotFoundError, BadRequestError, Err };
+export {
+      ForbiddenError,
+      UnauthorizedError,
+      CustomError,
+      NotFoundError,
+      BadRequestError,
+      Err,
+};

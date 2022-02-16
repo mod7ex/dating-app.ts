@@ -20,7 +20,7 @@ class AuthController {
                         password_confirmation,
                   }: IUserInput = req.body;
 
-                  let user = await createUser({
+                  await createUser({
                         first_name,
                         last_name,
                         username,
@@ -29,27 +29,23 @@ class AuthController {
                         password_confirmation,
                   });
 
-                  let token = await user.generateJWTToken();
+                  let token = await loginUser({ email, password });
 
-                  res.status(StatusCodes.CREATED).json({ token, user });
+                  res.status(StatusCodes.CREATED).json({ token });
             }
       );
 
-      login = wrap(
-            async (
-                  req: Request,
-                  res: Response,
-                  next: NextFunction
-            ): Promise<void> => {
-                  let { email, password }: IUserInput = req.body;
+      async login(
+            req: Request,
+            res: Response,
+            next: NextFunction
+      ): Promise<void> {
+            let { email, password }: IUserInput = req.body;
 
-                  let user = await loginUser({ email, password });
+            let token = await loginUser({ email, password });
 
-                  let token = await user.generateJWTToken();
-
-                  res.status(StatusCodes.OK).json({ token, user });
-            }
-      );
+            res.status(StatusCodes.OK).json({ token });
+      }
 
       logout = wrap(
             async (

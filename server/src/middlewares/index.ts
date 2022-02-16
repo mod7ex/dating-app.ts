@@ -4,12 +4,22 @@ import { Error } from "mongoose";
 import path from "path";
 import fs from "fs/promises";
 import { Mode } from "fs";
-import { APP_PATH } from "../config/config";
+import { APP_PATH, JWT_SECRET } from "../config/config";
+import jwt, { VerifyErrors } from "jsonwebtoken";
+import { StatusCodes } from "http-status-codes";
 
 type LogNatureType = "error" | "request";
 
 class Middleware {
       constructor() {}
+
+      isVerifyErrors(err: Error): err is VerifyErrors {
+            return (
+                  err instanceof jwt.JsonWebTokenError ||
+                  err instanceof jwt.NotBeforeError ||
+                  err instanceof jwt.TokenExpiredError
+            );
+      }
 
       async log(
             data: string,
@@ -42,6 +52,24 @@ class Middleware {
             next();
       };
 
+      auth = (req: Request, res: Response, next: NextFunction): void => {
+            let authHeader = req.headers.authorization;
+
+            let token =
+                  authHeader &&
+                  authHeader.startsWith("Bearer ") &&
+                  authHeader.split(" ")[1];
+
+            if (!token) Err.throw("UnauthorizedError", "Unauthenticated");
+
+            jwt.verify(token, JWT_SECRET, (err, payload) => {
+                  if (err) throw err;
+
+                  req.user = payload;
+                  next();
+            });
+      };
+
       notFound = (req: Request, res: Response, next: NextFunction): never => {
             Err.throw("NotFoundError", "Page not found", true);
       };
@@ -63,7 +91,13 @@ class Middleware {
 
             let error = Err.create("CustomError");
 
-            if (err instanceof CustomError) error = err;
+            if (this.isVerifyErrors(err)) {
+                  error = Err.throw("ForbiddenError");
+            }
+
+            if (err instanceof CustomError) {
+                  error = err;
+            }
 
             // if (err.code == 11000) {
             //       customErr.message = `Duplicate value for ${Object.keys(
@@ -91,6 +125,7 @@ class Middleware {
             }
 
             res.status(error.status_code).json({ error: error.toObject() });
+            return next();
       };
 }
 
