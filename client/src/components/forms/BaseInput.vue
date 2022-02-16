@@ -1,13 +1,16 @@
 <template>
-      <label :for="name">{{ label }}</label>
+      <label :for="name">
+            {{ label }}
+            <slot></slot>
+            <span v-if="mandatory" class="mandatory"></span>
+      </label>
       <input
             :type="type"
-            :name="name"
             :id="name"
-            class="{{class}}"
-            :placeholder="placeholder"
-            :value="value"
-            @input="$emit('update:value', $event.target.value)"
+            :placeholder="label"
+            :value="modelValue"
+            @input="$emit('update:modelValue', $event.target.value)"
+            :autocomplete="autocomplete"
       />
 </template>
 
@@ -16,6 +19,16 @@ export default {
       name: "BaseInput",
 
       props: {
+            autocomplete: {
+                  type: String,
+                  default: "off",
+            },
+
+            mandatory: {
+                  type: Boolean,
+                  default: false,
+            },
+
             label: {
                   type: String,
                   default: "Title",
@@ -31,18 +44,8 @@ export default {
                   default: "title",
             },
 
-            class: {
-                  type: String,
-                  default: "title",
-            },
-
-            placeholder: {
-                  type: String,
-                  default: "Title",
-            },
-
-            value: {
-                  type: [String, Number],
+            modelValue: {
+                  type: [String, Number, Boolean],
                   default: "",
             },
       },

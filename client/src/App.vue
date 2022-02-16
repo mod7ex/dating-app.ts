@@ -23,6 +23,25 @@ export default {
       .content {
             padding: 0.5em;
             @include center();
+            width: 100%;
+
+            input[type="submit"],
+            button {
+                  padding: 1em;
+                  border: none;
+                  @include shadow($blure: 3px);
+                  font-weight: bold;
+                  color: white;
+                  background-color: $brand-color;
+                  cursor: pointer;
+
+                  &:hover {
+                        @include shadow();
+
+                        color: $brand-color;
+                        background-color: $white;
+                  }
+            }
       }
 }
 
@@ -38,5 +57,34 @@ button {
       outline: none;
       border: none;
       background-color: transparent;
+}
+
+input,
+textarea,
+button {
+      outline: none;
+      border-radius: $border-radius;
+}
+
+input[type="password"],
+input[type="text"],
+input[type="number"],
+input[type="email"],
+textarea {
+      padding: 1em;
+      border: 1px solid transparent;
+      display: block;
+      width: 100%;
+      @include shadow($blure: 3px);
+      margin-top: 0.3em;
+
+      &:hover {
+            @include shadow();
+      }
+
+      &:focus {
+            @include shadow();
+            border-color: rgba($black, 0.3);
+      }
 }
 </style>

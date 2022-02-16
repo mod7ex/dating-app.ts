@@ -10,3 +10,7 @@
       max-width: $w;
       margin: 0 auto;
 }
+
+@mixin shadow($x: 0px, $y: 0px, $blure: 7px, $spread: 0px, $c: $black) {
+      box-shadow: $x $y $blure $spread rgba($c, 0.3);
+}

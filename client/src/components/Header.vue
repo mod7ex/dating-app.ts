@@ -70,7 +70,6 @@ header {
       }
 
       a {
-            color: $black;
             &:visited {
                   color: $black;
             }
@@ -81,6 +80,8 @@ header {
             width: 100%;
 
             .menu-btn {
+                  border-radius: 50%;
+
                   img {
                         border-radius: 50%;
                         border: 3px solid $black;
@@ -89,6 +90,7 @@ header {
 
                         &:hover,
                         &.visibleMenue {
+                              @include shadow($c: $black);
                               filter: invert(26%) sepia(97%) saturate(1888%)
                                     hue-rotate(214deg) brightness(94%)
                                     contrast(95%);
@@ -97,18 +99,23 @@ header {
             }
 
             ul {
-                  background-color: rgba($brand-color, 0.3);
+                  background-color: $white;
                   li {
-                        padding: 0.3em;
+                        @include shadow();
+                        background-color: $brand-color;
 
                         a {
+                              display: inline-block;
+                              color: $white;
+                              line-height: 2rem;
+                              padding: 0.5rem;
                               font-weight: bold;
                         }
 
                         &:hover {
-                              background-color: $brand-color;
+                              background-color: $white;
                               a {
-                                    color: $white;
+                                    color: $brand-color;
                               }
                         }
                   }
@@ -120,7 +127,7 @@ header {
 
             .nav-leave-active,
             .nav-enter-active {
-                  height: 87px;
+                  height: 9rem; // (0.5 * 2 + 2)*3 rem
             }
 
             .nav-enter-from {
@@ -161,21 +168,11 @@ header {
                         right: 0;
                         left: 0;
                         top: 2.8em;
+                        border-radius: $border-radius;
 
-                        background-color: $brand-color;
                         li {
                               a {
-                                    color: $white !important;
-                                    display: inline-block;
-                                    padding: 0.3em;
                                     width: 100%;
-                                    &:hover {
-                                          color: $black !important;
-                                    }
-                              }
-
-                              &:hover {
-                                    background-color: $white;
                               }
                         }
                   }
