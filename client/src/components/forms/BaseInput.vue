@@ -5,23 +5,26 @@
             <span v-if="mandatory" class="mandatory"></span>
       </label>
       <input
-            :type="type"
             :id="name"
-            :placeholder="label"
+            :type="type"
             :value="modelValue"
-            @input="$emit('update:modelValue', $event.target.value)"
-            :autocomplete="autocomplete"
+            :placeholder="label"
+            autocomplete="off"
+            v-model="value"
+            @input="foo()"
       />
 </template>
 
 <script>
+import { onMounted, ref } from "vue";
+
 export default {
       name: "BaseInput",
 
       props: {
-            autocomplete: {
+            type: {
                   type: String,
-                  default: "off",
+                  default: "text",
             },
 
             mandatory: {
@@ -34,11 +37,6 @@ export default {
                   default: "Title",
             },
 
-            type: {
-                  type: String,
-                  default: "text",
-            },
-
             name: {
                   type: String,
                   default: "title",
@@ -49,7 +47,33 @@ export default {
                   default: "",
             },
       },
+      emits: ["update:modelValue"],
 
-      setup() {},
+      setup(props, { emit }) {
+            let value = ref(null);
+
+            onMounted(() => {
+                  value.value = props.modelValue;
+            });
+
+            if (props.type == "checkbox") {
+                  value.value = false;
+            }
+
+            let foo = () => {
+                  let payload = value.value;
+
+                  if (props.type == "checkbox") {
+                        payload = !payload;
+                  }
+
+                  emit("update:modelValue", payload);
+            };
+
+            return {
+                  value,
+                  foo,
+            };
+      },
 };
 </script>

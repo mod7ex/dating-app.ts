@@ -1,12 +1,12 @@
 <template>
       <Guest>
-            <Form id="login" @submit.prevent="submit">
+            <Form id="login" @form-submitted="submit">
                   <template v-slot:header>
                         <h1>Sign Up</h1>
                   </template>
 
                   <!-- Default slot -->
-                  <FormField :valide="register.first_name.valide">
+                  <FormField :valide="register.first_name.valide()">
                         <BaseInput
                               type="text"
                               label="First name"
@@ -16,7 +16,7 @@
                         />
                   </FormField>
 
-                  <FormField :valide="register.last_name.valide">
+                  <FormField :valide="register.last_name.valide()">
                         <BaseInput
                               type="text"
                               label="Last name"
@@ -25,7 +25,7 @@
                         />
                   </FormField>
 
-                  <FormField :valide="register.username.valide">
+                  <FormField :valide="register.username.valide()">
                         <BaseInput
                               type="text"
                               label="Username"
@@ -35,7 +35,7 @@
                         />
                   </FormField>
 
-                  <FormField :valide="register.email.valide">
+                  <FormField :valide="register.email.valide()">
                         <BaseInput
                               type="email"
                               label="Email"
@@ -45,7 +45,7 @@
                         />
                   </FormField>
 
-                  <FormField :valide="register.password.valide">
+                  <FormField :valide="register.password.valide()">
                         <BaseInput
                               type="password"
                               label="Password"
@@ -55,7 +55,7 @@
                         />
                   </FormField>
 
-                  <FormField :valide="register.password_confirmation.valide">
+                  <FormField :valide="register.password_confirmation.valide()">
                         <BaseInput
                               type="password"
                               label="Confirm password"
@@ -65,14 +65,12 @@
                         />
                   </FormField>
 
-                  <FormField
-                        :valide="register.agree.valide"
-                        class="form-checkbox"
-                  >
+                  <FormField class="form-checkbox">
                         <BaseInput
                               type="checkbox"
                               label="I agree with"
-                              name="remember"
+                              name="agree"
+                              :mandatory="true"
                               v-model="register.agree.value"
                         >
                               <router-link :to="{ name: 'About' }">
@@ -117,63 +115,67 @@ export default {
             let register = ref({
                   first_name: {
                         value: null,
-                        valide: true,
-                        validate: validators.name,
+                        valide: function (v = this.value) {
+                              if (v === null) return true;
+                              return validators.name(v);
+                        },
                   },
                   last_name: {
                         value: null,
-                        valide: true,
-                        validate: validators.name,
+                        valide: function (v = this.value) {
+                              if (!v) return true;
+                              return validators.name(v);
+                        },
                   },
                   email: {
                         value: null,
-                        valide: true,
-                        validate: validators.email,
+                        valide: function (v = this.value) {
+                              if (v === null) return true;
+                              return validators.email(v);
+                        },
                   },
                   username: {
                         value: null,
-                        valide: true,
-                        validate: validators.name,
+                        valide: function (v = this.value) {
+                              if (v === null) return true;
+                              return validators.name(v);
+                        },
                   },
                   password: {
                         value: null,
-                        valide: true,
-                        validate: validators.password,
+                        valide: function (v = this.value) {
+                              if (v === null) return true;
+                              return validators.password(v);
+                        },
                   },
                   password_confirmation: {
                         value: null,
-                        valide: true,
-                        validate: (v) => register.value.password.value == v,
+                        valide: function (v = this.value) {
+                              if (v === null) return true;
+                              return register.value.password.value == v;
+                        },
                   },
                   agree: {
-                        value: null,
-                        valide: true,
-                        validate: (v) => console.log(v),
+                        value: false,
+                        valide: function (v = this.value) {
+                              return v;
+                        },
                   },
             });
 
-            for (let field of Object.keys(register.value)) {
-                  // if (field == "agree") continue;
-                  watch(
-                        () => register.value[field].value,
-                        debounce((v) => {
-                              register.value[field].valide =
-                                    register.value[field].validate(v);
-                              console.log(
-                                    register.value[field].valide,
-                                    "validated"
-                              );
-                        })
-                  );
-            }
+            // for (let field of Object.keys(register.value)) {
+            //       watch(
+            //             () => register.value[field].value,
+            //             (v) => {
+            //                   console.log(v);
+            //             }
+            //       );
+            // }
 
             let isValidForm = computed(() => {
                   let bool = true;
                   for (let field of Object.keys(register.value)) {
-                        bool =
-                              bool &&
-                              register.value[field].valide &&
-                              register.value[field].value;
+                        bool = bool && register.value[field].valide();
                   }
                   return bool;
             });

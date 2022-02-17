@@ -1,6 +1,6 @@
 <template>
       <Guest>
-            <Form id="login" @submit.prevent="submit">
+            <Form id="login" @form-submitted="submit">
                   <template v-slot:header>
                         <h1>Login</h1>
                   </template>
@@ -30,10 +30,10 @@
                         <BaseInput
                               type="checkbox"
                               label="Remember me"
-                              name="remember"
                               v-model="login.remember.value"
                         />
                   </FormField>
+
                   <!-- Default slot -->
 
                   <template v-slot:submit>
@@ -51,8 +51,9 @@ import Guest from "../../layouts/views/Guest.vue";
 import Form from "../../layouts/Form.vue";
 import BaseInput from "../../components/forms/BaseInput.vue";
 import SubmitInput from "../../components/forms/SubmitInput.vue";
+import validators, { debounce } from "../../helpers";
 
-import { ref } from "vue";
+import { ref, watch, computed } from "vue";
 
 export default {
       name: "Login",
@@ -66,17 +67,38 @@ export default {
       },
 
       setup() {
+            let food = ref(false);
+
             let login = ref({
                   email_or_username: {
                         value: null,
+                        valide: function (v = this.value) {
+                              if (v === null) return true;
+                              return validators.email(v) || validators.name(v);
+                        },
                   },
                   password: {
                         value: null,
+                        valide: function (v = this.value) {
+                              if (v === null) return true;
+                              return validators.password(v);
+                        },
                   },
 
                   remember: {
-                        value: null,
+                        value: false,
+                        valide: function (v = this.value) {
+                              return v;
+                        },
                   },
+            });
+
+            let isValidForm = computed(() => {
+                  let bool = true;
+                  for (let field of Object.keys(login.value)) {
+                        bool = bool && login.value[field].valide();
+                  }
+                  return bool;
             });
 
             let submit = () => {
@@ -86,6 +108,7 @@ export default {
             return {
                   login,
                   submit,
+                  food,
             };
       },
 };

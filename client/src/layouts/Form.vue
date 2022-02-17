@@ -1,5 +1,5 @@
 <template>
-      <form :method="method" :id="id">
+      <form :method="method" :id="id" @submit.prevent="$emit('formSubmitted')">
             <div class="form-header">
                   <slot name="header"></slot>
             </div>
