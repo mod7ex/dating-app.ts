@@ -15,5 +15,5 @@ export interface IUser extends IUserInput, Document {
       createdAt: Date;
       updatedAt: Date;
       comparePassword(password_condidat: string): Promise<boolean>;
-      generateJWTToken(expIn?: number): Promise<string>;
+      generateJWTAcessToken(expIn?: number): Promise<string>;
 }

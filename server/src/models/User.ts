@@ -2,8 +2,7 @@ import bcrypt from "bcrypt";
 import { Schema, model } from "mongoose";
 import { IUser, IUserInput } from "../interfaces/IUser";
 import { emailRegex, passwordRegex } from "../helpers";
-import { JWT_SECRET } from "../config/config";
-import jwt from "jsonwebtoken";
+import { generateJWTAcessToken } from "../services/auth";
 
 const userSchema = new Schema<IUser>({
       first_name: { type: String, required: [true, "First name is required"] },
@@ -67,16 +66,17 @@ userSchema.methods = {
                   .catch((e) => false);
       },
 
-      generateJWTToken: async function (this: IUser, expIn: number = 60 * 60) {
-            let token = jwt.sign(
-                  { username: this.username, _id: this._id },
-                  JWT_SECRET,
+      generateJWTAcessToken: function (this: IUser, expIn: number = 60 * 60) {
+            return generateJWTAcessToken<{
+                  _id: IUser["_id"];
+                  username: IUser["username"];
+            }>(
                   {
-                        expiresIn: expIn,
-                  }
+                        _id: this._id,
+                        username: this.username,
+                  },
+                  expIn
             );
-
-            return token;
       },
 };
 

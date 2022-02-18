@@ -3,12 +3,9 @@ import { StatusCodes } from "http-status-codes";
 
 export default class ForbiddenError extends CustomError {
       constructor(
-            public message: string = "forbidden",
-            public status_code: number = StatusCodes.FORBIDDEN,
-            public name: string = "forbidden",
-            public render?: boolean,
-            public stack?: string | undefined
+            protected _message: string = "forbidden",
+            protected _name: string = "forbidden"
       ) {
-            super(message, status_code, name, render, stack);
+            super(_message, _name, StatusCodes.FORBIDDEN);
       }
 }

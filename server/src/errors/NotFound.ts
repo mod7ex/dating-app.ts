@@ -3,12 +3,9 @@ import { StatusCodes } from "http-status-codes";
 
 export default class NotFoundError extends CustomError {
       constructor(
-            public message: string = "Not found",
-            public status_code: number = StatusCodes.NOT_FOUND,
-            public name: string = "notfound_error",
-            public render?: boolean,
-            public stack?: string | undefined
+            protected _message: string = "forbidden",
+            protected _name: string = "forbidden"
       ) {
-            super(message, status_code, name, render, stack);
+            super(_message, _name, StatusCodes.NOT_FOUND);
       }
 }

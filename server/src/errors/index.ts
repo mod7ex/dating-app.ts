@@ -4,42 +4,44 @@ import NotFoundError from "./NotFound";
 import BadRequestError from "./BadRequest";
 import ForbiddenError from "./Forbidden";
 
+/*
+
 type ErrType =
-      | "CustomError"
       | "NotFoundError"
       | "BadRequestError"
       | "UnauthorizedError"
       | "ForbiddenError";
 
 class Err {
-      static create(
-            name: ErrType,
-            ...args: [
-                  message?: string,
-                  render?: boolean,
-                  status_code?: number,
-                  name?: string,
-                  stack?: string | undefined
-            ]
-      ): CustomError {
-            let Cls = eval(name);
-            return new Cls(...args);
+      createErr(err: ErrType, message?: string, name?: string): CustomError {
+            let Cls = eval(err);
+            return new Cls();
       }
 
-      static throw(
-            name: ErrType,
-            ...args: [
-                  message?: string,
-                  render?: boolean,
-                  name?: string,
-                  status_code?: number,
-                  stack?: string | undefined
-            ]
+      throwErr(err: ErrType, message?: string, name?: string): never {
+            throw this.createErr(err, message, name);
+      }
+
+      createCustomErr(
+            message?: string,
+            name?: string,
+            status_code?: number
+      ): CustomError {
+            return new CustomError(message, name, status_code);
+      }
+
+      throwCustomErr(
+            message?: string,
+            name?: string,
+            status_code?: number
       ): never {
-            let Cls = eval(name);
-            throw new Cls(...args);
+            throw this.createCustomErr(message, name, status_code);
       }
 }
+
+export default new Err();
+
+*/
 
 export {
       ForbiddenError,
@@ -47,5 +49,4 @@ export {
       CustomError,
       NotFoundError,
       BadRequestError,
-      Err,
 };

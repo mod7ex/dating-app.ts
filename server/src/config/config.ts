@@ -9,10 +9,22 @@ const MONGO_USERNAME = process.env.MONGO_USERNAME || "modex987";
 const MONGO_PASSWORD = process.env.MONGO_PASSWORD || "mongo1998";
 const MONGO_DB_NAME = process.env.MONGO_DB_NAME || "dating-app";
 
+const REDIS_HOST = process.env.REDIS_HOST || "127.0.0.1";
+const REDIS_PORT = Number(process.env.REDIS_PORT) || 6379;
+const REDIS_USERNAME = process.env.REDIS_USERNAME || "modex98";
+const REDIS_PASSWORD = process.env.REDIS_PASSWORD || "mongo1998";
+
 const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || "localhost";
 const SERVER_PORT = Number(process.env.SERVER_PORT) || 3000;
 
-export const JWT_SECRET = process.env.JWT_SECRET!;
+export const JWT_SECRET_ACCESS = process.env.JWT_SECRET_ACCESS!;
+
+export const REDIS = {
+      host: REDIS_HOST,
+      port: REDIS_PORT,
+      username: REDIS_USERNAME,
+      password: REDIS_PASSWORD,
+};
 
 export const MONGO = {
       host: MONGO_HOST,
