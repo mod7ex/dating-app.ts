@@ -86,8 +86,9 @@ export default {
                   },
 
                   remember: {
-                        value: false,
+                        value: null,
                         valide: function (v = this.value) {
+                              if (v === null) return true;
                               return v;
                         },
                   },
@@ -102,6 +103,7 @@ export default {
             });
 
             let submit = () => {
+                  if (!isValidForm) return;
                   console.log(login.value);
             };
 

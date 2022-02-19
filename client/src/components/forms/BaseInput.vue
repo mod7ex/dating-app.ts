@@ -56,16 +56,12 @@ export default {
                   value.value = props.modelValue;
             });
 
-            if (props.type == "checkbox") {
-                  value.value = false;
-            }
+            if (props.type == "checkbox") value.value = false;
 
             let foo = () => {
                   let payload = value.value;
 
-                  if (props.type == "checkbox") {
-                        payload = !payload;
-                  }
+                  if (props.type == "checkbox") payload = !payload;
 
                   emit("update:modelValue", payload);
             };
