@@ -6,34 +6,37 @@
                   </template>
 
                   <!-- Default slot -->
-                  <FormField>
+                  <FormField
+                        :valide="email_or_username.valide"
+                        :error="email_or_username.error"
+                  >
                         <BaseInput
                               type="text"
                               label="Email or username"
                               name="email_or_username"
                               :mandatory="true"
-                              v-model="login.email_or_username.value"
+                              v-model="login.email_or_username"
                         />
                   </FormField>
 
-                  <FormField>
+                  <FormField :valide="password.valide" :error="password.error">
                         <BaseInput
                               type="password"
                               label="Password"
                               name="password"
                               :mandatory="true"
-                              v-model="login.password.value"
+                              v-model="login.password"
                         />
                   </FormField>
 
                   <FormField class="form-checkbox">
                         <BaseInput
+                              name="remember"
                               type="checkbox"
                               label="Remember me"
-                              v-model="login.remember.value"
+                              v-model="login.remember"
                         />
                   </FormField>
-
                   <!-- Default slot -->
 
                   <template v-slot:submit>
@@ -51,9 +54,10 @@ import Guest from "../../layouts/views/Guest.vue";
 import Form from "../../layouts/Form.vue";
 import BaseInput from "../../components/forms/BaseInput.vue";
 import SubmitInput from "../../components/forms/SubmitInput.vue";
-import validators, { debounce } from "../../helpers";
-
-import { ref, watch, computed } from "vue";
+import { watch, ref, reactive, toRefs } from "vue";
+import { required, password, login_field } from "../../helpers/validators";
+import validationHandler from "../../mixins/validation";
+import { debounce } from "../../helpers/index";
 
 export default {
       name: "Login",
@@ -67,50 +71,51 @@ export default {
       },
 
       setup() {
-            let food = ref(false);
+            let login = reactive({
+                  email_or_username: null,
 
-            let login = ref({
+                  password: null,
+
+                  remember: false,
+            });
+
+            let rules = {
                   email_or_username: {
-                        value: null,
-                        valide: function (v = this.value) {
-                              if (v === null) return true;
-                              return validators.email(v) || validators.name(v);
-                        },
+                        required,
+                        login_field,
                   },
+
                   password: {
-                        value: null,
-                        valide: function (v = this.value) {
-                              if (v === null) return true;
-                              return validators.password(v);
-                        },
+                        required,
+                        password,
                   },
+            };
 
-                  remember: {
-                        value: null,
-                        valide: function (v = this.value) {
-                              if (v === null) return true;
-                              return v;
-                        },
-                  },
-            });
+            let { vHandler, isValideForm, formTouch } = validationHandler(
+                  rules,
+                  login
+            );
 
-            let isValidForm = computed(() => {
-                  let bool = true;
-                  for (let field of Object.keys(login.value)) {
-                        bool = bool && login.value[field].valide();
-                  }
-                  return bool;
-            });
+            for (let field of Object.keys(rules)) {
+                  watch(
+                        () => login[field],
+                        debounce((v) => {
+                              vHandler[field].touch();
+                        }, 1000)
+                  );
+            }
 
             let submit = () => {
-                  if (!isValidForm) return;
-                  console.log(login.value);
+                  formTouch();
+                  if (!isValideForm) return;
             };
+
+            // let { email_or_username, password, remember } = toRefs(login);
 
             return {
                   login,
                   submit,
-                  food,
+                  ...vHandler,
             };
       },
 };

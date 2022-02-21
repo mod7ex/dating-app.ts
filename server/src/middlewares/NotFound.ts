@@ -1,13 +1,15 @@
 import Controller from "./Controller";
-import { Err } from "../errors/index";
+import { NotFoundError } from "../errors";
 import { Request, Response, NextFunction } from "express";
 
-export default class ErrorHandler extends Controller {
+class NotFound extends Controller {
       constructor() {
             super();
       }
 
-      face = (req: Request, res: Response, next: NextFunction): never => {
-            this.throwErr("NotFoundError", "Resource not found");
+      _$ = (req: Request, res: Response, next: NextFunction): never => {
+            throw new NotFoundError("Resource not found", "page_not_found");
       };
 }
+
+export default new NotFound();

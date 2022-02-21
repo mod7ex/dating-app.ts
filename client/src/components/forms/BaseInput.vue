@@ -52,10 +52,6 @@ export default {
       setup(props, { emit }) {
             let value = ref(null);
 
-            onMounted(() => {
-                  value.value = props.modelValue;
-            });
-
             if (props.type == "checkbox") value.value = false;
 
             let foo = () => {

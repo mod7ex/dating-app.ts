@@ -9,12 +9,12 @@ import {
       NotFoundError,
 } from "../errors";
 
-export default class ErrorHandler extends Controller {
+class ErrorHandler extends Controller {
       constructor() {
             super();
       }
 
-      face = async (
+      _$ = async (
             err: Error,
             req: Request,
             res: Response,
@@ -64,3 +64,5 @@ export default class ErrorHandler extends Controller {
             return next();
       };
 }
+
+export default new ErrorHandler();

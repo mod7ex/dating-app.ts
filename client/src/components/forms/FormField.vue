@@ -1,11 +1,12 @@
 <template>
       <div class="form-field" :class="classObject" :id="id">
             <slot>Form field</slot>
+            <small v-show="error" class="error">{{ error }}</small>
       </div>
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { computed } from "vue";
 
 export default {
       name: "FormField",
@@ -16,6 +17,10 @@ export default {
             valide: {
                   type: Boolean,
                   default: true,
+            },
+            error: {
+                  type: String,
+                  default: null,
             },
       },
 
@@ -82,6 +87,14 @@ form {
                               @include shadow($c: red);
                               border-color: rgba(red, 0.3);
                         }
+                  }
+            }
+
+            small {
+                  &.error {
+                        color: red;
+                        font-size: 0.7rem;
+                        padding-left: 1em;
                   }
             }
       }

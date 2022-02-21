@@ -18,6 +18,12 @@ const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || "localhost";
 const SERVER_PORT = Number(process.env.SERVER_PORT) || 3000;
 
 export const JWT_SECRET_ACCESS = process.env.JWT_SECRET_ACCESS!;
+export const JWT_SECRET_REFRESH = process.env.JWT_SECRET_REFRESH!;
+
+export const JWT_SECRET = {
+      access: JWT_SECRET_ACCESS,
+      refresh: JWT_SECRET_REFRESH,
+};
 
 export const REDIS = {
       host: REDIS_HOST,

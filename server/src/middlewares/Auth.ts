@@ -4,12 +4,16 @@ import { JWT_SECRET_ACCESS } from "../config/config";
 import jwt, { VerifyErrors } from "jsonwebtoken";
 import { UnauthorizedError, ForbiddenError } from "../errors";
 
-export default class Auth extends Controller {
+class Auth extends Controller {
       constructor() {
             super();
       }
 
-      face = (req: Request, res: Response, next: NextFunction): void => {
+      _$ = async (
+            req: Request,
+            res: Response,
+            next: NextFunction
+      ): Promise<void | never> => {
             let authHeader = req.headers.authorization;
 
             let token =
@@ -28,3 +32,5 @@ export default class Auth extends Controller {
             });
       };
 }
+
+export default new Auth();

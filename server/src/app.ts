@@ -1,7 +1,8 @@
+import "express-async-errors";
 import express from "express";
 import { createServer } from "http";
 import { MONGO, SERVER } from "./config/config";
-import middleware from "./middlewares/Controller";
+import { req, errorHandler, notFound } from "./middlewares";
 
 const app = express();
 const server = createServer(app);
@@ -17,9 +18,8 @@ app.disable("x-powered-by");
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(middleware.request);
-
-app.use(middleware.notFound, middleware.errorHandler);
+app.use(req._$);
+app.use(notFound._$, errorHandler._$);
 
 /***************************************************/
 

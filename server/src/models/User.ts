@@ -2,7 +2,10 @@ import bcrypt from "bcrypt";
 import { Schema, model } from "mongoose";
 import { IUser, IUserInput } from "../interfaces/IUser";
 import { emailRegex, passwordRegex } from "../helpers";
-import { generateJWTAcessToken } from "../services/auth";
+import {
+      generateJWTAccessToken,
+      generateJWTRefreshToken,
+} from "../services/token";
 
 const userSchema = new Schema<IUser>({
       first_name: { type: String, required: [true, "First name is required"] },
@@ -66,17 +69,18 @@ userSchema.methods = {
                   .catch((e) => false);
       },
 
-      generateJWTAcessToken: function (this: IUser, expIn: number = 60 * 60) {
-            return generateJWTAcessToken<{
-                  _id: IUser["_id"];
-                  username: IUser["username"];
-            }>(
-                  {
-                        _id: this._id,
-                        username: this.username,
-                  },
-                  expIn
-            );
+      getJWTAccessToken: function (this: IUser): string {
+            return generateJWTAccessToken({
+                  _id: this._id,
+                  username: this.username,
+            });
+      },
+
+      getJWTRefreshToken: function (this: IUser): Promise<string> {
+            return generateJWTRefreshToken({
+                  _id: this._id,
+                  username: this.username,
+            });
       },
 };
 

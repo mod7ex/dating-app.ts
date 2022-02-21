@@ -20,7 +20,13 @@ export let loginUser = async ({
 }: {
       email: IUser["email"];
       password: IUser["password"];
-}): Promise<string | never> => {
+}): Promise<
+      | {
+              accessToken: string;
+              refreshToken: string;
+        }
+      | never
+> => {
       let user = await findUser({ email });
 
       if (!user) throw new NotFoundError("No user found with this email");
@@ -29,7 +35,13 @@ export let loginUser = async ({
 
       if (!isValidPassword) throw new UnauthorizedError("Wrong password");
 
-      return user.generateJWTAcessToken();
+      let accessToken = user.getJWTAccessToken();
+      let refreshToken = await user.getJWTRefreshToken();
+
+      return {
+            accessToken,
+            refreshToken,
+      };
 };
 
 export let deleteAllUsers = async () => {

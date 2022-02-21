@@ -34,7 +34,7 @@ class DB {
       }
 }
 
-export const client = createClient({
+export const RedisClient = createClient({
       socket: {
             host: REDIS.host,
             port: REDIS.port,
@@ -48,31 +48,31 @@ export const db = new DB();
 export const trackRedis = async () => {
       console.log("tracking redis now ....................");
 
-      client.on("connect", () => {
+      RedisClient.on("connect", () => {
             console.log("\nClient connected to redis ...");
       });
 
-      client.on("ready", () => {
+      RedisClient.on("ready", () => {
             console.log("\nClient connected to redis and ready to use ...");
       });
 
-      client.on("error", (err: Error) => {
+      RedisClient.on("error", (err: Error) => {
             console.error(err.message);
-            client.quit();
+            RedisClient.quit();
       });
 
-      client.on("end", () => {
+      RedisClient.on("end", () => {
             console.log("\nClient disconnected from redis ...");
       });
 
-      client.on("reconnecting", () => {
+      RedisClient.on("reconnecting", () => {
             console.log("\nClient is conecting wait ...");
       });
 
       process.on("SIGINT", () => {
-            client.quit();
+            RedisClient.quit();
             // process.exit(0);
       });
 
-      await client.connect();
+      await RedisClient.connect();
 };

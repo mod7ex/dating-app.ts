@@ -1,12 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import Controller from "./Controller";
 
-export default class Req extends Controller {
+class Req extends Controller {
       constructor() {
             super();
       }
 
-      face = async (
+      _$ = async (
             req: Request,
             res: Response,
             next: NextFunction
@@ -27,3 +27,5 @@ export default class Req extends Controller {
             next();
       };
 }
+
+export default new Req();
