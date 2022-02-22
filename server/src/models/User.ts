@@ -1,4 +1,3 @@
-import bcrypt from "bcrypt";
 import { Schema, model } from "mongoose";
 import { IUser, IUserInput } from "../interfaces/IUser";
 import { emailRegex, passwordRegex } from "../helpers";
@@ -6,13 +5,21 @@ import {
       generateJWTAccessToken,
       generateJWTRefreshToken,
 } from "../services/token";
+import { generateCode } from "../helpers";
+import logger from "../utils/logger";
+import argon2 from "argon2";
 
 const userSchema = new Schema<IUser>({
       first_name: { type: String, required: [true, "First name is required"] },
       last_name: { type: String, required: [true, "Last name is required"] },
-      username: { type: String, required: [true, "Username is required"] },
+      username: {
+            type: String,
+            unique: true,
+            required: [true, "Username is required"],
+      },
       email: {
             type: String,
+            unique: true,
             required: [true, "Email is required"],
             match: [emailRegex, "Please enter a valid email"],
             maxlength: [320, "Please enter a valid email"],
@@ -23,9 +30,23 @@ const userSchema = new Schema<IUser>({
             required: [true, "Password is required"],
       },
       password_confirmation: String,
+
+      verificationCode: {
+            type: String,
+            default: generateCode(),
+      },
+      passwordResetCode: String,
+      verified: {
+            type: Boolean,
+            default: false,
+      },
+
       lastOnline: Date,
       createdAt: Date,
-      updatedAt: Date,
+      updatedAt: {
+            type: Date,
+            default: new Date(),
+      },
 });
 
 userSchema.index({ email: 1, username: 1 });
@@ -39,8 +60,7 @@ userSchema.virtual("full_name").get(function (this: IUser) {
 userSchema.pre<IUser>("save", async function (next) {
       if (!this.isModified("password")) return next();
 
-      let salt = await bcrypt.genSalt(10);
-      let hash = await bcrypt.hash(this.password, salt);
+      let hash = await argon2.hash(this.password);
 
       this.password = hash;
       return next();
@@ -60,13 +80,15 @@ userSchema.post<IUserInput>("validate", function (next) {
 
 userSchema.methods = {
       comparePassword: async function (
+            this: IUser,
             password_condidat: string
       ): Promise<boolean> {
-            const user = this as IUser;
-
-            return bcrypt
-                  .compare(password_condidat, user.password)
-                  .catch((e) => false);
+            try {
+                  return await argon2.verify(this.password, password_condidat);
+            } catch (e: any) {
+                  await logger.error(e);
+                  return false;
+            }
       },
 
       getJWTAccessToken: function (this: IUser): string {

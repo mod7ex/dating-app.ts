@@ -1,21 +1,7 @@
 import jwt, { Jwt, JwtPayload, JsonWebTokenError } from "jsonwebtoken";
 import { JWT_SECRET } from "../config/config";
-import { IUser } from "../interfaces/IUser";
+
 import { RedisClient } from "../db";
-
-type JWTSubject = {
-      _id: IUser["_id"];
-      username: IUser["username"];
-};
-
-export const generateJWTAccessToken = (
-      payload: JWTSubject,
-      expIn: number = 60 * 60
-): string => {
-      return jwt.sign(payload, JWT_SECRET.access, {
-            expiresIn: expIn,
-      });
-};
 
 export const generateJWTRefreshToken = async (
       payload: JWTSubject,

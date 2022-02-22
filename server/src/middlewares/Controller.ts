@@ -1,14 +1,9 @@
 import { Error } from "mongoose";
-import path from "path";
-import fs from "fs/promises";
-import { Mode } from "fs";
-import { APP_PATH } from "../config/config";
+import { Logger } from "../utils/logger";
 import jwt, { VerifyErrors } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 
-type LogNatureType = "error" | "request";
-
-export default abstract class Middleware {
+export default abstract class Middleware extends Logger {
       // public abstract _$(
       //       req: Request,
       //       res: Response,
@@ -21,19 +16,5 @@ export default abstract class Middleware {
                   err instanceof jwt.NotBeforeError ||
                   err instanceof jwt.TokenExpiredError
             );
-      }
-
-      async log(
-            data: string,
-            logNature: LogNatureType,
-            mode: Mode = "a"
-      ): Promise<void> {
-            let filePath = path.resolve(APP_PATH, "logs", `${logNature}s.log`);
-
-            let file_descriptor = await fs.open(filePath, mode);
-
-            await fs.appendFile(filePath, data + ";\n", "utf8");
-
-            await file_descriptor.close();
       }
 }

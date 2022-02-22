@@ -1,9 +1,9 @@
 import User from "../models/User";
 import { IUser, IUserInput } from "../interfaces/IUser";
-import { AnyKeys, FilterQuery, QueryOptions } from "mongoose";
+import { FilterQuery, QueryOptions } from "mongoose";
 import { NotFoundError, UnauthorizedError } from "../errors";
 
-export let createUser = async (input: AnyKeys<IUserInput>) => {
+export let createUser = async (input: Partial<IUserInput>) => {
       return User.create(input);
 };
 

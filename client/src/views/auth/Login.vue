@@ -57,7 +57,6 @@ import SubmitInput from "../../components/forms/SubmitInput.vue";
 import { watch, ref, reactive, toRefs } from "vue";
 import { required, password, login_field } from "../../helpers/validators";
 import validationHandler from "../../mixins/validation";
-import { debounce } from "../../helpers/index";
 
 export default {
       name: "Login",
@@ -95,15 +94,6 @@ export default {
                   rules,
                   login
             );
-
-            for (let field of Object.keys(rules)) {
-                  watch(
-                        () => login[field],
-                        debounce((v) => {
-                              vHandler[field].touch();
-                        }, 1000)
-                  );
-            }
 
             let submit = () => {
                   formTouch();

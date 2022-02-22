@@ -1,6 +1,6 @@
 import { connect, connection, Error } from "mongoose";
 import { createClient } from "redis";
-import { REDIS } from "../config/config";
+import { REDIS, MONGO, SERVER } from "../config/config";
 
 class DB {
       public constructor(private _uri?: string) {}
@@ -31,8 +31,12 @@ class DB {
                   await connection.close(true);
                   process.exit(0);
             });
+
+            await this.connect();
       }
 }
+
+export const db = new DB(MONGO.uri);
 
 export const RedisClient = createClient({
       socket: {
@@ -42,8 +46,6 @@ export const RedisClient = createClient({
       username: REDIS.username,
       password: REDIS.password,
 });
-
-export const db = new DB();
 
 export const trackRedis = async () => {
       console.log("tracking redis now ....................");

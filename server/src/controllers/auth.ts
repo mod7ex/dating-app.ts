@@ -9,6 +9,7 @@ import {
 import { IUserInput } from "../interfaces/IUser";
 import { StatusCodes } from "http-status-codes";
 import { UnauthorizedError, ForbiddenError } from "../errors";
+import { CreateUserInput } from "../schema/user";
 
 class Auth {
       refreshToken = async (
@@ -37,29 +38,18 @@ class Auth {
       };
 
       register = async (
-            req: Request,
+            req: Request<{}, {}, CreateUserInput>,
             res: Response,
             next: NextFunction
       ): Promise<void> => {
-            let {
-                  first_name,
-                  last_name,
-                  username,
-                  email,
-                  password,
-                  password_confirmation,
-            }: IUserInput = req.body;
+            let body = req.body;
 
-            await createUser({
-                  first_name,
-                  last_name,
-                  username,
-                  email,
-                  password,
-                  password_confirmation,
+            await createUser(body);
+
+            let tokens = await loginUser({
+                  email: body.email,
+                  password: body.password,
             });
-
-            let tokens = await loginUser({ email, password });
 
             res.status(StatusCodes.CREATED).json(tokens);
       };
@@ -87,3 +77,5 @@ class Auth {
             res.status(StatusCodes.NO_CONTENT).json({ message: "Logged out" });
       };
 }
+
+export default new Auth();

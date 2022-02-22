@@ -1,7 +1,7 @@
 <template>
       <div class="form-field" :class="classObject" :id="id">
             <slot>Form field</slot>
-            <small v-show="error" class="error">{{ error }}</small>
+            <small class="error">{{ error }}</small>
       </div>
 </template>
 
@@ -20,7 +20,7 @@ export default {
             },
             error: {
                   type: String,
-                  default: null,
+                  default: " ",
             },
       },
 
@@ -94,7 +94,10 @@ form {
                   &.error {
                         color: red;
                         font-size: 0.7rem;
-                        padding-left: 1em;
+                        padding-left: 0.3em;
+                        display: block;
+                        width: 100%;
+                        margin-top: 0.3em;
                   }
             }
       }

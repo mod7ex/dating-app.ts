@@ -1,4 +1,5 @@
-import { ref, reactive } from "vue";
+import { watch, ref, reactive } from "vue";
+import { debounce } from "../helpers/index";
 
 export const errors = {
       required: (f) => `field is required`,
@@ -44,6 +45,15 @@ export default function (rules, state) {
             };
 
             vHandler[f] = obj;
+      }
+
+      for (let field of Object.keys(rules)) {
+            watch(
+                  () => state[field],
+                  debounce((v) => {
+                        vHandler[field].touch();
+                  }, 1000)
+            );
       }
 
       return {

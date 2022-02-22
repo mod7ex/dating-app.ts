@@ -1,8 +1,9 @@
 import "express-async-errors";
 import express from "express";
 import { createServer } from "http";
-import { MONGO, SERVER } from "./config/config";
+import { SERVER } from "./config/config";
 import { req, errorHandler, notFound } from "./middlewares";
+import router from "./routes";
 
 const app = express();
 const server = createServer(app);
@@ -19,6 +20,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 app.use(req._$);
+
+app.use(router);
+
 app.use(notFound._$, errorHandler._$);
 
 /***************************************************/
@@ -27,9 +31,7 @@ import { db, trackRedis } from "./db";
 
 let start = async (port: number): Promise<void> => {
       try {
-            db.uri = MONGO.uri;
             await db.track();
-            await db.connect();
 
             await trackRedis();
 

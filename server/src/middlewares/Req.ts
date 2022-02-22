@@ -8,21 +8,14 @@ class Req extends Controller {
 
       _$ = async (
             req: Request,
-            res: Response,
+            _: Response,
             next: NextFunction
       ): Promise<void> => {
-            let data = `[${Date.now()}] ---> ${req.method}: ${
-                  req.originalUrl
-            } from ${req.ip}`;
-
-            console.log(data);
-
             if (req.method == "POST") {
-                  // req.body = cleanObj(req.body);
                   console.log("body ==> ", req.body);
             }
 
-            await this.log(data, "request");
+            await this.request(req);
 
             next();
       };

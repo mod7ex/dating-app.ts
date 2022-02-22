@@ -2,6 +2,8 @@ import Controller from "./Controller";
 import { Request, Response, NextFunction } from "express";
 import { Error } from "mongoose";
 import { StatusCodes } from "http-status-codes";
+import { ZodError } from "zod";
+import logger from "../utils/logger";
 import {
       CustomError,
       ForbiddenError,
@@ -20,7 +22,7 @@ class ErrorHandler extends Controller {
             res: Response,
             next: NextFunction
       ): Promise<void> => {
-            await this.log(err.toString(), "error");
+            await logger.error(err);
 
             console.log({
                   name: err.name,
@@ -40,6 +42,14 @@ class ErrorHandler extends Controller {
             }
 
             if (err instanceof Error.ValidationError) {
+                  error = new BadRequestError(
+                        Object.values(err.errors)
+                              .map((item) => item.message)
+                              .join(", ")
+                  );
+            }
+
+            if (err instanceof ZodError) {
                   error = new BadRequestError(
                         Object.values(err.errors)
                               .map((item) => item.message)
