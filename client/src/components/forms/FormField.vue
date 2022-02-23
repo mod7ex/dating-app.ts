@@ -1,7 +1,7 @@
 <template>
       <div class="form-field" :class="classObject" :id="id">
             <slot>Form field</slot>
-            <small class="error">{{ error }}</small>
+            <small class="error"> <span>e</span> {{ error }}</small>
       </div>
 </template>
 
@@ -94,10 +94,13 @@ form {
                   &.error {
                         color: red;
                         font-size: 0.7rem;
-                        padding-left: 0.3em;
                         display: block;
                         width: 100%;
                         margin-top: 0.3em;
+
+                        span {
+                              color: transparent;
+                        }
                   }
             }
       }

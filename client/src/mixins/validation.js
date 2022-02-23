@@ -1,14 +1,6 @@
 import { watch, ref, reactive } from "vue";
 import { debounce } from "../helpers/index";
 
-export const errors = {
-      required: (f) => `field is required`,
-      name: (f) => `invalide name`,
-      email: (f) => `invalide email`,
-      password: (f) => `invalide password`,
-      login_field: (f) => `invalide email or username`,
-};
-
 export default function (rules, state) {
       // state is a reactive object x = reactive({...})
 
@@ -17,10 +9,11 @@ export default function (rules, state) {
       let isValideForm = ref(true);
 
       let formTouch = () => {
+            isValideForm.value = true;
+
             for (let f of Object.keys(vHandler)) {
                   vHandler[f].touch();
-                  isValideForm.value = vHandler[f].valide;
-                  if (!isValideForm.value) return;
+                  isValideForm.value = isValideForm.value && vHandler[f].valide;
             }
       };
 
@@ -36,8 +29,9 @@ export default function (rules, state) {
                   obj.valide = true;
 
                   for (let validator of Object.keys(rules[f])) {
-                        if (!rules[f][validator](state[f])) {
-                              obj.error = errors[validator](f);
+                        let result = rules[f][validator](state[f]);
+                        if (!result.valide) {
+                              obj.error = result.error;
                               obj.valide = false;
                               return;
                         }
@@ -62,17 +56,3 @@ export default function (rules, state) {
             formTouch,
       };
 }
-
-/*
-
-{
-      field: {
-            touch: ()=> {},
-            errors: [],
-            valide: computed(()=>{}),
-      },
-      ...,
-      touch: () => {}
-}
-
-*/

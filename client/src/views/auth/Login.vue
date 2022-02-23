@@ -97,7 +97,8 @@ export default {
 
             let submit = () => {
                   formTouch();
-                  if (!isValideForm) return;
+                  if (!isValideForm.value) return;
+                  console.log(login);
             };
 
             // let { email_or_username, password, remember } = toRefs(login);

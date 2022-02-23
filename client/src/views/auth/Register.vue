@@ -110,11 +110,10 @@ import {
       name,
       email,
       password,
-      login_field,
+      equale_to,
 } from "../../helpers/validators";
-import { debounce } from "../../helpers";
 import validationHandler from "../../mixins/validation";
-import { ref, computed, watch, reactive } from "vue";
+import { reactive } from "vue";
 
 export default {
       name: "Register",
@@ -140,12 +139,16 @@ export default {
 
             let rules = {
                   first_name: { required, name },
-                  last_name: { required, name },
+                  last_name: { name },
                   email: { required, email },
                   username: { required, name },
                   password: { required, password },
-                  password_confirmation: { required, password },
-                  agree: { required, name },
+                  password_confirmation: {
+                        required,
+                        password,
+                        equale_to: equale_to("password", register),
+                  },
+                  agree: { required },
             };
 
             let { vHandler, isValideForm, formTouch } = validationHandler(
@@ -155,7 +158,8 @@ export default {
 
             let submit = () => {
                   formTouch();
-                  if (!isValideForm) return;
+                  if (!isValideForm.value) return;
+                  console.log(register);
             };
 
             return {
