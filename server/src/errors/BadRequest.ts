@@ -6,6 +6,6 @@ export default class BadRequestError extends CustomError {
             protected _message: string = "Bad request",
             protected _name: string = "badrequest_error"
       ) {
-            super(_message, _name, StatusCodes.BAD_REQUEST);
+            super(_message, StatusCodes.BAD_REQUEST, _name);
       }
 }

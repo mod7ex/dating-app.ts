@@ -4,9 +4,9 @@ export const createUserSchema = object({
       body: object({
             first_name: string({
                   required_error: "first name is required",
-            }),
+            }).min(3, "invalide name"),
 
-            last_name: string(),
+            last_name: string().min(3, "invalide name").optional().nullable(),
 
             username: string({
                   required_error: "username is required",
@@ -28,4 +28,21 @@ export const createUserSchema = object({
       }),
 });
 
+export const verifyUserSchema = object({
+      prams: object({
+            id: string(),
+            verificationCode: string(),
+      }),
+});
+
+export const passwordResetSchema = object({
+      body: object({
+            email: string({
+                  required_error: "Email is required",
+            }).email("Invalid email"),
+      }),
+});
+
 export type CreateUserInput = TypeOf<typeof createUserSchema>["body"];
+export type VerifyUserInput = TypeOf<typeof verifyUserSchema>["prams"];
+export type PasswordResetInput = TypeOf<typeof passwordResetSchema>["body"];

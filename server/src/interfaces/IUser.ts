@@ -1,15 +1,7 @@
 import { Types, Document } from "mongoose";
+import { CreateUserInput } from "../schema/user";
 
-export interface IUserInput {
-      first_name: string;
-      last_name?: string | undefined;
-      username: string;
-      email: string;
-      password: string;
-      password_confirmation: string | undefined;
-}
-
-export interface IUser extends IUserInput, Document {
+export interface IUser extends CreateUserInput, Document {
       _id: Types.ObjectId;
 
       verificationCode: string;

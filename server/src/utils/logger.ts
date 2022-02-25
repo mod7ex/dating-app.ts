@@ -3,7 +3,7 @@ import { APP_PATH } from "../config/config";
 import path from "path";
 import { Mode } from "fs";
 
-type LogNatureType = "error" | "request";
+type LogNatureType = "error" | "request" | "info";
 
 export class Logger {
       now() {
@@ -28,9 +28,13 @@ export class Logger {
             await file_descriptor.close();
       }
 
+      async errorTxt(data: string) {
+            await this.write(data, "error");
+      }
+
       async error(err: Error) {
             let data = err.toString();
-            await this.write(data, "error");
+            await this.errorTxt(data);
       }
 
       async request({
@@ -45,6 +49,10 @@ export class Logger {
             let data = `${method}: ${originalUrl} from ${ip}`;
             await this.write(data, "request");
             this.console(data);
+      }
+
+      async log(data: string) {
+            await this.write(data, "info");
       }
 }
 export default new Logger();

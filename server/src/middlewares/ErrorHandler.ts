@@ -50,11 +50,8 @@ class ErrorHandler extends Controller {
             }
 
             if (err instanceof ZodError) {
-                  error = new BadRequestError(
-                        Object.values(err.errors)
-                              .map((item) => item.message)
-                              .join(", ")
-                  );
+                  res.status(StatusCodes.BAD_REQUEST).json(err.flatten());
+                  return;
             }
 
             if (err instanceof Error.CastError) {
@@ -63,15 +60,19 @@ class ErrorHandler extends Controller {
                   );
             }
 
-            // if (err.code == 11000) {
-            //       customErr.message = `Duplicate value for ${Object.keys(
-            //             err.keyValue
-            //       )} field`;
-            //       customErr.statusCode = StatusCodes.BAD_REQUEST;
-            // }
+            // @ts-ignore
+            if (err.code && err.code == 11000) {
+                  error = new CustomError(
+                        `Duplicate value for ${Object.keys(
+                              // @ts-ignore
+                              err.keyValue
+                        )} field`,
+                        StatusCodes.CONFLICT
+                  );
+            }
 
             res.status(error.status_code).json({ error: error.toObject() });
-            return next();
+            return;
       };
 }
 

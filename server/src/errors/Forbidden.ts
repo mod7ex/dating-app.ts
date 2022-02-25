@@ -6,6 +6,6 @@ export default class ForbiddenError extends CustomError {
             protected _message: string = "forbidden",
             protected _name: string = "forbidden"
       ) {
-            super(_message, _name, StatusCodes.FORBIDDEN);
+            super(_message, StatusCodes.FORBIDDEN, _name);
       }
 }

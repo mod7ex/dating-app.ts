@@ -1,10 +1,15 @@
 import User from "../models/User";
-import { IUser, IUserInput } from "../interfaces/IUser";
+import { IUser } from "../interfaces/IUser";
 import { FilterQuery, QueryOptions } from "mongoose";
 import { NotFoundError, UnauthorizedError } from "../errors";
+import { CreateUserInput } from "../schema/user";
 
-export let createUser = async (input: Partial<IUserInput>) => {
-      return User.create(input);
+export let createUser = async (input: Partial<CreateUserInput>) => {
+      return await User.create(input);
+};
+
+export let findUserById = async (id: string) => {
+      return await User.findById(id);
 };
 
 export let findUser = async (
@@ -12,6 +17,13 @@ export let findUser = async (
       options: QueryOptions | null = { lean: false }
 ) => {
       return User.findOne(query, null, options);
+};
+
+export let findUserByEmail = async (
+      email: string,
+      options: QueryOptions | null = { lean: false }
+) => {
+      return await findUser({ email }, options);
 };
 
 export let loginUser = async ({

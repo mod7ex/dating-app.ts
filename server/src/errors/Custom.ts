@@ -4,8 +4,8 @@ import { StatusCodes } from "http-status-codes";
 export default class CustomError implements IError {
       constructor(
             protected _message: string = "Something went wrong",
-            protected _name: string = "internal_error",
-            protected _status_code: number = StatusCodes.INTERNAL_SERVER_ERROR
+            protected _status_code: number = StatusCodes.INTERNAL_SERVER_ERROR,
+            protected _name: string = "internal_error"
       ) {}
 
       public get message() {
