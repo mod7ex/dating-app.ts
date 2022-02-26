@@ -1,11 +1,18 @@
 <template>
-      <h1>Photos page</h1>
+      <Authenticated>
+            <h1>Photos page</h1>
+      </Authenticated>
 </template>
 
 <script>
+import Authenticated from "../../layouts/views/Authenticated.vue";
+
 export default {
       name: "Photos",
+      components: {
+            Authenticated,
+      },
 };
 </script>
 
-<style></style>
+<style lang="scss"></style>

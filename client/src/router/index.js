@@ -26,6 +26,36 @@ const routes = [
       },
 
       {
+            path: "/chat",
+            name: "Chat",
+            component: () => import("../views/user/Chat.vue"),
+      },
+
+      {
+            path: "/me/settings",
+            name: "Settings",
+            component: () => import("../views/user/Settings.vue"),
+      },
+
+      {
+            path: "/me/messages",
+            name: "Messages",
+            component: () => import("../views/user/Messages.vue"),
+      },
+
+      {
+            path: "/me/photos",
+            name: "Photos",
+            component: () => import("../views/user/Photos.vue"),
+      },
+
+      {
+            path: "/search",
+            name: "Search",
+            component: () => import("../views/Search.vue"),
+      },
+
+      {
             path: "/about",
             name: "About",
             component: () => import("../views/About.vue"),

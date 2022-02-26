@@ -1,12 +1,15 @@
-import { createStore } from 'vuex'
+import { createStore } from "vuex";
+
+import App from "./modules/App";
 
 export default createStore({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
-  modules: {
-  }
-})
+      state: {},
+
+      mutations: {},
+
+      actions: {},
+
+      modules: {
+            app: App,
+      },
+});

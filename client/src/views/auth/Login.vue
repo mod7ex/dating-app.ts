@@ -50,13 +50,14 @@
 
 <script>
 import FormField from "../../components/forms/FormField.vue";
-import Guest from "../../layouts/views/Guest.vue";
 import Form from "../../layouts/Form.vue";
 import BaseInput from "../../components/forms/BaseInput.vue";
 import SubmitInput from "../../components/forms/SubmitInput.vue";
-import { watch, ref, reactive, toRefs } from "vue";
+import Guest from "../../layouts/views/Guest.vue";
+import { reactive } from "vue";
 import { required, password, login_field } from "../../helpers/validators";
 import validationHandler from "../../mixins/validation";
+import { useRouter } from "vue-router";
 
 export default {
       name: "Login",
@@ -70,6 +71,8 @@ export default {
       },
 
       setup() {
+            const router = useRouter();
+
             let login = reactive({
                   email_or_username: null,
 
@@ -95,10 +98,14 @@ export default {
                   login
             );
 
-            let submit = () => {
+            let submit = async () => {
                   formTouch();
                   if (!isValideForm.value) return;
                   console.log(login);
+
+                  await router.push({
+                        name: "Settings",
+                  });
             };
 
             // let { email_or_username, password, remember } = toRefs(login);

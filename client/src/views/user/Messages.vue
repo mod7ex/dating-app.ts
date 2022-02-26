@@ -1,6 +1,6 @@
 <template>
       <Authenticated>
-            <h1>Search page</h1>
+            <h1>Messages page</h1>
       </Authenticated>
 </template>
 
@@ -8,7 +8,7 @@
 import Authenticated from "../../layouts/views/Authenticated.vue";
 
 export default {
-      name: "Search",
+      name: "Messages",
       components: {
             Authenticated,
       },

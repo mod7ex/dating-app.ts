@@ -21,12 +21,10 @@ export default {
       background-color: $white;
 
       .content {
-            padding: 0.5em;
             @include center();
-            width: 100%;
 
             input[type="submit"],
-            button {
+            .btn {
                   padding: 1em;
                   border: none;
                   @include shadow($blure: 3px);
@@ -65,6 +63,10 @@ textarea,
 button {
       outline: none;
       border-radius: $border-radius;
+}
+
+button {
+      cursor: pointer;
 }
 
 input[type="password"],

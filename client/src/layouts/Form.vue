@@ -31,9 +31,9 @@ form {
       @include shadow($blure: 3px);
       background-color: white;
       border-radius: $border-radius;
-      padding: 2em;
-      margin-top: 3em;
-      margin-bottom: 3em;
+      padding: 2em !important;
+      margin-top: 3em !important;
+      margin-bottom: 3em !important;
       .form-header {
             margin-bottom: 2em;
             color: $brand-color;

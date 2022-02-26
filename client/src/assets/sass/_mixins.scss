@@ -7,8 +7,10 @@
 }
 
 @mixin center($w: $screen-max-width) {
+      padding: 0.5em;
       max-width: $w;
       margin: 0 auto;
+      width: 100%;
 }
 
 @mixin shadow(

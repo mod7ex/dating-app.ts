@@ -1,15 +1,11 @@
 <template>
       <div class="container-auth">
             <Transition name="slide">
-                  <Sidebar
-                        :sidebarIsClosed="showSidebar"
-                        @sidebarHidden="showSidebar = false"
-                        v-if="showSidebar"
-                  />
+                  <Sidebar @hide-sidebar="closeSideBar" v-if="showSidebar" />
             </Transition>
 
             <header>
-                  <button @click="showSidebar = !showSidebar">
+                  <button @click="switchSidebar">
                         <svg
                               xmlns="http://www.w3.org/2000/svg"
                               width="33"
@@ -22,6 +18,7 @@
                         </svg>
                   </button>
             </header>
+
             <div class="content">
                   <slot>Lorem</slot>
             </div>
@@ -33,19 +30,33 @@
 <script>
 import Footer from "../../components/Footer.vue";
 import Sidebar from "../../components/Sidebar.vue";
-import { ref } from "vue";
+import { ref, watch, computed } from "vue";
+import { useStore } from "vuex";
 
 export default {
       name: "Authenticated",
+
       components: {
             Footer,
             Sidebar,
       },
 
       setup() {
-            let showSidebar = ref(true);
+            let store = useStore();
+
+            let closeSideBar = () => {
+                  store.dispatch("closeSidebar");
+            };
+
+            let switchSidebar = () => {
+                  store.dispatch("switchSidebar");
+            };
+
+            let showSidebar = computed(() => store.getters.showSidebar);
 
             return {
+                  switchSidebar,
+                  closeSideBar,
                   showSidebar,
             };
       },
@@ -60,8 +71,8 @@ export default {
       position: relative;
 
       header {
+            @include center();
             @include flex($justify: flex-end);
-            padding: 0.5em 0.5em 0 0.5em;
             button {
                   border-radius: 50%;
                   svg {
