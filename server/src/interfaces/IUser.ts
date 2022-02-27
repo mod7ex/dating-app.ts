@@ -1,7 +1,7 @@
 import { Types, Document } from "mongoose";
 import { CreateUserInput } from "../schema/user";
 
-export interface IUser extends CreateUserInput, Document {
+export default interface IUser extends CreateUserInput, Document {
       _id: Types.ObjectId;
 
       verificationCode: string;
@@ -13,6 +13,6 @@ export interface IUser extends CreateUserInput, Document {
       updatedAt: Date;
 
       comparePassword(password_condidat: string): Promise<boolean>;
-      getJWTAccessToken(expIn?: number): string;
-      getJWTRefreshToken(expIn?: number): Promise<string>;
+      signAccessToken(expIn?: number): string;
+      signRefreshToken(expIn?: number): Promise<string>;
 }

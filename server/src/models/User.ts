@@ -1,22 +1,23 @@
 import { Schema, model } from "mongoose";
-import { IUser, IUserInput } from "../interfaces/IUser";
+import { CreateUserInput } from "../schema/user";
+import IUser from "../interfaces/IUser";
 import { emailRegex, passwordRegex } from "../helpers";
-import {
-      generateJWTAccessToken,
-      generateJWTRefreshToken,
-} from "../services/token";
+import { signAccessToken, signRefreshToken } from "../services/auth";
 import { generateCode } from "../helpers";
 import logger from "../utils/logger";
 import argon2 from "argon2";
 
 const userSchema = new Schema<IUser>({
       first_name: { type: String, required: [true, "First name is required"] },
+
       last_name: { type: String, required: [true, "Last name is required"] },
+
       username: {
             type: String,
             unique: true,
             required: [true, "Username is required"],
       },
+
       email: {
             type: String,
             unique: true,
@@ -24,25 +25,29 @@ const userSchema = new Schema<IUser>({
             match: [emailRegex, "Please enter a valid email"],
             maxlength: [320, "Please enter a valid email"],
       },
+
       password: {
             type: String,
             select: false,
             required: [true, "Password is required"],
       },
-      password_confirmation: String,
 
       verificationCode: {
             type: String,
             default: generateCode(),
       },
+
       passwordResetCode: String,
+
       verified: {
             type: Boolean,
             default: false,
       },
 
       lastOnline: Date,
+
       createdAt: Date,
+
       updatedAt: {
             type: Date,
             default: new Date(),
@@ -66,14 +71,9 @@ userSchema.pre<IUser>("save", async function (next) {
       return next();
 });
 
-userSchema.post<IUserInput>("validate", function (next) {
+userSchema.post<CreateUserInput>("validate", function (next) {
       if (!this.password.match(passwordRegex))
             return next(new Error("Invalid password"));
-
-      if (this.password != this.password_confirmation)
-            return next(new Error("Please confirm your password"));
-
-      this.password_confirmation = undefined;
 
       return next();
 });
@@ -91,15 +91,15 @@ userSchema.methods = {
             }
       },
 
-      getJWTAccessToken: function (this: IUser): string {
-            return generateJWTAccessToken({
+      signAccessToken: function (this: IUser): string {
+            return signAccessToken({
                   _id: this._id,
                   username: this.username,
             });
       },
 
-      getJWTRefreshToken: function (this: IUser): Promise<string> {
-            return generateJWTRefreshToken({
+      signRefreshToken: function (this: IUser): Promise<string> {
+            return signRefreshToken({
                   _id: this._id,
                   username: this.username,
             });

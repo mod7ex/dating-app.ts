@@ -4,27 +4,34 @@ import auth from "../controllers/auth";
 import {
       createUserSchema,
       verifyUserSchema,
-      passwordResetSchema,
+      forgotPasswordSchema,
+      resetPasswordSchema,
 } from "../schema/user";
 
 const authRouter = Router();
 
 authRouter.post(
-      "/api/auth/register",
+      "/auth/register",
       resourceValidator._$(createUserSchema),
       auth.register
 );
 
 authRouter.post(
-      "/api/auth/verify/:id/:verificationCode",
+      "/auth/verify/:id/:verificationCode",
       resourceValidator._$(verifyUserSchema),
       auth.verify
 );
 
 authRouter.post(
-      "/api/auth/forgotpassword",
-      resourceValidator._$(passwordResetSchema),
-      auth.password_reset
+      "/auth/forgotpassword",
+      resourceValidator._$(forgotPasswordSchema),
+      auth.forgot_password
+);
+
+authRouter.post(
+      "/auth/resetpassword/:id/:passwordResetCode",
+      resourceValidator._$(resetPasswordSchema),
+      auth.reset_password
 );
 
 export default authRouter;

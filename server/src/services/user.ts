@@ -1,5 +1,5 @@
 import User from "../models/User";
-import { IUser } from "../interfaces/IUser";
+import IUser from "../interfaces/IUser";
 import { FilterQuery, QueryOptions } from "mongoose";
 import { NotFoundError, UnauthorizedError } from "../errors";
 import { CreateUserInput } from "../schema/user";
@@ -16,7 +16,7 @@ export let findUser = async (
       query: FilterQuery<IUser>,
       options: QueryOptions | null = { lean: false }
 ) => {
-      return User.findOne(query, null, options);
+      return User.findOne<IUser>(query, null, options);
 };
 
 export let findUserByEmail = async (
@@ -41,14 +41,14 @@ export let loginUser = async ({
 > => {
       let user = await findUser({ email });
 
-      if (!user) throw new NotFoundError("No user found with this email");
+      if (!user) throw new NotFoundError("User not found");
 
       let isValidPassword = user.comparePassword(password);
 
       if (!isValidPassword) throw new UnauthorizedError("Wrong password");
 
-      let accessToken = user.getJWTAccessToken();
-      let refreshToken = await user.getJWTRefreshToken();
+      let accessToken = user.signAccessToken();
+      let refreshToken = await user.signRefreshToken();
 
       return {
             accessToken,

@@ -5,18 +5,19 @@ import {
       findUserById,
       findUserByEmail,
 } from "../services/user";
-import {
-      // generateJWTAccessToken,
-      getUserRefreshToken,
-      VerifyJWT,
-      deleteJWTRefreshToken,
-} from "../services/token";
+import {} from "../services/auth";
 import { StatusCodes } from "http-status-codes";
-import { UnauthorizedError, ForbiddenError } from "../errors";
+import {
+      UnauthorizedError,
+      ForbiddenError,
+      NotFoundError,
+      BadRequestError,
+} from "../errors";
 import {
       CreateUserInput,
       VerifyUserInput,
-      PasswordResetInput,
+      ForgotPasswordInput,
+      ResetPasswordInput,
 } from "../schema/user";
 import { sendEmail } from "../utils/mailer";
 import { CustomError } from "../errors";
@@ -78,8 +79,8 @@ class Auth {
             throw new CustomError("Could not verify user");
       };
 
-      password_reset = async (
-            req: Request<{}, {}, PasswordResetInput>,
+      forgot_password = async (
+            req: Request<{}, {}, ForgotPasswordInput>,
             res: Response,
             _: NextFunction
       ): Promise<void> => {
@@ -97,7 +98,7 @@ class Auth {
 
             if (!user.verified) {
                   res.status(StatusCodes.OK).json({
-                        message: "Account is not verified",
+                        message: "Account is not verified yet",
                   });
                   return;
             }
@@ -112,9 +113,41 @@ class Auth {
                   text: `password reset code ${user.passwordResetCode}. Id: ${user._id}`,
             });
 
-            logger.log(`password reset email sent to ${email}`);
-
             res.status(StatusCodes.CREATED).json({ success: true });
+      };
+
+      reset_password = async (
+            req: Request<
+                  ResetPasswordInput["params"],
+                  {},
+                  ResetPasswordInput["body"]
+            >,
+            res: Response,
+            _: NextFunction
+      ): Promise<void> => {
+            let { id, passwordResetCode } = req.params;
+
+            let { password, password_confirmation } = req.body;
+
+            let user = await findUserById(id);
+
+            if (!user) throw new NotFoundError("User not found");
+
+            if (!user.passwordResetCode)
+                  throw new BadRequestError("Could not reset password");
+
+            if (user.passwordResetCode !== passwordResetCode)
+                  throw new BadRequestError("Could not reset password");
+
+            delete user.passwordResetCode;
+
+            user.password = password;
+
+            user.save();
+
+            res.status(StatusCodes.OK).json({
+                  message: "Successfully updated user password",
+            });
       };
 
       async login(

@@ -1,5 +1,6 @@
 import nodemailer, { SendMailOptions } from "nodemailer";
 import { SMTP } from "../config/config";
+import logger from "../utils/logger";
 
 /*
 
@@ -19,4 +20,6 @@ export let sendEmail = async (payload: Partial<SendMailOptions>) => {
             if (err) throw err;
             console.log(`Preview URL: ${nodemailer.getTestMessageUrl(info)}`);
       });
+
+      logger.log(`<${payload.subject}> --email sent to-- ${payload.to}`);
 };
