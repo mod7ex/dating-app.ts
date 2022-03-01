@@ -1,15 +1,15 @@
 import User from "../models/User";
 import IUser from "../interfaces/IUser";
 import { FilterQuery, QueryOptions } from "mongoose";
-import { NotFoundError, UnauthorizedError } from "../errors";
 import { CreateUserInput } from "../schema/user";
+import { emailRegex } from "../helpers";
 
 export let createUser = async (input: Partial<CreateUserInput>) => {
       return await User.create(input);
 };
 
-export let findUserById = async (id: string) => {
-      return await User.findById(id);
+export let findUserById = async (id: string, options?: QueryOptions | null) => {
+      return await User.findById(id, null, options);
 };
 
 export let findUser = async (
@@ -26,34 +26,16 @@ export let findUserByEmail = async (
       return await findUser({ email }, options);
 };
 
-export let loginUser = async ({
-      email,
-      password,
-}: {
-      email: IUser["email"];
-      password: IUser["password"];
-}): Promise<
-      | {
-              accessToken: string;
-              refreshToken: string;
-        }
-      | never
-> => {
-      let user = await findUser({ email });
+export let findUserByLogin = async (
+      login: IUser["email"] | IUser["username"]
+): Promise<IUser | null> => {
+      let isEmail = emailRegex.test(login),
+            user: IUser | null = null;
 
-      if (!user) throw new NotFoundError("User not found");
+      if (isEmail) user = await findUser({ email: login });
+      else user = await findUser({ username: login });
 
-      let isValidPassword = user.comparePassword(password);
-
-      if (!isValidPassword) throw new UnauthorizedError("Wrong password");
-
-      let accessToken = user.signAccessToken();
-      let refreshToken = await user.signRefreshToken();
-
-      return {
-            accessToken,
-            refreshToken,
-      };
+      return user;
 };
 
 export let deleteAllUsers = async () => {

@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 
 export default {
       name: "BaseInput",
@@ -69,3 +69,9 @@ export default {
       },
 };
 </script>
+
+<style lang="scss" scoped>
+label {
+      max-width: fit-content;
+}
+</style>

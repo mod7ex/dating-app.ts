@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Controller from "./Controller";
-import { JWT_SECRET_ACCESS } from "../config/config";
-import jwt, { VerifyErrors } from "jsonwebtoken";
+import { verifyAccessToken } from "../services/auth";
 import { UnauthorizedError, ForbiddenError } from "../errors";
 
 class Auth extends Controller {
@@ -16,20 +15,23 @@ class Auth extends Controller {
       ): Promise<void | never> => {
             let authHeader = req.headers.authorization;
 
-            let token =
+            let accessToken =
                   authHeader &&
                   authHeader.startsWith("Bearer ") &&
                   authHeader.split(" ")[1];
 
-            if (!token) throw new UnauthorizedError("Unauthenticated");
+            if (!accessToken) throw new UnauthorizedError("Unauthenticated");
 
-            jwt.verify(token, JWT_SECRET_ACCESS, (err, payload) => {
-                  if (err) throw new ForbiddenError();
+            let { decoded, expired } = verifyAccessToken(accessToken);
 
-                  // @ts-ignore
-                  req.user = payload;
-                  next();
-            });
+            // if (expired) throw new ForbiddenError(); // refresh it
+            if (expired) return res.redirect("/auth/refresh");
+
+            if (!decoded) throw new ForbiddenError();
+
+            // it would be better to put decoded in req, work on request
+            res.locals.user = { _id: decoded._id, username: decoded.username };
+            next();
       };
 }
 

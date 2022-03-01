@@ -28,7 +28,7 @@ const userSchema = new Schema<IUser>({
 
       password: {
             type: String,
-            select: false,
+            // select: false,
             required: [true, "Password is required"],
       },
 
@@ -53,6 +53,13 @@ const userSchema = new Schema<IUser>({
             default: new Date(),
       },
 });
+
+export const privateFields = [
+      "password",
+      "verificationCode",
+      "passwordResetCode",
+      "verified",
+];
 
 userSchema.index({ email: 1, username: 1 });
 

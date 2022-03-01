@@ -1,6 +1,6 @@
 import nodemailer, { SendMailOptions } from "nodemailer";
 import { SMTP } from "../config/config";
-import logger from "../utils/logger";
+import logger from "./logger";
 
 /*
 

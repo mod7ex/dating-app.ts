@@ -29,6 +29,18 @@ export const createUserSchema = object({
       }),
 });
 
+export const loginUserSchema = object({
+      body: object({
+            login: string({
+                  required_error: "login is required",
+            }),
+
+            password: string({
+                  required_error: "password is required",
+            }).min(6, "password should be at least 6 chars"),
+      }),
+});
+
 export const verifyUserSchema = object({
       prams: object({
             id: string(),
@@ -65,6 +77,7 @@ export const resetPasswordSchema = object({
 });
 
 export type CreateUserInput = TypeOf<typeof createUserSchema>["body"];
+export type LoginUserInput = TypeOf<typeof loginUserSchema>["body"];
 export type VerifyUserInput = TypeOf<typeof verifyUserSchema>["prams"];
 export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>["body"];
 export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;

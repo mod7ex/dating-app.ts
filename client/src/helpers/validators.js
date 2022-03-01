@@ -1,5 +1,7 @@
 const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
+const phoneNumberRegex = /^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$/;
+
 const nameRegex = new RegExp(`^[a-z ,.'-]+$`, "i");
 
 const passwordRegex = new RegExp(`^[a-z ,.'-]+$`);
@@ -35,6 +37,13 @@ export const name = (val) => {
       return {
             valide: cleanOnEmpty((v) => nameRegex.test(v))(val),
             error: "invalide name",
+      };
+};
+
+export const phone_number = (val) => {
+      return {
+            valide: cleanOnEmpty((v) => phoneNumberRegex.test(v))(val),
+            error: "invalide phone number",
       };
 };
 

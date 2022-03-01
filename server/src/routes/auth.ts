@@ -1,37 +1,24 @@
 import { Router } from "express";
-import resourceValidator from "../middlewares/ResourceValidator";
-import auth from "../controllers/auth";
-import {
-      createUserSchema,
-      verifyUserSchema,
-      forgotPasswordSchema,
-      resetPasswordSchema,
-} from "../schema/user";
+import authController from "../controllers/auth";
+import { createUserSchema, loginUserSchema } from "../schema/user";
+import { resourceValidator, auth } from "../middlewares";
 
 const authRouter = Router();
 
 authRouter.post(
+      "/auth/login",
+      resourceValidator._$(loginUserSchema),
+      authController.login
+);
+
+authRouter.post(
       "/auth/register",
       resourceValidator._$(createUserSchema),
-      auth.register
+      authController.register
 );
 
-authRouter.post(
-      "/auth/verify/:id/:verificationCode",
-      resourceValidator._$(verifyUserSchema),
-      auth.verify
-);
+authRouter.post("/auth/logout", auth._$, authController.register);
 
-authRouter.post(
-      "/auth/forgotpassword",
-      resourceValidator._$(forgotPasswordSchema),
-      auth.forgot_password
-);
-
-authRouter.post(
-      "/auth/resetpassword/:id/:passwordResetCode",
-      resourceValidator._$(resetPasswordSchema),
-      auth.reset_password
-);
+authRouter.post("/auth/refresh", authController.refreshAccessToken);
 
 export default authRouter;

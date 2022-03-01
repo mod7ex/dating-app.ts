@@ -2,7 +2,7 @@ import jwtApp from "../utils/jwt";
 import IUser from "../interfaces/IUser";
 import { RedisClient } from "../db";
 
-type JWTSubject = {
+export type JWTSubject = {
       _id: IUser["_id"];
       username: IUser["username"];
 };
@@ -30,6 +30,14 @@ export const signRefreshToken = async (
       return token;
 };
 
+export const verifyAccessToken = (subject: string) => {
+      return jwtApp.verify<JWTSubject | null>(subject);
+};
+
+export const verifyRefreshToken = (subject: string) => {
+      return jwtApp.verify<JWTSubject | null>(subject, "refresh");
+};
+
 export const dropRefreshToken = async (_id: string) => {
       return RedisClient.del(_id);
 };
@@ -37,19 +45,3 @@ export const dropRefreshToken = async (_id: string) => {
 export const getUserRefreshToken = (_id: string): Promise<string | null> => {
       return RedisClient.get(_id);
 };
-
-// export const VerifyJWT = (
-//       subject: string
-// ): { payload: Jwt | JwtPayload | string | null; expired: boolean } => {
-//       try {
-//             let payload = jwt.verify(subject, JWT_SECRET.refresh);
-//             return { payload, expired: false };
-//       } catch (err) {
-//             return {
-//                   payload: null,
-//                   expired: (err as JsonWebTokenError).message.includes(
-//                         "jwt expired"
-//                   ),
-//             };
-//       }
-// };
