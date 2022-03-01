@@ -43,8 +43,8 @@ export const RedisClient = createClient({
             host: REDIS.host,
             port: REDIS.port,
       },
-      username: REDIS.username,
-      password: REDIS.password,
+      // username: REDIS.username,
+      // password: REDIS.password,
 });
 
 export const trackRedis = async () => {

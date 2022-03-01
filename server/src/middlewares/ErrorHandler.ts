@@ -33,7 +33,7 @@ class ErrorHandler extends Controller {
 
             let error = new CustomError();
 
-            if (super.isVerifyErrors(err)) {
+            if (this.isVerifyErrors(err)) {
                   error = new ForbiddenError();
             }
 
