@@ -28,12 +28,9 @@ export default {
 <style lang="scss">
 form {
       @include center($screen-small);
-      @include shadow($blure: 3px);
-      background-color: white;
-      border-radius: $border-radius;
-      padding: 2em !important;
-      margin-top: 3em !important;
-      margin-bottom: 3em !important;
+
+      @include area();
+
       .form-header {
             margin-bottom: 2em;
             color: $brand-color;
