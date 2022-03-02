@@ -16,7 +16,9 @@
 
                   <!-- Default slot -->
 
-                  <component :is="component" />
+                  <KeepAlive :max="3600">
+                        <component :is="component" :vHandler="vHandler" />
+                  </KeepAlive>
 
                   <!-- Default slot -->
 
@@ -40,7 +42,11 @@ import Part3 from "../components/searchPage/Part3.vue";
 
 import Authenticated from "../layouts/views/Authenticated.vue";
 
-import { ref } from "vue";
+import { ref, reactive } from "vue";
+import { useStore } from "vuex";
+
+import validationHandler from "../mixins/validation";
+import { name, phone_number } from "../helpers/validators";
 
 export default {
       name: "Search",
@@ -55,16 +61,37 @@ export default {
       },
 
       setup() {
-            let submit = () => {};
+            let store = useStore();
 
             let tabs = ["Part1", "Part2", "Part3"];
 
             let component = ref("Part1");
 
+            let searchForm = reactive(store.state.app.searchForm);
+
+            let rules = {
+                  username: { name },
+                  name: { name },
+                  phone_number: { phone_number },
+            };
+
+            let { vHandler, isValideForm, formTouch } = validationHandler(
+                  rules,
+                  searchForm
+            );
+
+            let submit = () => {
+                  formTouch();
+                  console.log(isValideForm.value);
+                  console.log(searchForm);
+                  if (!isValideForm.value) return;
+            };
+
             return {
                   submit,
                   tabs,
                   component,
+                  vHandler,
             };
       },
 };
@@ -73,6 +100,16 @@ export default {
 <style lang="scss">
 #searchForm {
       @include center($screen-medium);
+
+      .form-field {
+            & > label {
+                  min-width: 9em;
+            }
+
+            &.flex {
+                  @include flex();
+            }
+      }
 
       .form-header {
             @include flex($justify: space-between);

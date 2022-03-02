@@ -69,9 +69,3 @@ export default {
       },
 };
 </script>
-
-<style lang="scss" scoped>
-label {
-      max-width: fit-content;
-}
-</style>

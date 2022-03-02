@@ -1,29 +1,103 @@
 <template>
-      <FormField>
-            <label for="age_from"></label>
-            <select name="age_from" id="age_from">
-                  <option v-for="i in 10" :key="i" :value="i">{{ i }}</option>
-            </select>
+      <FormField class="flex">
+            <label>Partner age</label>
 
-            <label for="age_to"></label>
-            <select name="age_to" id="age_to">
-                  <option v-for="i in 10" :key="i" :value="i">{{ i }}</option>
-            </select>
+            <SelectInput
+                  label="from"
+                  name="age_from"
+                  :values="[1, 2, 3]"
+                  v-model="part2.partner_age.from"
+            />
+            <SelectInput
+                  label="to"
+                  name="age_to"
+                  :values="[1, 2, 3]"
+                  v-model="part2.partner_age.to"
+            />
       </FormField>
 
-      <FormField>
-            <BaseInput label="With photo" type="checkbox" name="with_photo" />
+      <FormField class="flex">
+            <label>Height</label>
+
+            <SelectInput
+                  label="from"
+                  name="height_from"
+                  :values="[1, 2, 3]"
+                  v-model="part2.height.from"
+            />
+            <SelectInput
+                  label="to"
+                  name="height_to"
+                  :values="[1, 2, 3]"
+                  v-model="part2.height.to"
+            />
+      </FormField>
+
+      <FormField class="flex">
+            <label>Weight</label>
+
+            <SelectInput
+                  label="from"
+                  name="weight_from"
+                  :values="[1, 2, 3]"
+                  v-model="part2.weight.from"
+            />
+            <SelectInput
+                  label="to"
+                  name="weight_to"
+                  :values="[1, 2, 3]"
+                  v-model="part2.weight.to"
+            />
+      </FormField>
+
+      <FormField class="flex">
+            <CheckboxList v-model="part2.languages">Languages </CheckboxList>
+      </FormField>
+
+      <FormField class="flex">
+            <CheckboxList v-model="part2.marital_status"
+                  >Marital status
+            </CheckboxList>
+      </FormField>
+
+      <FormField class="flex">
+            <CheckboxList v-model="part2.smoking">Smoking </CheckboxList>
+      </FormField>
+
+      <FormField class="flex">
+            <CheckboxList v-model="part2.drinking">Drinking </CheckboxList>
+      </FormField>
+
+      <FormField class="flex">
+            <CheckboxList v-model="part2.relegion">Relegion </CheckboxList>
+      </FormField>
+
+      <FormField class="flex">
+            <CheckboxList v-model="part2.eye_color">Eye color </CheckboxList>
+      </FormField>
+
+      <FormField class="flex">
+            <CheckboxList v-model="part2.hair_color">Hair color </CheckboxList>
+      </FormField>
+
+      <FormField class="flex">
+            <BaseInput
+                  type="checkbox"
+                  label="Without children"
+                  name="without_children"
+                  v-model="part2.without_children"
+            />
       </FormField>
 </template>
 
 <script>
 import { reactive, watch } from "vue";
+import { useStore } from "vuex";
 
+import CheckboxList from "../forms/CheckboxList.vue";
 import FormField from "../forms/FormField.vue";
 import BaseInput from "../forms/BaseInput.vue";
-import RadioOptions from "../forms/RadioOptions.vue";
-
-import validationHandler from "../../mixins/validation";
+import SelectInput from "../forms/SelectInput.vue";
 
 export default {
       name: "Part2",
@@ -31,47 +105,23 @@ export default {
       components: {
             FormField,
             BaseInput,
-            RadioOptions,
+            SelectInput,
+            CheckboxList,
+      },
+
+      props: {
+            vHandler: Object,
       },
 
       setup() {
-            let part1 = reactive({
-                  age: {
-                        from: null,
-                        to: null,
-                  },
-
-                  height: {
-                        from: null,
-                        to: null,
-                  },
-
-                  weight: {
-                        from: null,
-                        to: null,
-                  },
-
-                  children: null,
-
-                  marital_status: null,
-                  smoking: null,
-                  drinking: null,
-                  relegion: null,
-                  eye_color: null,
-                  hair_color: null,
-            });
-
-            // let rules = { };
-
-            // let { vHandler, isValideForm, formTouch } = validationHandler(
-            //       rules,
-            //       part1
-            // );
+            let store = useStore();
+            let part2 = reactive(store.state.app.searchForm);
 
             return {
-                  part1,
-                  // ...vHandler,
+                  part2,
             };
       },
 };
 </script>
+
+<style lang="scss"></style>

@@ -1,5 +1,5 @@
 <template>
-      <FormField id="gender">
+      <FormField id="gender" class="flex">
             <label>Gender:</label>
             <div class="options">
                   <RadioOptions
@@ -39,7 +39,10 @@
             </FormField>
       </div>
 
-      <FormField :valide="username.valide" :error="username.error">
+      <FormField
+            :valide="vHandler.username.valide"
+            :error="vHandler.username.error"
+      >
             <BaseInput
                   type="text"
                   label="Username"
@@ -48,7 +51,7 @@
             />
       </FormField>
 
-      <FormField :valide="name.valide" :error="name.error">
+      <FormField :valide="vHandler.name.valide" :error="vHandler.name.error">
             <BaseInput
                   type="text"
                   label="Name"
@@ -57,7 +60,10 @@
             />
       </FormField>
 
-      <FormField :valide="phone_number.valide" :error="phone_number.error">
+      <FormField
+            :valide="vHandler.phone_number.valide"
+            :error="vHandler.phone_number.error"
+      >
             <BaseInput
                   label="Phone number"
                   type="text"
@@ -66,7 +72,7 @@
             />
       </FormField>
 
-      <FormField id="online_now">
+      <FormField id="online_now" class="flex">
             <BaseInput
                   label="Online now"
                   type="checkbox"
@@ -75,7 +81,7 @@
             />
       </FormField>
 
-      <FormField id="withPhoto">
+      <FormField id="withPhoto" class="flex">
             <BaseInput
                   label="With photo"
                   type="checkbox"
@@ -87,14 +93,15 @@
 
 <script>
 import { reactive, watch } from "vue";
+import { useStore } from "vuex";
 
 import FormField from "../forms/FormField.vue";
 import BaseInput from "../forms/BaseInput.vue";
 import RadioOptions from "../forms/RadioOptions.vue";
 
-import validationHandler from "../../mixins/validation";
+// import validationHandler from "../../mixins/validation";
 
-import { name, phone_number } from "../../helpers/validators";
+// import { name, phone_number } from "../../helpers/validators";
 
 export default {
       name: "Part1",
@@ -105,31 +112,25 @@ export default {
             RadioOptions,
       },
 
+      props: {
+            vHandler: Object,
+      },
+
       setup() {
-            let part1 = reactive({
-                  gender: null,
-                  location: {
-                        country: null,
-                        region: null,
-                        city: null,
-                  },
-                  username: null,
-                  name: null,
-                  online: false,
-                  phone_number: null,
-                  with_photo: false,
-            });
+            let store = useStore();
 
-            let rules = {
-                  username: { name },
-                  name: { name },
-                  phone_number: { phone_number },
-            };
+            let part1 = reactive(store.state.app.searchForm);
 
-            let { vHandler, isValideForm, formTouch } = validationHandler(
-                  rules,
-                  part1
-            );
+            // let rules = {
+            //       username: { name },
+            //       name: { name },
+            //       phone_number: { phone_number },
+            // };
+
+            // let { vHandler, isValideForm, formTouch } = validationHandler(
+            //       rules,
+            //       part1
+            // );
 
             let options = [
                   { label: "Male", value: "male" },
@@ -140,7 +141,7 @@ export default {
             return {
                   part1,
                   options,
-                  ...vHandler,
+                  // ...vHandler,
             };
       },
 };
@@ -148,12 +149,6 @@ export default {
 
 <style lang="scss">
 #gender {
-      @include flex($justify: flex-start);
-
-      label {
-            margin-right: 1em;
-      }
-
       .options {
             @include flex($justify: flex-start);
 
@@ -164,14 +159,6 @@ export default {
                         margin-right: 0.3em;
                   }
             }
-      }
-}
-
-#online_now,
-#withPhoto {
-      @include flex($justify: flex-start);
-      label {
-            min-width: 6em;
       }
 }
 

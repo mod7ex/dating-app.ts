@@ -1,20 +1,41 @@
 <template>
       <FormField>
             <BaseInput
+                  label="Education"
                   type="text"
-                  label="Email or username"
-                  name="email_or_username"
+                  name="education"
+                  v-model="part3.education"
             />
       </FormField>
 
       <FormField>
-            <BaseInput type="password" label="Password" name="password" />
+            <BaseInput
+                  label="Ocupation"
+                  type="text"
+                  name="ocupation"
+                  v-model="part3.ocupation"
+            />
+      </FormField>
+
+      <FormField class="flex">
+            <label>Income</label>
+
+            <SelectInput
+                  label=" "
+                  name="age_from"
+                  :values="[1, 2, 3]"
+                  v-model="part3.income"
+            />
       </FormField>
 </template>
 
 <script>
+import { reactive, watch } from "vue";
+import { useStore } from "vuex";
+
 import FormField from "../forms/FormField.vue";
 import BaseInput from "../forms/BaseInput.vue";
+import SelectInput from "../forms/SelectInput.vue";
 
 export default {
       name: "Part3",
@@ -22,6 +43,20 @@ export default {
       components: {
             FormField,
             BaseInput,
+            SelectInput,
+      },
+
+      props: {
+            vHandler: Object,
+      },
+
+      setup() {
+            let store = useStore();
+            let part3 = reactive(store.state.app.searchForm);
+
+            return {
+                  part3,
+            };
       },
 };
 </script>

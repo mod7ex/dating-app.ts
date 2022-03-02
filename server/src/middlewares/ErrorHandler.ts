@@ -71,7 +71,7 @@ class ErrorHandler extends Controller {
                   );
             }
 
-            res.status(error.status_code).json({ error: error.toObject() });
+            res.status(error.status_code).json(error.toObject());
             return;
       };
 }

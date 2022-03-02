@@ -1,1 +1,21 @@
-POST http://localhost:3000/login
+POST http://localhost:3000/auth/login HTTP/1.1
+content-type: application/json
+
+{
+      "login": "modex",
+      "password": "cpgempsi"
+}
+
+###
+
+POST http://localhost:3000/auth/register HTTP/1.1
+content-Type: application/json
+
+{
+      "first_name": "Mourad",
+      "last_name": "EL CADI",
+      "username": "modex98",
+      "email": "mourad@mail.com",
+      "password": "secret",
+      "password_confirmation": "secret",
+}

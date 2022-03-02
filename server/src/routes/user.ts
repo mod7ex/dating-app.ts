@@ -29,3 +29,5 @@ userRouter.patch(
 );
 
 userRouter.get("/auth/me", auth._$, userController.me);
+
+export default userRouter;
