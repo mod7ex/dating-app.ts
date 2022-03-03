@@ -29,7 +29,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjIwYjk2N
 
 #################################################################################
 
-PATCH  http://localhost:3000/user/verify/6220b967ca8b29064f0a3f59/3611 HTTP/1.1
+PATCH  http://localhost:3000/user/verify/622133f9da917d285ef69ab2/4537 HTTP/1.1
 
 
 
@@ -57,3 +57,10 @@ content-Type: application/json
 
 PATCH  http://localhost:3000/auth/refresh HTTP/1.1
 X-REFRESH: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjIwYjk2N2NhOGIyOTA2NGYwYTNmNTkiLCJ1c2VybmFtZSI6Im1vZGV4OTgiLCJpYXQiOjE2NDYzMjM5MjcsImV4cCI6MTY0NjMyMzk4N30.qm3bes6QA-vc8fY_2TXwOetftA9OwNPt8ul9rfnFaYY
+
+
+
+#################################################################################
+
+GET  http://localhost:3000/user/me HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjIxMzNmOWRhOTE3ZDI4NWVmNjlhYjIiLCJ1c2VybmFtZSI6Im1vZGV4OTgiLCJpYXQiOjE2NDYzNDMxOTIsImV4cCI6MTY0NjM0Njc5Mn0.OfRz_Rx4NyxM21F_Ltt4MD55aoFPGwzWzl4sVpimxrw

@@ -7,22 +7,36 @@ import {
       ForgotPasswordInput,
       ResetPasswordInput,
 } from "../schema/user";
+import { MetaInput } from "../schema/meta";
 import { sendEmail } from "../utils/mailer";
 import { CustomError } from "../errors";
 import logger from "../utils/logger";
 import { generateCode } from "../helpers";
 import { omit } from "lodash";
-import { privateFields } from "../models/User";
+import { userPrivateFields } from "../models/User";
+import { metaPrivateFields } from "../models/Meta";
 
 class User {
-      me = async (req: Request, res: Response, next: NextFunction) => {
+      me = async (
+            req: Request,
+            res: Response,
+            next: NextFunction
+      ): Promise<void> => {
             let { _id } = res.locals.user;
 
+            // let user = await findUserById(_id, {lean: true});
             let user = await findUserById(_id);
 
             if (!user) throw new NotFoundError("User not found");
 
-            res.status(StatusCodes.OK).json(omit(user, privateFields));
+            let meta = await user.getMeta();
+
+            console.log(meta);
+
+            res.status(StatusCodes.OK).json({
+                  ...omit(user.toObject(), userPrivateFields),
+                  ...omit(meta.toObject(), metaPrivateFields),
+            });
       };
 
       verify = async (
@@ -51,6 +65,8 @@ class User {
                   throw new CustomError("Could not verify user");
 
             user.verified = true;
+            let meta = await user.initMeta();
+            user.meta_id = meta._id;
             await user.save();
             res.status(StatusCodes.OK).json({
                   message: "Account successfuly verified",
@@ -126,6 +142,22 @@ class User {
             res.status(StatusCodes.OK).json({
                   message: "Successfully updated user password",
             });
+      };
+
+      updateMeta = async (
+            req: Request<{}, {}, MetaInput>,
+            res: Response,
+            next: NextFunction
+      ): Promise<void> => {
+            let { _id } = res.locals.user;
+
+            let user = await findUserById(_id);
+
+            if (!user) throw new NotFoundError("User not found");
+
+            await user.updateMeta(req.body);
+
+            res.status(StatusCodes.OK).json({ message: "User updated" });
       };
 }
 

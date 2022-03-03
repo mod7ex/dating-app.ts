@@ -29,5 +29,6 @@ userRouter.patch(
 );
 
 userRouter.get("/user/me", auth._$, userController.me);
+userRouter.patch("/user/update", auth._$, userController.updateMeta);
 
 export default userRouter;

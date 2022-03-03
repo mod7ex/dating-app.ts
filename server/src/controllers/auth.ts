@@ -41,7 +41,7 @@ class Auth {
 
             let user = await findUserByLogin(login);
 
-            if (!user) throw new NotFoundError("Could not log in");
+            if (!user) throw new NotFoundError("invalide credentials");
 
             if (!user.verified)
                   throw new NotFoundError("check email for account validation");
@@ -49,7 +49,7 @@ class Auth {
             let isValidPassword = await user.comparePassword(password);
 
             if (!isValidPassword)
-                  throw new UnauthorizedError("Could not log in");
+                  throw new UnauthorizedError("invalide credentials");
 
             let accessToken = user.signAccessToken();
             let refreshToken = await user.signRefreshToken();

@@ -1,11 +1,13 @@
 import { Types, Document } from "mongoose";
+import { MetaInput } from "../schema/meta";
+import IUser from "./IUser";
+
+/* 
 
 export interface MetaInput {
-      avatar?: string;
       phone_number?: string;
       dob?: Date;
       gender?: boolean | unknown;
-      media?: string[];
       location?: {
             country?: number;
             region?: number;
@@ -30,8 +32,16 @@ export interface MetaInput {
       about_partner?: string;
 }
 
+*/
+
 export default interface IMeta extends MetaInput, Document {
       _id: Types.ObjectId;
+
+      user_id: Types.ObjectId;
+      user: IUser;
+
+      avatar?: string;
+      media?: string[];
 
       createdAt: Date;
       updatedAt: Date;
