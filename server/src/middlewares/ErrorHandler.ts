@@ -24,7 +24,7 @@ class ErrorHandler extends Controller {
       ): Promise<void> => {
             await logger.error(err);
 
-            console.log({
+            console.log("====> ", {
                   name: err.name,
                   type: typeof err,
                   // code: err.code,

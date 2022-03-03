@@ -17,8 +17,8 @@ authRouter.post(
       authController.register
 );
 
-authRouter.post("/auth/logout", auth._$, authController.register);
+authRouter.delete("/auth/logout", auth._$, authController.logout);
 
-authRouter.post("/auth/refresh", authController.refreshAccessToken);
+authRouter.patch("/auth/refresh", authController.refreshAccessToken);
 
 export default authRouter;

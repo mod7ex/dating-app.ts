@@ -27,7 +27,9 @@ class Auth {
                   text: `verification code ${user.verificationCode}. Id: ${user._id}`,
             });
 
-            res.status(StatusCodes.CREATED).json({ success: true });
+            res.status(StatusCodes.CREATED).json({
+                  message: "check email for account validation",
+            });
       };
 
       async login(
@@ -40,6 +42,9 @@ class Auth {
             let user = await findUserByLogin(login);
 
             if (!user) throw new NotFoundError("Could not log in");
+
+            if (!user.verified)
+                  throw new NotFoundError("check email for account validation");
 
             let isValidPassword = await user.comparePassword(password);
 
@@ -62,7 +67,7 @@ class Auth {
       ): Promise<void> => {
             await dropRefreshToken(res.locals.user._id);
 
-            res.status(StatusCodes.NO_CONTENT).json({ message: "Logged out" });
+            res.status(StatusCodes.OK).json({ message: "Logged out" });
       };
 
       refreshAccessToken = async (
@@ -78,7 +83,8 @@ class Auth {
                   providedRefreshToken as string
             );
 
-            if (expired) throw new UnauthorizedError(); // the token has been also deleted from redis
+            if (expired) throw new UnauthorizedError("session expired"); // the token has been also deleted from redis
+
             if (!decoded) throw new ForbiddenError();
 
             let userRefreshToken = await getUserRefreshToken(

@@ -11,23 +11,23 @@ import {
 const userRouter = Router();
 
 userRouter.patch(
-      "/auth/verify/:id/:verificationCode",
+      "/user/verify/:id/:verificationCode",
       resourceValidator._$(verifyUserSchema),
       userController.verify
 );
 
 userRouter.post(
-      "/auth/forgotpassword",
+      "/user/forgotpassword",
       resourceValidator._$(forgotPasswordSchema),
       userController.forgot_password
 );
 
 userRouter.patch(
-      "/auth/resetpassword/:id/:passwordResetCode",
+      "/user/resetpassword/:id/:passwordResetCode",
       resourceValidator._$(resetPasswordSchema),
       userController.reset_password
 );
 
-userRouter.get("/auth/me", auth._$, userController.me);
+userRouter.get("/user/me", auth._$, userController.me);
 
 export default userRouter;

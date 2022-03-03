@@ -14,7 +14,9 @@ export const createUserSchema = object({
 
             email: string({
                   required_error: "email is required",
-            }).email("not a valide email"),
+            })
+                  .max(320)
+                  .email("not a valide email"),
 
             password: string({
                   required_error: "password is required",
@@ -42,7 +44,7 @@ export const loginUserSchema = object({
 });
 
 export const verifyUserSchema = object({
-      prams: object({
+      params: object({
             id: string(),
             verificationCode: string(),
       }),
@@ -78,6 +80,6 @@ export const resetPasswordSchema = object({
 
 export type CreateUserInput = TypeOf<typeof createUserSchema>["body"];
 export type LoginUserInput = TypeOf<typeof loginUserSchema>["body"];
-export type VerifyUserInput = TypeOf<typeof verifyUserSchema>["prams"];
+export type VerifyUserInput = TypeOf<typeof verifyUserSchema>["params"];
 export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>["body"];
 export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;

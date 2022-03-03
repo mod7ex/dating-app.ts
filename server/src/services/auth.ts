@@ -9,7 +9,7 @@ export type JWTSubject = {
 
 export const signAccessToken = (
       payload: JWTSubject,
-      expIn: number = 60 * 60
+      expIn?: number
 ): string => {
       // create token
       let token = jwtApp.sign(payload, expIn);

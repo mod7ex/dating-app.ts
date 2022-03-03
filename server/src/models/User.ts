@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { BadRequestError } from "../errors";
 import { CreateUserInput } from "../schema/user";
 import IUser from "../interfaces/IUser";
 import { emailRegex, passwordRegex } from "../helpers";
@@ -72,18 +73,21 @@ userSchema.virtual("full_name").get(function (this: IUser) {
 userSchema.pre<IUser>("save", async function (next) {
       if (!this.isModified("password")) return next();
 
+      if (!passwordRegex.test(this.password))
+            next(new BadRequestError("Invalid password"));
+
       let hash = await argon2.hash(this.password);
 
       this.password = hash;
       return next();
 });
 
-userSchema.post<CreateUserInput>("validate", function (next) {
-      if (!this.password.match(passwordRegex))
-            return next(new Error("Invalid password"));
+// userSchema.post<CreateUserInput>("validate", function (doc, next) {
+//       if (!passwordRegex.test(this.password))
+//             next(new BadRequestError("Invalid password"));
 
-      return next();
-});
+//       next();
+// });
 
 userSchema.methods = {
       comparePassword: async function (
@@ -98,18 +102,27 @@ userSchema.methods = {
             }
       },
 
-      signAccessToken: function (this: IUser): string {
-            return signAccessToken({
-                  _id: this._id,
-                  username: this.username,
-            });
+      signAccessToken: function (this: IUser, expIn?: number): string {
+            return signAccessToken(
+                  {
+                        _id: this._id,
+                        username: this.username,
+                  },
+                  expIn
+            );
       },
 
-      signRefreshToken: function (this: IUser): Promise<string> {
-            return signRefreshToken({
-                  _id: this._id,
-                  username: this.username,
-            });
+      signRefreshToken: function (
+            this: IUser,
+            expIn?: number
+      ): Promise<string> {
+            return signRefreshToken(
+                  {
+                        _id: this._id,
+                        username: this.username,
+                  },
+                  expIn
+            );
       },
 };
 

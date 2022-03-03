@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Controller from "./Controller";
-import { verifyAccessToken } from "../services/auth";
+import { verifyAccessToken, getUserRefreshToken } from "../services/auth";
 import { UnauthorizedError, ForbiddenError } from "../errors";
 
 class Auth extends Controller {
@@ -20,14 +20,23 @@ class Auth extends Controller {
                   authHeader.startsWith("Bearer ") &&
                   authHeader.split(" ")[1];
 
+            console.log(accessToken);
+
             if (!accessToken) throw new UnauthorizedError("Unauthenticated");
 
             let { decoded, expired } = verifyAccessToken(accessToken);
 
+            if (!decoded) throw new ForbiddenError();
+
+            let refreshToken = await getUserRefreshToken(
+                  decoded._id.toString()
+            );
+
+            // check if refresh token is still valide
+            if (!refreshToken) throw new UnauthorizedError("Unauthenticated");
+
             // if (expired) throw new ForbiddenError(); // refresh it
             if (expired) return res.redirect("/auth/refresh");
-
-            if (!decoded) throw new ForbiddenError();
 
             // it would be better to put decoded in req, work on request
             res.locals.user = { _id: decoded._id, username: decoded.username };
