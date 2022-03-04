@@ -99,6 +99,63 @@ export default {
             }
       }
 
+      .content {
+            #messages,
+            #photos {
+                  .area {
+                        @include area($px: 1em, $py: 1em, $mb: 1em, $mt: 1em);
+                  }
+
+                  .nav {
+                        ul {
+                              @include flex($wrap: wrap);
+
+                              li {
+                                    margin: 1em;
+
+                                    button {
+                                          @include flex();
+                                          @include shadow($blure: 3px);
+                                          padding: 0.3em;
+                                          width: 9em;
+
+                                          &:hover {
+                                                @include shadow($blure: 13px);
+                                          }
+
+                                          img {
+                                                width: 17px;
+                                                margin-right: 0.3em;
+                                          }
+                                    }
+                              }
+                        }
+                  }
+            }
+
+            @media screen and (min-width: $screen-small * 1.2) {
+                  #messages,
+                  #photos {
+                        display: grid;
+                        grid-template-columns: auto 1fr;
+                        grid-column-gap: 1em;
+
+                        .nav {
+                              ul {
+                                    @include flex(
+                                          $direction: column,
+                                          $align: flex-start
+                                    );
+
+                                    li {
+                                          margin-bottom: 1em;
+                                    }
+                              }
+                        }
+                  }
+            }
+      }
+
       .slide-enter-active {
             transition: all 0.3s ease-out;
       }

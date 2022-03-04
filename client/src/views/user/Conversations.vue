@@ -34,7 +34,7 @@
                   </div>
 
                   <div class="msgs area">
-                        <Message
+                        <Conversation
                               name="Mourad EL CADI"
                               :age="23"
                               time="18:36"
@@ -42,7 +42,7 @@
                               status="online"
                               message_status="unreaded"
                         />
-                        <Message
+                        <Conversation
                               name="Mourad EL CADI"
                               :age="23"
                               time="18:36"
@@ -51,7 +51,7 @@
                               message_status="readed"
                         />
 
-                        <Message
+                        <Conversation
                               name="Mourad EL CADI"
                               :age="23"
                               time="18:36"
@@ -65,13 +65,14 @@
 
 <script>
 import Authenticated from "../../layouts/views/Authenticated.vue";
-import Message from "../../components/Message.vue";
+import Conversation from "../../components/Conversation.vue";
 
 export default {
-      name: "Messages",
+      name: "Conversations",
+
       components: {
             Authenticated,
-            Message,
+            Conversation,
       },
 
       setup() {
@@ -83,55 +84,3 @@ export default {
       },
 };
 </script>
-
-<style lang="scss">
-#messages {
-      .area {
-            @include area($px: 1em);
-      }
-
-      .nav {
-            ul {
-                  @include flex($wrap: wrap);
-
-                  li {
-                        margin: 1em;
-
-                        button {
-                              @include flex();
-                              @include shadow($blure: 3px);
-                              padding: 0.3em;
-                              width: 9em;
-
-                              &:hover {
-                                    @include shadow($blure: 13px);
-                              }
-
-                              img {
-                                    width: 17px;
-                                    margin-right: 0.3em;
-                              }
-                        }
-                  }
-            }
-      }
-}
-
-@media screen and (min-width: $screen-small) {
-      #messages {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            grid-column-gap: 1em;
-
-            .nav {
-                  ul {
-                        @include flex($direction: column, $align: flex-start);
-
-                        li {
-                              margin-bottom: 1em;
-                        }
-                  }
-            }
-      }
-}
-</style>

@@ -56,7 +56,7 @@ export default {
             let sidebar = ref(null);
             let tabs = [
                   { name: "Search", label: "search" },
-                  { name: "Messages", label: "messages" },
+                  { name: "Conversations", label: "conversations" },
                   { name: "Photos", label: "my photos" },
                   { name: "Settings", label: "settings" },
             ];

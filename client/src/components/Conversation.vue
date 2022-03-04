@@ -35,7 +35,7 @@
 
 <script>
 export default {
-      name: "Message",
+      name: "Conversation",
 
       props: {
             name: String,
@@ -78,6 +78,10 @@ export default {
       margin-bottom: 1.3em;
       // max-width: fit-content;
 
+      & > img {
+            width: 70px;
+      }
+
       &:hover {
             @include shadow($blure: 13px);
 
@@ -100,6 +104,10 @@ export default {
             .data {
                   @include flex($justify: flex-start);
                   // background-color: green;
+                  background-color: $white;
+                  width: fit-content;
+                  padding: 3px 0.3em;
+                  border-radius: $border-radius * 2;
 
                   .msg-status {
                         margin-right: 0.5em;
