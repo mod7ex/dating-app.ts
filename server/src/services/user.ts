@@ -3,6 +3,7 @@ import IUser from "../interfaces/IUser";
 import { FilterQuery, QueryOptions } from "mongoose";
 import { CreateUserInput } from "../schema/user";
 import { emailRegex } from "../helpers";
+import { UpdateUserInput } from "../schema/user";
 
 export let createUser = async (input: Partial<CreateUserInput>) => {
       return await User.create(input);
@@ -38,6 +39,16 @@ export let findUserByLogin = async (
       return user;
 };
 
+export const deleteUser = async (_id: string) => {
+      return User.deleteOne({ _id });
+};
+
 export let deleteAllUsers = async () => {
       return User.deleteMany({});
+};
+
+export const updateUser = async (_id: string, update: UpdateUserInput) => {
+      return await User.findByIdAndUpdate(_id, update, {
+            new: true,
+      });
 };

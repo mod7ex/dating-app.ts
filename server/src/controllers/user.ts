@@ -1,11 +1,17 @@
 import { Request, Response, NextFunction } from "express";
-import { findUserById, findUserByEmail } from "../services/user";
+import {
+      findUserById,
+      findUserByEmail,
+      deleteUser,
+      updateUser,
+} from "../services/user";
 import { StatusCodes } from "http-status-codes";
 import { NotFoundError, BadRequestError } from "../errors";
 import {
       VerifyUserInput,
       ForgotPasswordInput,
       ResetPasswordInput,
+      UpdateUserInput,
 } from "../schema/user";
 import { MetaInput } from "../schema/meta";
 import { sendEmail } from "../utils/mailer";
@@ -158,6 +164,32 @@ class User {
             await user.updateMeta(req.body);
 
             res.status(StatusCodes.OK).json({ message: "User updated" });
+      };
+
+      updateUser = async (
+            req: Request<{}, {}, UpdateUserInput>,
+            res: Response,
+            next: NextFunction
+      ): Promise<void> => {
+            let { _id } = res.locals.user;
+
+            let user = await updateUser(_id, req.body);
+
+            if (!user) throw new NotFoundError("User not found");
+
+            res.status(StatusCodes.OK).json({ message: "User updated" });
+      };
+
+      delete = async (
+            req: Request,
+            res: Response,
+            next: NextFunction
+      ): Promise<void> => {
+            let { _id } = res.locals.user;
+
+            await deleteUser(_id);
+
+            res.status(StatusCodes.OK).json({ message: "User deleted" });
       };
 }
 

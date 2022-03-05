@@ -1,14 +1,13 @@
 import { Schema, model, SchemaTypes } from "mongoose";
-import { BadRequestError } from "../errors";
 import IUser from "../interfaces/IUser";
-import { emailRegex, passwordRegex } from "../helpers";
 import { signAccessToken, signRefreshToken } from "../services/auth";
 import { generateCode } from "../helpers";
 import logger from "../utils/logger";
 import argon2 from "argon2";
 import IMeta from "../interfaces/IMeta";
-import { initUserMeta, updateUserMeta, getMeta } from "../services/meta";
+import { initUserMeta, updateMeta, getMeta, dropMeta } from "../services/meta";
 import { MetaInput } from "../schema/meta";
+import { sendEmail } from "../utils/mailer";
 
 const userSchema = new Schema<IUser>({
       meta_id: {
@@ -30,8 +29,6 @@ const userSchema = new Schema<IUser>({
             type: String,
             unique: true,
             required: [true, "Email is required"],
-            match: [emailRegex, "Please enter a valid email"],
-            maxlength: [320, "Please enter a valid email"],
       },
 
       password: {
@@ -81,46 +78,35 @@ userSchema.virtual("full_name").get(function (this: IUser) {
       return `${this.first_name} ${this.last_name}`;
 });
 
-/*
-
-userSchema.virtual("meta").get(async function (this: IUser) {
-      let meta = await Meta.findById(this.meta_id);
-      return meta;
-});
-
-userSchema.virtual("meta").set(async function (this: IUser, value: MetaInput) {
-      await updateUserMeta(value, this._id);
-});
-
-*/
-
 /* Hooks */
 userSchema.pre<IUser>("save", async function (next) {
-      if (!this.isModified("password")) {
-            this.updatedAt = new Date();
-            return next();
+      this.updatedAt = new Date();
+
+      if (this.isModified("email")) {
+            this.verified = false;
+
+            this.verificationCode = generateCode();
+
+            await sendEmail({
+                  from: "siteadmin@example.com",
+                  to: this.email,
+                  subject: "please verify your account",
+                  text: `verification code ${this.verificationCode}. Id: ${this._id}`,
+            });
       }
 
-      if (!passwordRegex.test(this.password))
-            next(new BadRequestError("Invalid password"));
+      if (this.isModified("password")) {
+            let hash = await argon2.hash(this.password);
+            this.password = hash;
+      }
 
-      let hash = await argon2.hash(this.password);
-
-      this.password = hash;
-      this.updatedAt = new Date();
       return next();
 });
 
-userSchema.pre<IUser>("updateOne", function (next) {
-      this.updatedAt = new Date();
-      return next();
+userSchema.pre<IUser>("deleteOne", async function (next) {
+      await dropMeta(this.meta_id);
+      next();
 });
-
-// userSchema.post<CreateUserInput>("validate", function (doc, next) {
-//       if (!passwordRegex.test(this.password))
-//             next(new BadRequestError("Invalid password"));
-//       next();
-// });
 
 userSchema.methods = {
       comparePassword: async function (
@@ -159,14 +145,20 @@ userSchema.methods = {
       },
 
       initMeta: async function (this: IUser): Promise<IMeta> {
-            return await initUserMeta(this._id);
+            let meta = await initUserMeta(this._id);
+            this.updatedAt = new Date();
+            await this.save();
+            return meta;
       },
 
       updateMeta: async function (
             this: IUser,
             update: MetaInput
       ): Promise<IMeta | null> {
-            return await updateUserMeta(update, this._id);
+            let meta = await updateMeta(update, this.meta_id);
+            this.updatedAt = new Date();
+            await this.save();
+            return meta;
       },
 
       getMeta: async function (this: IUser): Promise<IMeta | null> {

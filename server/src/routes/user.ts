@@ -6,7 +6,10 @@ import {
       verifyUserSchema,
       forgotPasswordSchema,
       resetPasswordSchema,
+      updateUserSchema,
 } from "../schema/user";
+
+import { metaSchema } from "../schema/meta";
 
 const userRouter = Router();
 
@@ -29,6 +32,19 @@ userRouter.patch(
 );
 
 userRouter.get("/user/me", auth._$, userController.me);
-userRouter.patch("/user/update", auth._$, userController.updateMeta);
+
+userRouter.patch(
+      "/user/update/meta",
+      auth._$,
+      resourceValidator._$(metaSchema),
+      userController.updateMeta
+);
+
+userRouter.patch(
+      "/user/update",
+      auth._$,
+      resourceValidator._$(updateUserSchema),
+      userController.updateUser
+);
 
 export default userRouter;

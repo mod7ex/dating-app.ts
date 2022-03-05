@@ -1,4 +1,5 @@
 import { object, string, TypeOf } from "zod";
+import { emailRegex, passwordRegex } from "../helpers";
 
 export const createUserSchema = object({
       body: object({
@@ -16,11 +17,14 @@ export const createUserSchema = object({
                   required_error: "email is required",
             })
                   .max(320)
-                  .email("not a valide email"),
+                  .email("not a valide email")
+                  .regex(emailRegex, "Invalide email"),
 
             password: string({
                   required_error: "password is required",
-            }).min(6, "password should be at least 6 chars"),
+            })
+                  .min(6, "password should be at least 6 chars")
+                  .regex(passwordRegex, "Weak password"),
 
             password_confirmation: string({
                   required_error: "password confirmation is required",
@@ -67,7 +71,9 @@ export const resetPasswordSchema = object({
       body: object({
             password: string({
                   required_error: "password is required",
-            }).min(6, "password should be at least 6 chars"),
+            })
+                  .min(6, "password should be at least 6 chars")
+                  .regex(passwordRegex, "Weak password"),
 
             password_confirmation: string({
                   required_error: "password confirmation is required",
@@ -78,8 +84,29 @@ export const resetPasswordSchema = object({
       }),
 });
 
+export const updateUserSchema = object({
+      body: object({
+            first_name: string({
+                  required_error: "first name is required",
+            }).min(3, "invalide name"),
+
+            last_name: string().min(3, "invalide name").optional().nullable(),
+
+            username: string({
+                  required_error: "username is required",
+            }),
+
+            email: string({
+                  required_error: "email is required",
+            })
+                  .max(320)
+                  .email("not a valide email"),
+      }),
+});
+
 export type CreateUserInput = TypeOf<typeof createUserSchema>["body"];
 export type LoginUserInput = TypeOf<typeof loginUserSchema>["body"];
 export type VerifyUserInput = TypeOf<typeof verifyUserSchema>["params"];
 export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>["body"];
 export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;
+export type UpdateUserInput = TypeOf<typeof updateUserSchema>["body"];
