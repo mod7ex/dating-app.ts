@@ -86,21 +86,17 @@ export const resetPasswordSchema = object({
 
 export const updateUserSchema = object({
       body: object({
-            first_name: string({
-                  required_error: "first name is required",
-            }).min(3, "invalide name"),
+            first_name: string({}).min(3, "invalide name").optional(),
 
-            last_name: string().min(3, "invalide name").optional().nullable(),
+            last_name: string().min(3, "invalide name").optional(),
 
-            username: string({
-                  required_error: "username is required",
-            }),
+            username: string({}).optional(),
 
-            email: string({
-                  required_error: "email is required",
-            })
+            email: string({})
                   .max(320)
-                  .email("not a valide email"),
+                  .email("not a valide email")
+                  .regex(emailRegex, "Invalide email")
+                  .optional(),
       }),
 });
 

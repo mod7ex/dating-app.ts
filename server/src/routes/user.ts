@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { resourceValidator, auth } from "../middlewares";
+import { resourceValidator, auth, upload } from "../middlewares";
 import userController from "../controllers/user";
+import { MAX_USER_PHOTOS } from "../config/config";
 
 import {
       verifyUserSchema,
@@ -45,6 +46,13 @@ userRouter.patch(
       auth._$,
       resourceValidator._$(updateUserSchema),
       userController.updateUser
+);
+
+userRouter.patch(
+      "/user/update",
+      auth._$,
+      upload._$.array("photos", MAX_USER_PHOTOS),
+      userController.uploadPhotos
 );
 
 export default userRouter;

@@ -2,7 +2,7 @@ POST http://localhost:3000/auth/login HTTP/1.1
 content-type: application/json
 
 {
-      "login": "modex98",
+      "login": "memod",
       "password": "sccret98"
 }
 
@@ -56,11 +56,72 @@ content-Type: application/json
 #################################################################################
 
 PATCH  http://localhost:3000/auth/refresh HTTP/1.1
-X-REFRESH: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjIwYjk2N2NhOGIyOTA2NGYwYTNmNTkiLCJ1c2VybmFtZSI6Im1vZGV4OTgiLCJpYXQiOjE2NDYzMjM5MjcsImV4cCI6MTY0NjMyMzk4N30.qm3bes6QA-vc8fY_2TXwOetftA9OwNPt8ul9rfnFaYY
+X-REFRESH: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjIxMzNmOWRhOTE3ZDI4NWVmNjlhYjIiLCJ1c2VybmFtZSI6Im1lbW9kIiwiaWF0IjoxNjQ2NDkxMDEwLCJleHAiOjE2NDY1MzQyMTB9.1JBjXUwWTVEXcWkpBS_w2c8NTVQpXhWkKs2hJJ5bQqs
 
 
 
 #################################################################################
 
 GET  http://localhost:3000/user/me HTTP/1.1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjIxMzNmOWRhOTE3ZDI4NWVmNjlhYjIiLCJ1c2VybmFtZSI6Im1vZGV4OTgiLCJpYXQiOjE2NDYzNDMxOTIsImV4cCI6MTY0NjM0Njc5Mn0.OfRz_Rx4NyxM21F_Ltt4MD55aoFPGwzWzl4sVpimxrw
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjIxMzNmOWRhOTE3ZDI4NWVmNjlhYjIiLCJ1c2VybmFtZSI6Im1vZGV4OTgiLCJpYXQiOjE2NDY0OTkwMzQsImV4cCI6MTY0NjUwMjYzNH0.ZkduZ0MOgXYGl_4SBV9obH8T3m3T8TaQen4gfifPMaU
+
+
+#################################################################################
+
+PATCH  http://localhost:3000/user/update HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjIxMzNmOWRhOTE3ZDI4NWVmNjlhYjIiLCJ1c2VybmFtZSI6Im1lbW9kIiwiaWF0IjoxNjQ2NDk1MzQ5LCJleHAiOjE2NDY0OTg5NDl9.pWOrK16jLCeKecc41CBecWC3GE8dEHzqCAYKCGHrR-c
+content-Type: application/json
+
+{
+      "first_name": "Mourad",
+      "last_name": "EL CADI",
+      "username": "modex98",
+      "email": "almod@hotmail.com"
+}
+
+#################################################################################
+
+PATCH  http://localhost:3000/user/update/meta HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjIxMzNmOWRhOTE3ZDI4NWVmNjlhYjIiLCJ1c2VybmFtZSI6Im1vZGV4OTgiLCJpYXQiOjE2NDY1MDYwMDMsImV4cCI6MTY0NjUwOTYwM30.oEsYC07PDJwcx4Ll8eS4PSdlldE5k60cge45f1EPYsE
+content-Type: application/json
+
+{
+      "phone_number": "+21261948806",
+      "dob": "2020-04-40",
+      "gender": false,
+      "location": {
+            "country": 5,
+            "region": 6,
+            "city": 1,
+            "timezone": 3
+      },
+      "marital_status": 9,
+      "height": 12,
+      "weight": 9,
+      "hair_color": 9,
+      "eye_color": 53,
+      "children": 9,
+      "relegion": 3,
+      "smoking": 0,
+      "drinking": 1,
+      "income": 9,
+      "education": "University",
+      "ocupation": "Programmer",
+      "languages": [1, 9],
+      "partner_age": {
+            "from": 19,
+            "to": 30
+      },
+      "about_me": "hard working and hopping fo good ...",
+      "about_partner": "hard working and hopping fo good ..."
+}
+
+#################################################################################
+/*
+
+{
+  "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjIxMzNmOWRhOTE3ZDI4NWVmNjlhYjIiLCJ1c2VybmFtZSI6Im1vZGV4OTgiLCJpYXQiOjE2NDY1MDYwMDMsImV4cCI6MTY0NjUwOTYwM30.oEsYC07PDJwcx4Ll8eS4PSdlldE5k60cge45f1EPYsE",
+  "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MjIxMzNmOWRhOTE3ZDI4NWVmNjlhYjIiLCJ1c2VybmFtZSI6Im1lbW9kIiwiaWF0IjoxNjQ2NDkxMDEwLCJleHAiOjE2NDY1MzQyMTB9.1JBjXUwWTVEXcWkpBS_w2c8NTVQpXhWkKs2hJJ5bQqs"
+}
+
+*/

@@ -48,7 +48,8 @@ export let deleteAllUsers = async () => {
 };
 
 export const updateUser = async (_id: string, update: UpdateUserInput) => {
-      return await User.findByIdAndUpdate(_id, update, {
+      return await User.findOneAndUpdate({ _id }, update, {
             new: true,
+            runValidators: true,
       });
 };

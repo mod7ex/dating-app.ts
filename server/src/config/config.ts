@@ -17,6 +17,8 @@ const REDIS_PASSWORD = process.env.REDIS_PASSWORD || "mongo1998";
 const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || "localhost";
 const SERVER_PORT = Number(process.env.SERVER_PORT) || 3000;
 
+export const MAX_USER_PHOTOS = Number(process.env.MAX_USER_PHOTOS) || 13;
+
 export const JWT_SECRET_ACCESS = process.env.JWT_SECRET_ACCESS!;
 export const JWT_SECRET_REFRESH = process.env.JWT_SECRET_REFRESH!;
 

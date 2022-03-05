@@ -28,7 +28,7 @@ class User {
             res: Response,
             next: NextFunction
       ): Promise<void> => {
-            let { _id } = res.locals.user;
+            let { _id } = req.user;
 
             // let user = await findUserById(_id, {lean: true});
             let user = await findUserById(_id);
@@ -155,7 +155,7 @@ class User {
             res: Response,
             next: NextFunction
       ): Promise<void> => {
-            let { _id } = res.locals.user;
+            let { _id } = req.user;
 
             let user = await findUserById(_id);
 
@@ -171,7 +171,7 @@ class User {
             res: Response,
             next: NextFunction
       ): Promise<void> => {
-            let { _id } = res.locals.user;
+            let { _id } = req.user;
 
             let user = await updateUser(_id, req.body);
 
@@ -185,11 +185,21 @@ class User {
             res: Response,
             next: NextFunction
       ): Promise<void> => {
-            let { _id } = res.locals.user;
+            let { _id } = req.user;
 
-            await deleteUser(_id);
+            await deleteUser(_id.toString());
 
             res.status(StatusCodes.OK).json({ message: "User deleted" });
+      };
+
+      uploadPhotos = async (
+            req: Request,
+            res: Response,
+            next: NextFunction
+      ): Promise<void> => {
+            let media = req.files;
+
+            // res.status(StatusCodes.OK).json({ message: "User deleted" });
       };
 }
 

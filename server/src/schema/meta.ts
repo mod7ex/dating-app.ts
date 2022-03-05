@@ -5,7 +5,12 @@ export const metaSchema = object({
             phone_number: string({})
                   .max(15, "invalide phone number")
                   .optional(),
-            dob: date().optional(),
+            dob: string()
+                  .refine(
+                        (v) => (Date.parse(v) ? true : false),
+                        "invalide date"
+                  )
+                  .optional(),
             gender: boolean().optional(),
             location: object({
                   country: number().optional(),

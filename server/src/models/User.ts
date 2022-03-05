@@ -82,25 +82,41 @@ userSchema.virtual("full_name").get(function (this: IUser) {
 userSchema.pre<IUser>("save", async function (next) {
       this.updatedAt = new Date();
 
-      if (this.isModified("email")) {
-            this.verified = false;
-
-            this.verificationCode = generateCode();
-
-            await sendEmail({
-                  from: "siteadmin@example.com",
-                  to: this.email,
-                  subject: "please verify your account",
-                  text: `verification code ${this.verificationCode}. Id: ${this._id}`,
-            });
-      }
-
       if (this.isModified("password")) {
             let hash = await argon2.hash(this.password);
             this.password = hash;
       }
 
-      return next();
+      next();
+});
+
+userSchema.pre("findOneAndUpdate", async function () {
+      let doc = await this.model.findOne<IUser>(this.getQuery(), { email: 1 });
+
+      if (!doc) return;
+
+      let update = this.getUpdate();
+
+      // @ts-ignore
+      if (!update.email) return;
+
+      // @ts-ignore
+      if (update.email != doc.email) {
+            // doc.verified = false
+            // await doc.save()
+
+            this.setUpdate({
+                  ...update,
+                  verified: false,
+            });
+
+            await sendEmail({
+                  from: "siteadmin@example.com",
+                  to: doc.email,
+                  subject: "please verify your account",
+                  text: `verification code ${doc.verificationCode}. Id: ${doc._id}`,
+            });
+      }
 });
 
 userSchema.pre<IUser>("deleteOne", async function (next) {

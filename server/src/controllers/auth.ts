@@ -51,7 +51,7 @@ class Auth {
             if (!isValidPassword)
                   throw new UnauthorizedError("invalide credentials");
 
-            let accessToken = user.signAccessToken();
+            let accessToken = user.signAccessToken(60 * 60 * 12);
             let refreshToken = await user.signRefreshToken();
 
             res.status(StatusCodes.OK).json({
