@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
 
 import App from "./modules/App";
+import Me from "./modules/Me";
 
 export default createStore({
       state: {},
@@ -11,5 +12,6 @@ export default createStore({
 
       modules: {
             app: App,
+            me: Me,
       },
 });

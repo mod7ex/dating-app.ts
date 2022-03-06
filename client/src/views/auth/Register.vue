@@ -100,11 +100,12 @@
 </template>
 
 <script>
+import SubmitInput from "../../components/forms/SubmitInput.vue";
 import FormField from "../../components/forms/FormField.vue";
+import BaseInput from "../../components/forms/BaseInput.vue";
 import Guest from "../../layouts/views/Guest.vue";
 import Form from "../../layouts/Form.vue";
-import BaseInput from "../../components/forms/BaseInput.vue";
-import SubmitInput from "../../components/forms/SubmitInput.vue";
+
 import {
       required,
       name,

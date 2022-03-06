@@ -121,27 +121,17 @@ export default {
 
             let part1 = reactive(store.state.app.searchForm);
 
-            // let rules = {
-            //       username: { name },
-            //       name: { name },
-            //       phone_number: { phone_number },
-            // };
+            let options = reactive(store.state.app.genderOptions);
 
-            // let { vHandler, isValideForm, formTouch } = validationHandler(
-            //       rules,
-            //       part1
-            // );
-
-            let options = [
-                  { label: "Male", value: "male" },
-                  { label: "Female", value: "female" },
-                  { label: "Any", value: "any" },
-            ];
+            // let options = [
+            //       { label: "Male", value: "male" },
+            //       { label: "Female", value: "female" },
+            //       { label: "Any", value: "any" },
+            // ];
 
             return {
                   part1,
                   options,
-                  // ...vHandler,
             };
       },
 };

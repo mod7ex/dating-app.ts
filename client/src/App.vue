@@ -74,6 +74,7 @@ input[type="password"],
 input[type="text"],
 input[type="number"],
 input[type="email"],
+input[type="date"],
 textarea {
       padding: 1em;
       border: 1px solid transparent;

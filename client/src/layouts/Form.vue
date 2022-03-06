@@ -1,7 +1,12 @@
 <template>
-      <form :method="method" :id="id" @submit.prevent="$emit('formSubmitted')">
+      <form
+            :method="method"
+            :id="id"
+            @submit.prevent="$emit('formSubmitted')"
+            :class="class"
+      >
             <div class="form-header">
-                  <slot name="header"></slot>
+                  <slot name="header">form header</slot>
             </div>
 
             <slot>Form</slot>
@@ -18,6 +23,11 @@ export default {
             method: {
                   type: String,
                   default: "post",
+            },
+
+            class: {
+                  type: String,
+                  default: "",
             },
 
             id: String,

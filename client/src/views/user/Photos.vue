@@ -4,18 +4,21 @@
             @click.self="emptyCurrentImg"
             v-if="currentImg != null"
       >
-            <button @click="switchPhoto(true)">
-                  <img src="../../assets/svg/left.svg" />
-            </button>
-
-            <div class="container">
-                  <img :src="photos[currentImg]" />
+            <div class="nav-btn">
+                  <button @click="switchPhoto(true)">
+                        <img src="../../assets/svg/left.svg" />
+                  </button>
             </div>
 
-            <button @click="switchPhoto(false)">
-                  <img src="../../assets/svg/right.svg" />
-            </button>
+            <div class="container" ref="imgContainer"></div>
+
+            <div class="nav-btn">
+                  <button @click="switchPhoto(false)">
+                        <img src="../../assets/svg/right.svg" />
+                  </button>
+            </div>
       </div>
+
       <Authenticated>
             <div id="photos">
                   <div class="nav area">
@@ -23,7 +26,7 @@
                               <li>
                                     <button>
                                           <img
-                                                src="../../assets/svg/favorite.svg"
+                                                src="../../assets/svg/trash.svg"
                                           />
                                           delete all photos
                                     </button>
@@ -31,17 +34,9 @@
                               <li>
                                     <button>
                                           <img
-                                                src="../../assets/svg/message.svg"
+                                                src="../../assets/svg/upload.svg"
                                           />
-                                          upload photo
-                                    </button>
-                              </li>
-                              <li>
-                                    <button>
-                                          <img
-                                                src="../../assets/svg/block.svg"
-                                          />
-                                          blocked
+                                          upload photos
                                     </button>
                               </li>
                         </ul>
@@ -52,30 +47,10 @@
                               class="item"
                               v-for="i in len"
                               :key="i"
-                              @click="currentImg = i - 1"
+                              @click="renderPhoto(i)"
                         >
                               <img :src="photos[i - 1]" />
                         </div>
-
-                        <!-- <div class="media">
-                              <div class="photo">
-                                    <img :src="photos[i]" />
-                              </div>
-                        </div>
-                        <div class="photos-nav">
-                              <button @click="switchPhoto(true)">
-                                    <img
-                                          src="../../assets/svg/left.svg"
-                                          alt=""
-                                    />
-                              </button>
-                              <button @click="switchPhoto(false)">
-                                    <img
-                                          src="../../assets/svg/right.svg"
-                                          alt=""
-                                    />
-                              </button>
-                        </div> -->
                   </div>
             </div>
       </Authenticated>
@@ -94,8 +69,12 @@ export default {
 
       setup() {
             let currentImg = ref(null);
+
+            let imgContainer = ref(null);
+
             let emptyCurrentImg = () => {
                   currentImg.value = null;
+                  imgContainer.value.innerHTML = "";
             };
 
             let photos = [
@@ -117,7 +96,21 @@ export default {
 
             let len = ref(photos.length);
 
+            let renderPhoto = (i) => {
+                  currentImg.value = i;
+                  let img = new Image();
+                  img.src = photos[currentImg.value];
+
+                  setTimeout(() => {
+                        imgContainer.value.appendChild(img);
+                  }, 300);
+            };
+
             let switchPhoto = (bool) => {
+                  imgContainer.value
+                        .querySelector("img")
+                        .classList.add(bool ? "from_left" : "from_right");
+
                   if (bool)
                         currentImg.value =
                               (currentImg.value + 1) % photos.length;
@@ -125,6 +118,17 @@ export default {
                         currentImg.value =
                               (currentImg.value + photos.length - 1) %
                               photos.length;
+
+                  let img = new Image();
+                  img.src = photos[currentImg.value];
+                  img.classList.add(bool ? "to_left" : "to_right");
+
+                  setTimeout(() => {
+                        imgContainer.value.innerHTML = "";
+                        imgContainer.value.appendChild(img);
+                  }, 500);
+
+                  console.log(imgContainer.value);
             };
 
             return {
@@ -133,31 +137,71 @@ export default {
                   switchPhoto,
                   currentImg,
                   emptyCurrentImg,
+                  imgContainer,
+                  renderPhoto,
             };
       },
 };
 </script>
 
 <style lang="scss">
+@keyframes to_left {
+      from {
+            transform: translateX(100vw);
+      }
+
+      to {
+            transform: translateX(0);
+      }
+}
+
+@keyframes to_right {
+      from {
+            transform: translateX(-100vw);
+      }
+
+      to {
+            transform: translateX(0);
+      }
+}
+
+@keyframes from_left {
+      from {
+            transform: translateX(0);
+      }
+
+      to {
+            transform: translateX(-100vw);
+      }
+}
+
+@keyframes from_right {
+      from {
+            transform: translateX(0);
+      }
+
+      to {
+            transform: translateX(100vw);
+      }
+}
+
 .overlay {
+      overflow: hidden;
+      @include flex($justify: space-between, $align: stretch);
+      background-color: rgba(black, 0.93);
       position: absolute;
       top: 0;
       bottom: 0;
       left: 0;
       right: 0;
       z-index: 10;
-      background-color: rgba(black, 0.9);
-      padding: 1em;
-      @include flex();
 
       .container {
+            padding: 1em;
             align-self: stretch;
             flex-grow: 1;
-            padding: 1em;
-            background-color: $brand-color;
             max-width: $screen-small;
             border-radius: $border-radius;
-            position: relative;
             max-height: 97vh;
 
             @include flex();
@@ -165,35 +209,40 @@ export default {
             img {
                   width: 100%;
                   max-height: 100%;
+                  @include shadow($blure: 23px, $spread: 3px, $c: $white);
+
+                  &.to_left {
+                        animation: to_left 1s;
+                  }
+
+                  &.to_right {
+                        animation: to_right 1s;
+                  }
+
+                  &.from_left {
+                        animation: from_left 1s;
+                  }
+
+                  &.from_right {
+                        animation: from_right 1s;
+                  }
             }
       }
 
-      button {
-            img {
-                  width: 3.5em;
+      .nav-btn {
+            z-index: 20;
+            background-color: rgba(rgb(22, 22, 22), 0.9);
+            @include flex($direction: column);
+            button {
+                  img {
+                        width: 4.5em;
+                  }
             }
       }
 }
 
 #photos {
       .photos {
-            // @include flex(
-            //       $justify: flex-start,
-            //       $align: flex-start,
-            //       $wrap: wrap
-            // );
-
-            // display: grid;
-            // grid-column-gap: 0.3em;
-            // grid-row-gap: 0.3em;
-            // grid-template-columns: repeat(auto-fill, minmax(9em, 1fr));
-            // grid-auto-rows: 0;
-
-            // display: flex;
-            // flex-direction: column;
-            // flex-wrap: wrap;
-            // align-content: flex-start;
-
             display: flex;
             gap: 0.5em;
             flex-wrap: wrap;
@@ -202,38 +251,27 @@ export default {
 
             .item {
                   height: 11em;
-                  max-width: max-content;
-                  flex-basis: 1;
+                  // max-width: max-content;
+                  max-width: 15em;
+                  // flex-basis: 1;
                   flex-grow: 1;
                   flex-shrink: 1;
                   background-color: red;
+
+                  @include shadow($blure: 3px);
+
+                  &:hover {
+                        @include shadow($blure: 17px);
+                  }
+
                   img {
                         border-radius: $border-radius * 0.5;
                         height: 100%;
                         width: 100%;
 
                         cursor: pointer;
-
-                        @include shadow($blure: 3px);
-
-                        &:hover {
-                              @include shadow($blure: 13px);
-                        }
                   }
             }
-
-            // .media {
-            //       @include center($screen-small * 0.7);
-
-            //       img {
-            //             width: 100%;
-            //       }
-            // }
-
-            // .photos-nav {
-            //       @include flex($justify: space-between);
-            //       @include center($screen-small * 0.7);
-            // }
       }
 }
 </style>

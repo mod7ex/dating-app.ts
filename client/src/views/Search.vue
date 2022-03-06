@@ -1,6 +1,6 @@
 <template>
       <Authenticated>
-            <Form id="searchForm" @form-submitted="submit">
+            <Form id="searchForm" @form-submitted="submit" class="userForm">
                   <template v-slot:header>
                         <h1>Search for matche</h1>
 
@@ -36,9 +36,9 @@ import FormField from "../components/forms/FormField.vue";
 import Form from "../layouts/Form.vue";
 import SubmitInput from "../components/forms/SubmitInput.vue";
 
-import Part1 from "../components/searchPage/Part1.vue";
-import Part2 from "../components/searchPage/Part2.vue";
-import Part3 from "../components/searchPage/Part3.vue";
+import Part1 from "../components/search/Part1.vue";
+import Part2 from "../components/search/Part2.vue";
+import Part3 from "../components/search/Part3.vue";
 
 import Authenticated from "../layouts/views/Authenticated.vue";
 
@@ -100,16 +100,6 @@ export default {
 <style lang="scss">
 #searchForm {
       @include center($screen-medium);
-
-      .form-field {
-            & > label {
-                  min-width: 9em;
-            }
-
-            &.flex {
-                  @include flex();
-            }
-      }
 
       .form-header {
             @include flex($justify: space-between);

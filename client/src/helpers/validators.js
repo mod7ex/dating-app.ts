@@ -50,7 +50,7 @@ export const phone_number = (val) => {
 export const email = (val) => {
       return {
             valide: cleanOnEmpty((v) => emailRegex.test(v))(val),
-            error: "field is required",
+            error: "invalide email",
       };
 };
 

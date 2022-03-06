@@ -2,6 +2,12 @@ export default {
       state: () => ({
             showSidebar: false,
 
+            genderOptions: [
+                  { label: "Male", value: "male" },
+                  { label: "Female", value: "female" },
+                  { label: "Any", value: "any" },
+            ],
+
             searchForm: {
                   // part 1
                   gender: null,

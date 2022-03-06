@@ -100,6 +100,7 @@ export default {
       }
 
       .content {
+            #settings,
             #messages,
             #photos {
                   .area {
@@ -117,14 +118,14 @@ export default {
                                           @include flex();
                                           @include shadow($blure: 3px);
                                           padding: 0.3em;
-                                          width: 9em;
+                                          width: 10em;
 
                                           &:hover {
                                                 @include shadow($blure: 13px);
                                           }
 
                                           img {
-                                                width: 17px;
+                                                width: 1.3em;
                                                 margin-right: 0.3em;
                                           }
                                     }
@@ -134,6 +135,7 @@ export default {
             }
 
             @media screen and (min-width: $screen-small * 1.2) {
+                  #settings,
                   #messages,
                   #photos {
                         display: grid;
@@ -151,6 +153,18 @@ export default {
                                           margin-bottom: 1em;
                                     }
                               }
+                        }
+                  }
+            }
+
+            .userForm {
+                  .form-field {
+                        & > label {
+                              min-width: 9em;
+                        }
+
+                        &.flex {
+                              @include flex();
                         }
                   }
             }
