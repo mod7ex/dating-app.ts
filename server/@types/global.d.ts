@@ -5,4 +5,6 @@ declare global {
             _id: IUser["_id"];
             username: IUser["username"];
       };
+
+      export type FnType = (...args: any[]) => any;
 }

@@ -5,8 +5,10 @@ import {
       deleteUser,
       updateUser,
 } from "../services/user";
+
+import { getMetaByUserId } from "../services/meta";
 import { StatusCodes } from "http-status-codes";
-import { NotFoundError, BadRequestError } from "../errors";
+import { NotFoundError, BadRequestError, UnauthorizedError } from "../errors";
 import {
       VerifyUserInput,
       ForgotPasswordInput,
@@ -21,6 +23,8 @@ import { generateCode } from "../helpers";
 import { omit } from "lodash";
 import { userPrivateFields } from "../models/User";
 import { metaPrivateFields } from "../models/Meta";
+import { MAX_USER_PHOTOS } from "../config/config";
+import { unlinkImg } from "../helpers";
 
 class User {
       me = async (
@@ -31,7 +35,7 @@ class User {
             let { _id } = req.user;
 
             // let user = await findUserById(_id, {lean: true});
-            let user = await findUserById(_id);
+            let user = await findUserById(_id.toString());
 
             if (!user) throw new NotFoundError("User not found");
 
@@ -157,7 +161,7 @@ class User {
       ): Promise<void> => {
             let { _id } = req.user;
 
-            let user = await findUserById(_id);
+            let user = await findUserById(_id.toString());
 
             if (!user) throw new NotFoundError("User not found");
 
@@ -173,7 +177,7 @@ class User {
       ): Promise<void> => {
             let { _id } = req.user;
 
-            let user = await updateUser(_id, req.body);
+            let user = await updateUser(_id.toString(), req.body);
 
             if (!user) throw new NotFoundError("User not found");
 
@@ -197,9 +201,107 @@ class User {
             res: Response,
             next: NextFunction
       ): Promise<void> => {
-            let media = req.files;
+            let { _id } = req.user;
 
-            // res.status(StatusCodes.OK).json({ message: "User deleted" });
+            let media = (req.files as Express.Multer.File[]).map(
+                  (file) => file.filename
+            );
+
+            let meta = await getMetaByUserId(_id);
+
+            if (!meta) throw new NotFoundError("User not found");
+
+            if (meta.media.length + media.length > MAX_USER_PHOTOS)
+                  throw new BadRequestError(
+                        `You can't have more than ${MAX_USER_PHOTOS} photos`
+                  );
+
+            meta = await meta.updateMedia(media);
+
+            res.status(StatusCodes.OK).json({
+                  message: "Photos updated",
+                  meta,
+            });
+      };
+
+      delete_photo = async (
+            req: Request,
+            res: Response,
+            next: NextFunction
+      ): Promise<void> => {
+            let { photo } = req.params;
+            let { _id } = req.user;
+
+            if (
+                  !photo.includes("-at-") ||
+                  photo.split("-at-")[0] != _id.toString()
+            )
+                  throw new UnauthorizedError("Unauthorized");
+
+            let meta = await getMetaByUserId(_id);
+
+            if (!meta) throw new NotFoundError("User not found");
+
+            meta = await meta.dropPhoto(photo);
+
+            if (!meta) throw new NotFoundError("User not found");
+
+            if (meta.avatar && meta.avatar >= meta.media.length)
+                  delete meta.avatar;
+
+            await unlinkImg(photo);
+
+            res.status(StatusCodes.OK).json({
+                  message: "Photo deleted",
+                  meta,
+            });
+      };
+
+      delete_all_photos = async (
+            req: Request,
+            res: Response,
+            next: NextFunction
+      ): Promise<void> => {
+            let { _id } = req.user;
+
+            let meta = await getMetaByUserId(_id);
+
+            if (!meta) throw new NotFoundError("User not found");
+
+            for (let photo of meta.media) {
+                  await unlinkImg(photo);
+            }
+
+            meta = await meta.setMedia([]);
+
+            res.status(StatusCodes.OK).json({
+                  message: "Photos deleted",
+                  meta,
+            });
+      };
+
+      set_main_photo = async (
+            req: Request,
+            res: Response,
+            next: NextFunction
+      ): Promise<void> => {
+            let { photo } = req.params;
+            let { _id } = req.user;
+
+            let meta = await getMetaByUserId(_id);
+
+            if (!meta) throw new NotFoundError("User not found");
+
+            meta.avatar = meta.media.indexOf(photo);
+
+            if (meta.avatar < 0) meta.avatar = undefined;
+
+            meta.save();
+
+            res.status(StatusCodes.OK).json({
+                  message: "Profile photo updated",
+                  meta,
+            });
       };
 }
 
