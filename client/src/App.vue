@@ -41,6 +41,20 @@ export default {
                         background-color: $white;
                   }
             }
+
+            #gender {
+                  .options {
+                        @include flex($justify: flex-start);
+
+                        label {
+                              margin-right: 1em;
+                              @include flex();
+                              input {
+                                    margin-right: 0.3em;
+                              }
+                        }
+                  }
+            }
       }
 }
 

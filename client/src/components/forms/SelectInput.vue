@@ -5,8 +5,14 @@
                   :id="name"
                   @input="$emit('update:modelValue', $event.target.value)"
             >
-                  <option v-for="i in values" :key="i" :value="i">
-                        {{ fn(i) }}
+                  <option v-if="notselected" disabled selected>select</option>
+
+                  <option
+                        v-for="item in items"
+                        :key="item.value"
+                        :value="item.value"
+                  >
+                        {{ item.label }}
                   </option>
             </select>
       </div>
@@ -27,12 +33,12 @@ export default {
                   default: "Field",
             },
 
-            values: Array,
-
-            fn: {
-                  type: Function,
-                  default: (i) => i,
+            notselected: {
+                  type: Boolean,
+                  default: true,
             },
+
+            items: Array,
       },
 };
 </script>

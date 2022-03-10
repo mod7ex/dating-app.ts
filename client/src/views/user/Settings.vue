@@ -19,11 +19,16 @@
                                           meta data
                                     </button>
                               </li>
+                              <li>
+                                    <button class="btn">Save</button>
+                              </li>
                         </ul>
                   </div>
 
                   <div class="settings area">
-                        <component :is="component" />
+                        <KeepAlive :max="3600">
+                              <component :is="component" />
+                        </KeepAlive>
                   </div>
             </div>
       </Authenticated>
@@ -46,7 +51,7 @@ export default {
       },
 
       setup() {
-            let component = ref("Main");
+            let component = ref("Meta");
 
             let tabs = reactive(["Main", "Meta"]);
 

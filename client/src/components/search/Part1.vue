@@ -138,20 +138,6 @@ export default {
 </script>
 
 <style lang="scss">
-#gender {
-      .options {
-            @include flex($justify: flex-start);
-
-            label {
-                  margin-right: 1em;
-                  @include flex();
-                  input {
-                        margin-right: 0.3em;
-                  }
-            }
-      }
-}
-
 .location {
       padding: 1.3em 1.3em 0.7em 1.3em;
       margin-bottom: 1.3em;

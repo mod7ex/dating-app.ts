@@ -4,7 +4,7 @@
                   <label>Gender:</label>
                   <div class="options">
                         <RadioOptions
-                              :options="options"
+                              :options="gender"
                               v-model="meta.gender"
                               name="gender"
                         />
@@ -51,7 +51,7 @@
                   <SelectInput
                         label="Timezone"
                         name="timezone"
-                        :values="[1, 2, 3]"
+                        :items="timezone"
                         v-model="meta.location.timezone"
                   />
             </FormField>
@@ -67,6 +67,153 @@
                         v-model="meta.phone_number"
                   />
             </FormField>
+
+            <FormField>
+                  <SelectInput
+                        label="Marital Status"
+                        name="marital_status"
+                        :items="maritalStatus"
+                        v-model="meta.marital_status"
+                  />
+            </FormField>
+
+            <FormField>
+                  <SelectInput
+                        label="Height"
+                        name="height"
+                        :items="height"
+                        v-model="meta.height"
+                  />
+            </FormField>
+
+            <FormField>
+                  <SelectInput
+                        label="Weight"
+                        name="weight"
+                        :items="weight"
+                        v-model="meta.weight"
+                  />
+            </FormField>
+
+            <FormField>
+                  <SelectInput
+                        label="Eye color"
+                        name="eye_color"
+                        :items="eyeColor"
+                        v-model="meta.eye_color"
+                  />
+            </FormField>
+
+            <FormField>
+                  <SelectInput
+                        label="Hair color"
+                        name="hair_color"
+                        :items="hairColor"
+                        v-model="meta.hair_color"
+                  />
+            </FormField>
+
+            <FormField>
+                  <SelectInput
+                        label="Number of children"
+                        name="children"
+                        :items="children"
+                        v-model="meta.children"
+                  />
+            </FormField>
+
+            <FormField>
+                  <SelectInput
+                        label="Relegion"
+                        name="relegion"
+                        :items="relegion"
+                        v-model="meta.relegion"
+                  />
+            </FormField>
+
+            <FormField>
+                  <SelectInput
+                        label="Smoking"
+                        name="smoking"
+                        :items="habit"
+                        v-model="meta.smoking"
+                  />
+            </FormField>
+
+            <FormField>
+                  <SelectInput
+                        label="Drinking"
+                        name="drinking"
+                        :items="habit"
+                        v-model="meta.drinking"
+                  />
+            </FormField>
+
+            <FormField>
+                  <SelectInput
+                        label="Income"
+                        name="income"
+                        :items="income"
+                        v-model="meta.income"
+                  />
+            </FormField>
+
+            <FormField>
+                  <BaseInput
+                        type="text"
+                        label="Education"
+                        name="education"
+                        v-model="meta.education"
+                  />
+            </FormField>
+
+            <FormField>
+                  <BaseInput
+                        type="text"
+                        label="Ocupation"
+                        name="ocupation"
+                        v-model="meta.ocupation"
+                  />
+            </FormField>
+
+            <FormField class="flex checkbox-list languages">
+                  <CheckboxList v-model="meta.languages" :values="language"
+                        >Marital status
+                  </CheckboxList>
+            </FormField>
+
+            <FormField>
+                  <TextArea
+                        v-model="meta.about_me"
+                        name="about_me"
+                        label="About me"
+                  />
+            </FormField>
+
+            <FormField>
+                  <TextArea
+                        v-model="meta.about_partner"
+                        name="about_partner"
+                        label="About partner"
+                  />
+            </FormField>
+
+            <FormField class="flex partner-age">
+                  <label>Partner age</label>
+
+                  <SelectInput
+                        label="from"
+                        name="partner_age_from"
+                        :items="partnerAge"
+                        v-model="meta.partner_age.from"
+                  />
+                  <SelectInput
+                        label="to"
+                        name="partner_age_to"
+                        :items="partnerAge"
+                        v-model="meta.partner_age.to"
+                  />
+            </FormField>
       </div>
 </template>
 
@@ -75,9 +222,11 @@ import FormField from "../forms/FormField.vue";
 import BaseInput from "../forms/BaseInput.vue";
 import SelectInput from "../forms/SelectInput.vue";
 import RadioOptions from "../forms/RadioOptions.vue";
+import CheckboxList from "../forms/CheckboxList.vue";
+import TextArea from "../forms/TextArea.vue";
 
 import { useStore } from "vuex";
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 
 import validationHandler from "../../mixins/validation";
 import { phone_number } from "../../helpers/validators";
@@ -89,6 +238,8 @@ export default {
             BaseInput,
             RadioOptions,
             SelectInput,
+            CheckboxList,
+            TextArea,
       },
 
       setup() {
@@ -96,7 +247,7 @@ export default {
 
             let meta = reactive(store.state.me.meta);
 
-            let options = reactive(store.state.app.genderOptions);
+            let appOptions = reactive(store.state.app.appOptions);
 
             let rules = {
                   phone_number: { phone_number },
@@ -107,10 +258,18 @@ export default {
                   meta
             );
 
+            watch(
+                  () => meta.about_me,
+                  (v) => {
+                        console.log(v);
+                  }
+            );
+
             return {
-                  meta,
-                  options,
+                  ...appOptions,
+
                   ...vHandler,
+                  meta,
             };
       },
 };
@@ -142,6 +301,34 @@ export default {
                               border-color: rgba($black, 0.3);
                         }
                   }
+            }
+
+            &.partner-age {
+                  .select-input {
+                        margin-right: 2em !important;
+                        max-width: 15em !important;
+                        width: 100%;
+                        flex-direction: row !important;
+                        align-items: center !important;
+
+                        select {
+                              flex-grow: 1 !important;
+                        }
+                  }
+            }
+
+            &.checkbox-list {
+                  .error {
+                        display: none;
+                  }
+            }
+
+            &.languages {
+                  align-items: flex-start !important;
+            }
+
+            textarea {
+                  resize: none;
             }
       }
 }

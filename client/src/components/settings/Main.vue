@@ -42,6 +42,7 @@
 import FormField from "../forms/FormField.vue";
 import BaseInput from "../forms/BaseInput.vue";
 
+import { useStore } from "vuex";
 import { required, name, email } from "../../helpers/validators";
 import validationHandler from "../../mixins/validation";
 import { reactive } from "vue";
@@ -54,12 +55,9 @@ export default {
       },
 
       setup() {
-            let user = reactive({
-                  first_name: "",
-                  last_name: "",
-                  email: "",
-                  username: "",
-            });
+            let store = useStore();
+
+            let user = reactive(store.state.me.user);
 
             let rules = {
                   first_name: { required, name },
@@ -81,7 +79,4 @@ export default {
 };
 </script>
 
-<style lang="scss">
-.user-main {
-}
-</style>
+<style lang="scss"></style>

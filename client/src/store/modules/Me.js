@@ -1,5 +1,12 @@
 export default {
       state: () => ({
+            user: {
+                  first_name: null,
+                  last_name: null,
+                  email: null,
+                  username: null,
+            },
+
             meta: {
                   avatar: null,
                   media: [],
@@ -20,8 +27,10 @@ export default {
                   eye_color: null,
                   children: null,
                   relegion: null,
+
                   smoking: null,
                   drinking: null,
+
                   income: null,
                   education: null,
                   ocupation: null,

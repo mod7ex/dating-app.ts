@@ -65,11 +65,12 @@ export default {
 
 <style lang="scss">
 .checkbox-list {
-      width: 100%;
+      width: 100% !important;
       @include flex($wrap: wrap, $justify: flex-start);
 
       .choice {
             margin-right: 1.5em;
+            margin-bottom: 1em;
             @include flex();
             label {
                   margin-right: 0.3em;

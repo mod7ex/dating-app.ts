@@ -1,30 +1,36 @@
 <template>
       <div class="msg">
-            <img src="https://placeimg.com/70/70/any" alt="" />
+            <router-link :to="{ name: 'Chat' }">
+                  <img src="https://placeimg.com/90/90/any" />
+            </router-link>
 
             <div class="msg-data">
-                  <div class="other-part">
-                        <h4>
-                              <span
-                                    class="status"
-                                    :class="userStatusClassObj"
-                              ></span>
+                  <router-link :to="{ name: 'Chat' }">
+                        <div class="other-part">
+                              <h4>
+                                    <span
+                                          class="status"
+                                          :class="userStatusClassObj"
+                                    ></span>
 
-                              <span>{{ name }}</span>
-                              <small>{{ age }}</small>
-                        </h4>
+                                    <span>{{ name }}</span>
+                                    <small>{{ age }}</small>
+                              </h4>
 
-                        <span class="time">{{ time }}</span>
-                  </div>
-                  <div class="data">
-                        <small
-                              class="msg-status"
-                              :class="messageStatusClassObj"
-                        >
-                        </small>
+                              <span class="time">{{ time }}</span>
+                        </div>
+                        <div class="data">
+                              <small
+                                    class="msg-status"
+                                    :class="messageStatusClassObj"
+                              >
+                              </small>
 
-                        <span class="msg-content">{{ cut(content) }}</span>
-                  </div>
+                              <span class="msg-content">{{
+                                    cut(content)
+                              }}</span>
+                        </div>
+                  </router-link>
             </div>
 
             <div class="actions">
@@ -78,19 +84,23 @@ export default {
       margin-bottom: 1.3em;
       // max-width: fit-content;
 
-      & > img {
-            width: 70px;
+      a {
+            padding: 0 !important;
+      }
+
+      & > a img {
+            width: 75px;
       }
 
       &:hover {
             @include shadow($blure: 13px);
 
-            & > img {
+            & > a img {
                   @include shadow($blure: 13px);
             }
       }
 
-      & > img {
+      & > a img {
             margin-right: 1em;
             @include shadow($blure: 3px);
             border-top-left-radius: $border-radius;
@@ -100,6 +110,10 @@ export default {
       .msg-data {
             flex: 1;
             margin: 0.3em;
+
+            a {
+                  display: block;
+            }
 
             .data {
                   @include flex($justify: flex-start);
