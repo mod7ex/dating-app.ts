@@ -2,23 +2,41 @@
       <Authenticated>
             <div id="chat">
                   <div class="messages">
-                        <div class="message">
-                              <div class="wrapper info">
-                                    <div class="message-content">today</div>
-                              </div>
-                        </div>
+                        <Message
+                              time="13:05"
+                              :isInfoMessage="true"
+                              message="today"
+                        />
 
-                        <div class="message">
-                              <div class="wrapper me">
-                                    <div class="message-content">
-                                          Lorem ipsum dolor sit amet
-                                          consectetur.
-                                    </div>
-                                    <span class="message-meta">
-                                          <small class="time">13:05</small>
-                                    </span>
-                              </div>
-                        </div>
+                        <Message time="13:05" />
+                        <Message time="13:05" who="him" />
+                        <Message time="13:05" who="me" :readed="true" />
+                        <Message time="13:05" who="him" />
+
+                        <Message time="13:05" />
+                        <Message time="13:05" who="him" />
+                        <Message time="13:05" who="me" :readed="true" />
+                        <Message time="13:05" who="him" />
+
+                        <Message time="13:05" />
+                        <Message time="13:05" who="him" />
+                        <Message time="13:05" who="me" :readed="true" />
+                        <Message time="13:05" who="him" />
+
+                        <Message time="13:05" />
+                        <Message time="13:05" who="him" />
+                        <Message time="13:05" who="me" :readed="true" />
+                        <Message time="13:05" who="him" />
+
+                        <Message time="13:05" />
+                        <Message time="13:05" who="him" />
+                        <Message time="13:05" who="me" :readed="true" />
+                        <Message time="13:05" who="him" />
+
+                        <Message time="13:05" />
+                        <Message time="13:05" who="him" />
+                        <Message time="13:05" who="me" :readed="true" />
+                        <Message time="13:05" who="him" />
                   </div>
 
                   <div class="control">
@@ -33,11 +51,13 @@
 
 <script>
 import Authenticated from "../../layouts/views/Authenticated.vue";
+import Message from "../../components/Message";
 
 export default {
       name: "Chat",
       components: {
             Authenticated,
+            Message,
       },
 };
 </script>
@@ -47,13 +67,19 @@ export default {
       @include center($screen-small * 1.5);
       @include area($py: 1em, $px: 1em, $mt: 0, $mb: 0);
 
-      min-height: 80vh;
+      max-height: 80vh;
 
       display: grid;
       grid-row-gap: 0.5em;
       grid-template-rows: 1fr auto;
 
       .messages {
+            overflow-y: scroll;
+
+            &::-webkit-scrollbar {
+                  display: none;
+            }
+
             border-radius: $border-radius;
             padding-top: 0.3em;
             @include shadow(
@@ -67,43 +93,66 @@ export default {
 
             .message {
                   margin-bottom: 0.3em;
-                  padding: 0.1em;
+                  color: white;
                   @include flex($justify: flex-start);
 
                   .wrapper {
+                        max-width: $screen-small * 0.8;
+                        padding: 0 0.2em;
                         @include flex($justify: flex-start, $align: flex-end);
                         background-color: $brand-color;
+                  }
 
-                        .message-content {
-                              padding: 0.3em;
+                  .message-content {
+                        padding: 0.3em;
+                  }
+
+                  .message-meta {
+                        @include flex($justify: space-between);
+                        .time {
+                              font-weight: 100;
+                        }
+                  }
+
+                  &.info {
+                        justify-content: center;
+                        margin: 1em 0;
+
+                        .wrapper {
+                              background-color: gray;
+                              border-radius: $border-radius * 3;
+                        }
+                  }
+
+                  &.me {
+                        justify-content: flex-end;
+                        .wrapper {
+                              border-top-left-radius: $border-radius * 3;
+                              border-bottom-left-radius: $border-radius * 3;
                         }
 
-                        &.info {
-                              justify-content: center;
-                              margin: 1em 0;
+                        .message-meta {
+                              .mark {
+                                    margin-left: 0.2em;
+                                    &::before {
+                                          content: " ✓";
+                                    }
 
-                              .message-content {
-                                    background-color: gray;
-                                    border-radius: $border-radius * 2;
-                                    color: white;
-                              }
-                        }
-
-                        &.me {
-                              justify-content: flex-end;
-                              .message-content {
-                                    border-top-left-radius: $border-radius * 2;
-                                    border-bottom-left-radius: $border-radius *
-                                          2;
-                              }
-
-                              .message-meta {
-                                    .time {
+                                    &.readed {
                                           &::after {
+                                                margin-left: -6px;
                                                 content: "✓";
                                           }
                                     }
                               }
+                        }
+                  }
+
+                  &.him {
+                        .wrapper {
+                              flex-direction: row-reverse;
+                              border-top-right-radius: $border-radius * 3;
+                              border-bottom-right-radius: $border-radius * 3;
                         }
                   }
             }
