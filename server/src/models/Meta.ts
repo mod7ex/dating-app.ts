@@ -1,7 +1,12 @@
 import IMeta from "../interfaces/IMeta";
 import { Schema, model, SchemaTypes } from "mongoose";
 import User from "./User";
-import { updateMedia, dropPhoto, setMedia } from "../services/meta";
+import {
+      updateMedia,
+      dropPhoto,
+      setMedia,
+      setMainPhoto,
+} from "../services/meta";
 
 const metaSchema = new Schema<IMeta>({
       user_id: {
@@ -9,7 +14,6 @@ const metaSchema = new Schema<IMeta>({
             ref: "User",
       },
 
-      avatar: Number,
       phone_number: String,
       dob: Date,
       gender: Boolean,
@@ -45,7 +49,9 @@ metaSchema.virtual("user").get(async function (this: IMeta) {
       return user;
 });
 
-export default model<IMeta>("Meta", metaSchema);
+metaSchema.virtual("avatar").get(function (this: IMeta) {
+      if (this.media.length) return this.media[0];
+});
 
 metaSchema.methods = {
       updateMedia: async function (
@@ -68,4 +74,10 @@ metaSchema.methods = {
       ): Promise<IMeta | null> {
             return await setMedia(this._id, media);
       },
+
+      setMainPhoto: async function (this: IMeta, photo: string): Promise<void> {
+            return await setMainPhoto(this._id, photo);
+      },
 };
+
+export default model<IMeta>("Meta", metaSchema);

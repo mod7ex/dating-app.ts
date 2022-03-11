@@ -6,8 +6,8 @@ export default interface IMeta extends MetaInput, Document {
 
       user_id: Types.ObjectId;
 
-      avatar?: number;
       media: string[];
+      avatar: string;
 
       createdAt: Date;
       updatedAt: Date;
@@ -15,4 +15,5 @@ export default interface IMeta extends MetaInput, Document {
       updateMedia(update: string[]): Promise<IMeta | null>;
       dropPhoto(photo: string): Promise<IMeta | null>;
       setMedia(this: IMeta, media: string[]): Promise<IMeta | null>;
+      setMainPhoto(photo: string): Promise<void>;
 }

@@ -2,14 +2,12 @@ import { Router } from "express";
 import { resourceValidator, auth, upload } from "../middlewares";
 import userController from "../controllers/user";
 import { MAX_USER_PHOTOS } from "../config/config";
-
 import {
       verifyUserSchema,
       forgotPasswordSchema,
       resetPasswordSchema,
       updateUserSchema,
 } from "../schema/user";
-
 import { metaSchema } from "../schema/meta";
 
 const userRouter = Router();

@@ -1,4 +1,4 @@
-import { object, string, TypeOf } from "zod";
+import { object, string, TypeOf, boolean, number } from "zod";
 import { emailRegex, passwordRegex } from "../helpers";
 
 export const createUserSchema = object({
@@ -100,9 +100,59 @@ export const updateUserSchema = object({
       }),
 });
 
-export type CreateUserInput = TypeOf<typeof createUserSchema>["body"];
-export type LoginUserInput = TypeOf<typeof loginUserSchema>["body"];
-export type VerifyUserInput = TypeOf<typeof verifyUserSchema>["params"];
+export const searchUsersSchema = object({
+      body: object({
+            // part 1
+            gender: boolean().optional(),
+
+            location: object({
+                  country: number().optional(),
+                  region: number().optional(),
+                  city: number().optional(),
+            }).optional(),
+
+            username: string().optional(),
+            name: string().optional(),
+            online: boolean().optional(),
+            phone_number: string().optional(),
+            with_photo: boolean().optional(),
+
+            // part 2
+            partner_age: object({
+                  from: number().optional(),
+                  to: number().optional(),
+            }),
+
+            height: object({
+                  from: number().optional(),
+                  to: number().optional(),
+            }),
+
+            weight: object({
+                  from: number().optional(),
+                  to: number().optional(),
+            }),
+
+            without_children: boolean().optional(),
+            languages: number().array().optional(),
+            marital_status: number().array().optional(),
+            smoking: number().array().optional(),
+            drinking: number().array().optional(),
+            relegion: number().array().optional(),
+            eye_color: number().array().optional(),
+            hair_color: number().array().optional(),
+
+            // part3
+            income: string().optional(),
+            education: string().optional(),
+            ocupation: string().optional(),
+      }),
+});
+
 export type ForgotPasswordInput = TypeOf<typeof forgotPasswordSchema>["body"];
-export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;
+export type VerifyUserInput = TypeOf<typeof verifyUserSchema>["params"];
+export type CreateUserInput = TypeOf<typeof createUserSchema>["body"];
 export type UpdateUserInput = TypeOf<typeof updateUserSchema>["body"];
+export type LoginUserInput = TypeOf<typeof loginUserSchema>["body"];
+export type SearchUsersInput = TypeOf<typeof searchUsersSchema>["body"];
+export type ResetPasswordInput = TypeOf<typeof resetPasswordSchema>;

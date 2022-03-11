@@ -6,7 +6,7 @@ import {
       updateUser,
 } from "../services/user";
 
-import { getMetaByUserId } from "../services/meta";
+import { getMetaByUserId, searchUsers } from "../services/meta";
 import { StatusCodes } from "http-status-codes";
 import { NotFoundError, BadRequestError, UnauthorizedError } from "../errors";
 import {
@@ -14,6 +14,7 @@ import {
       ForgotPasswordInput,
       ResetPasswordInput,
       UpdateUserInput,
+      SearchUsersInput,
 } from "../schema/user";
 import { MetaInput } from "../schema/meta";
 import { sendEmail } from "../utils/mailer";
@@ -246,9 +247,6 @@ class User {
 
             if (!meta) throw new NotFoundError("User not found");
 
-            if (meta.avatar && meta.avatar >= meta.media.length)
-                  delete meta.avatar;
-
             await unlinkImg(photo);
 
             res.status(StatusCodes.OK).json({
@@ -292,16 +290,23 @@ class User {
 
             if (!meta) throw new NotFoundError("User not found");
 
-            meta.avatar = meta.media.indexOf(photo);
+            await meta.setMainPhoto(photo);
 
-            if (meta.avatar < 0) meta.avatar = undefined;
-
-            meta.save();
+            meta = await getMetaByUserId(_id);
 
             res.status(StatusCodes.OK).json({
                   message: "Profile photo updated",
                   meta,
             });
+      };
+
+      search_users = async (
+            req: Request<{}, {}, SearchUsersInput>,
+            res: Response,
+            next: NextFunction
+      ): Promise<void> => {
+            let users = await searchUsers(req.body);
+            res.status(StatusCodes.OK).json(users);
       };
 }
 

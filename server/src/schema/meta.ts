@@ -30,7 +30,7 @@ export const metaSchema = object({
             income: number().optional(),
             education: string().max(32).optional(),
             ocupation: string().max(32).optional(),
-            languages: number().array().optional().optional(),
+            languages: number().array().optional(),
             partner_age: object({
                   from: number().optional(),
                   to: number(),
