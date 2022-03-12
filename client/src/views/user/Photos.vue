@@ -10,7 +10,11 @@
                   </button>
             </div>
 
-            <div class="container" ref="imgContainer"></div>
+            <div
+                  class="container"
+                  ref="imgContainer"
+                  @click.self="emptyCurrentImg"
+            ></div>
 
             <div class="nav-btn">
                   <button @click="switchPhoto(false)">
@@ -145,46 +149,6 @@ export default {
 </script>
 
 <style lang="scss">
-@keyframes to_left {
-      from {
-            transform: translateX(100vw);
-      }
-
-      to {
-            transform: translateX(0);
-      }
-}
-
-@keyframes to_right {
-      from {
-            transform: translateX(-100vw);
-      }
-
-      to {
-            transform: translateX(0);
-      }
-}
-
-@keyframes from_left {
-      from {
-            transform: translateX(0);
-      }
-
-      to {
-            transform: translateX(-100vw);
-      }
-}
-
-@keyframes from_right {
-      from {
-            transform: translateX(0);
-      }
-
-      to {
-            transform: translateX(100vw);
-      }
-}
-
 .overlay {
       overflow: hidden;
       @include flex($justify: space-between, $align: stretch);

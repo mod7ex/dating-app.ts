@@ -64,4 +64,75 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="scss">
+.message {
+      animation-name: down_up;
+      animation-duration: 500ms;
+      animation-timing-function: ease-out;
+      animation-iteration-count: 1;
+
+      margin-bottom: 0.3em;
+      color: white;
+      @include flex($justify: flex-start);
+
+      .wrapper {
+            max-width: $screen-small * 0.8;
+            padding: 0.2em;
+            @include flex($justify: flex-start, $align: flex-end);
+            background-color: $brand-color;
+      }
+
+      .message-content {
+            padding: 0.3em;
+      }
+
+      .message-meta {
+            @include flex($justify: space-between);
+            .time {
+                  font-weight: 100;
+            }
+      }
+
+      &.info {
+            justify-content: center;
+            margin: 1em 0;
+
+            .wrapper {
+                  background-color: gray;
+                  border-radius: $border-radius * 3;
+            }
+      }
+
+      &.me {
+            justify-content: flex-end;
+            .wrapper {
+                  border-top-left-radius: $border-radius * 3;
+                  border-bottom-left-radius: $border-radius * 3;
+            }
+
+            .message-meta {
+                  .mark {
+                        margin-left: 0.2em;
+                        &::before {
+                              content: " ✓";
+                        }
+
+                        &.readed {
+                              &::after {
+                                    margin-left: -6px;
+                                    content: "✓";
+                              }
+                        }
+                  }
+            }
+      }
+
+      &.him {
+            .wrapper {
+                  flex-direction: row-reverse;
+                  border-top-right-radius: $border-radius * 3;
+                  border-bottom-right-radius: $border-radius * 3;
+            }
+      }
+}
+</style>

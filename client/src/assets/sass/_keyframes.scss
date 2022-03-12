@@ -1,0 +1,51 @@
+@keyframes to_left {
+      from {
+            transform: translateX(100vw);
+      }
+
+      to {
+            transform: translateX(0);
+      }
+}
+
+@keyframes to_right {
+      from {
+            transform: translateX(-100vw);
+      }
+
+      to {
+            transform: translateX(0);
+      }
+}
+
+@keyframes from_left {
+      from {
+            transform: translateX(0);
+      }
+
+      to {
+            transform: translateX(-100vw);
+      }
+}
+
+@keyframes from_right {
+      from {
+            transform: translateX(0);
+      }
+
+      to {
+            transform: translateX(100vw);
+      }
+}
+
+@keyframes down_up {
+      from {
+            position: relative;
+            top: 50vh;
+      }
+
+      to {
+            position: relative;
+            top: 0;
+      }
+}

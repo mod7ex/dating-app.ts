@@ -7,7 +7,8 @@ module.exports = {
                         @import "@/assets/sass/_variables.scss";
                         @import "@/assets/sass/_mixins.scss";
                         @import "@/assets/sass/_functions.scss";
-                        @import "@/assets/sass/_reset.scss";`,
+                        @import "@/assets/sass/_reset.scss";
+                        @import "@/assets/sass/_keyframes.scss";`,
                   },
             },
       },

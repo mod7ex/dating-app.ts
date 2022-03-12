@@ -1,47 +1,27 @@
 <template>
       <Authenticated>
             <div id="chat">
-                  <div class="messages">
+                  <div class="messages" ref="messagesArea">
                         <Message
-                              time="13:05"
-                              :isInfoMessage="true"
-                              message="today"
+                              v-for="i in msgNum"
+                              :key="i"
+                              :message="messages[i - 1].message"
+                              :time="messages[i - 1].time"
+                              :who="messages[i - 1].who"
+                              :readed="messages[i - 1].readed"
+                              :isInfoMessage="messages[i - 1].isInfoMessage"
                         />
-
-                        <Message time="13:05" />
-                        <Message time="13:05" who="him" />
-                        <Message time="13:05" who="me" :readed="true" />
-                        <Message time="13:05" who="him" />
-
-                        <Message time="13:05" />
-                        <Message time="13:05" who="him" />
-                        <Message time="13:05" who="me" :readed="true" />
-                        <Message time="13:05" who="him" />
-
-                        <Message time="13:05" />
-                        <Message time="13:05" who="him" />
-                        <Message time="13:05" who="me" :readed="true" />
-                        <Message time="13:05" who="him" />
-
-                        <Message time="13:05" />
-                        <Message time="13:05" who="him" />
-                        <Message time="13:05" who="me" :readed="true" />
-                        <Message time="13:05" who="him" />
-
-                        <Message time="13:05" />
-                        <Message time="13:05" who="him" />
-                        <Message time="13:05" who="me" :readed="true" />
-                        <Message time="13:05" who="him" />
-
-                        <Message time="13:05" />
-                        <Message time="13:05" who="him" />
-                        <Message time="13:05" who="me" :readed="true" />
-                        <Message time="13:05" who="him" />
                   </div>
 
                   <div class="control">
-                        <input type="text" placeholder="Message..." />
-                        <button>
+                        <input
+                              type="text"
+                              placeholder="Message..."
+                              v-model.trim="message"
+                              ref="messageInput"
+                              @keyup.enter="sendMessage"
+                        />
+                        <button @click="sendMessage">
                               <img src="../../assets/svg/send.svg" />
                         </button>
                   </div>
@@ -52,12 +32,105 @@
 <script>
 import Authenticated from "../../layouts/views/Authenticated.vue";
 import Message from "../../components/Message";
+import { reactive, ref, computed } from "@vue/reactivity";
 
 export default {
       name: "Chat",
       components: {
             Authenticated,
             Message,
+      },
+
+      setup() {
+            let messages = reactive([
+                  {
+                        who: "him",
+                        message: "15 july",
+                        time: "11:05",
+                        readed: false,
+                        isInfoMessage: true,
+                  },
+
+                  {
+                        who: "me",
+                        message: "Lorem ipsum dolor sit amet consectetur.",
+                        time: "13:05",
+                        readed: false,
+                        isInfoMessage: false,
+                  },
+
+                  {
+                        who: "him",
+                        message: "ipsum dolor sit amet consectetur. r sit amet consectetur.",
+                        time: "11:05",
+                        readed: false,
+                        isInfoMessage: false,
+                  },
+
+                  {
+                        who: "me",
+                        message: "Lorem ipsum dolor sit amet consectetur.",
+                        time: "13:05",
+                        readed: false,
+                        isInfoMessage: false,
+                  },
+
+                  {
+                        who: "him",
+                        message: "ipsum dolor sit amet consectetur. r sit amet consectetur.",
+                        time: "11:05",
+                        readed: false,
+                        isInfoMessage: false,
+                  },
+
+                  {
+                        who: "me",
+                        message: "ipsum dolo ",
+                        time: "11:05",
+                        readed: true,
+                        isInfoMessage: false,
+                  },
+            ]);
+
+            let msgNum = computed(() => messages.length);
+
+            let messagesArea = ref(null);
+            let messageInput = ref(null);
+
+            let message = ref(null);
+
+            let sendMessage = () => {
+                  if (!message.value) return;
+
+                  messages.push({
+                        who: "me",
+                        message: message.value,
+                        time: "11:05",
+                        readed: false,
+                        isInfoMessage: false,
+                  });
+
+                  setTimeout(() => {
+                        messagesArea.value.scroll({
+                              top: messagesArea.value.scrollHeight,
+                              left: 0,
+                              behavior: "smooth",
+                        });
+
+                        messageInput.value.focus();
+                  }, 600);
+
+                  message.value = null;
+            };
+
+            return {
+                  messages,
+                  msgNum,
+                  message,
+                  sendMessage,
+                  messagesArea,
+                  messageInput,
+            };
       },
 };
 </script>
@@ -67,7 +140,7 @@ export default {
       @include center($screen-small * 1.5);
       @include area($py: 1em, $px: 1em, $mt: 0, $mb: 0);
 
-      max-height: 80vh;
+      height: 80vh;
 
       display: grid;
       grid-row-gap: 0.5em;
@@ -90,72 +163,6 @@ export default {
                   $c: $black,
                   $inset: true
             );
-
-            .message {
-                  margin-bottom: 0.3em;
-                  color: white;
-                  @include flex($justify: flex-start);
-
-                  .wrapper {
-                        max-width: $screen-small * 0.8;
-                        padding: 0 0.2em;
-                        @include flex($justify: flex-start, $align: flex-end);
-                        background-color: $brand-color;
-                  }
-
-                  .message-content {
-                        padding: 0.3em;
-                  }
-
-                  .message-meta {
-                        @include flex($justify: space-between);
-                        .time {
-                              font-weight: 100;
-                        }
-                  }
-
-                  &.info {
-                        justify-content: center;
-                        margin: 1em 0;
-
-                        .wrapper {
-                              background-color: gray;
-                              border-radius: $border-radius * 3;
-                        }
-                  }
-
-                  &.me {
-                        justify-content: flex-end;
-                        .wrapper {
-                              border-top-left-radius: $border-radius * 3;
-                              border-bottom-left-radius: $border-radius * 3;
-                        }
-
-                        .message-meta {
-                              .mark {
-                                    margin-left: 0.2em;
-                                    &::before {
-                                          content: " ✓";
-                                    }
-
-                                    &.readed {
-                                          &::after {
-                                                margin-left: -6px;
-                                                content: "✓";
-                                          }
-                                    }
-                              }
-                        }
-                  }
-
-                  &.him {
-                        .wrapper {
-                              flex-direction: row-reverse;
-                              border-top-right-radius: $border-radius * 3;
-                              border-bottom-right-radius: $border-radius * 3;
-                        }
-                  }
-            }
       }
 
       .control {
