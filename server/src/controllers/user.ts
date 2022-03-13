@@ -306,6 +306,7 @@ class User {
             next: NextFunction
       ): Promise<void> => {
             let users = await searchUsers(req.body);
+
             res.status(StatusCodes.OK).json(users);
       };
 }

@@ -17,6 +17,9 @@ const REDIS_PASSWORD = process.env.REDIS_PASSWORD || "mongo1998";
 const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || "localhost";
 const SERVER_PORT = Number(process.env.SERVER_PORT) || 3000;
 
+const CLIENT_HOSTNAME = process.env.CLIENT_HOSTNAME || "localhost";
+const CLIENT_PORT = Number(process.env.CLIENT_PORT) || 5000;
+
 export const MAX_USER_PHOTOS = Number(process.env.MAX_USER_PHOTOS) || 13;
 
 export const JWT_SECRET_ACCESS = process.env.JWT_SECRET_ACCESS!;
@@ -45,6 +48,11 @@ export const MONGO = {
 export const SERVER = {
       hostname: SERVER_HOSTNAME,
       port: SERVER_PORT,
+};
+
+export const CLIENT = {
+      hostname: CLIENT_HOSTNAME,
+      port: CLIENT_PORT,
 };
 
 export const SMTP = {
