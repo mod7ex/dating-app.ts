@@ -101,16 +101,28 @@ export default {
                   login
             );
 
-            let submit = async () => {
+            let submit = () => {
                   formTouch();
+
                   if (!isValideForm.value) return;
 
-                  let responce = await xhrApi.post("/auth/login", login);
-                  console.log(responce);
+                  xhrApi.post("/auth/login", login)
+                        .then(async (responce) => {
+                              console.log(responce.data);
 
-                  // await router.push({
-                  //       name: "Settings",
-                  // });
+                              await router.push({
+                                    name: "Settings",
+                              });
+                        })
+                        .catch((error) => {
+                              if (error.response) {
+                                    console.log(error.response.data);
+                              } else if (error.request) {
+                                    console.log(error.request);
+                              } else {
+                                    console.log("Error", error.message);
+                              }
+                        });
             };
 
             // let { email_or_username, password, remember } = toRefs(login);

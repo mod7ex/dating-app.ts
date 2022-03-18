@@ -17,14 +17,13 @@ export const createUserSchema = object({
                   required_error: "email is required",
             })
                   .max(320)
-                  .email("not a valide email")
-                  .regex(emailRegex, "Invalide email"),
+                  .email("not a valide email"),
+            // .regex(emailRegex, "Invalide email"),
 
             password: string({
                   required_error: "password is required",
-            })
-                  .min(6, "password should be at least 6 chars")
-                  .regex(passwordRegex, "Weak password"),
+            }).min(6, "password should be at least 6 chars"),
+            // .regex(passwordRegex, "Weak password"),
 
             password_confirmation: string({
                   required_error: "password confirmation is required",
@@ -37,7 +36,7 @@ export const createUserSchema = object({
 
 export const loginUserSchema = object({
       body: object({
-            login: string({
+            email_or_username: string({
                   required_error: "login is required",
             }),
 

@@ -1,9 +1,8 @@
 import "express-async-errors";
 import express from "express";
-import { SERVER, CLIENT } from "./config/config";
-import { req, errorHandler, notFound } from "./middlewares";
+import { SERVER } from "./config/config";
+import { req, errorHandler, notFound, cors } from "./middlewares";
 import router from "./routes";
-import cors from "cors";
 import { app, httpServer, initSocket } from "./server";
 
 /******************   security   ******************/
@@ -14,21 +13,10 @@ app.disable("x-powered-by");
 
 /*****************   middlewares   *****************/
 
-// app.use(
-//       cors({
-//             origin: "*",
-//             // origin: [`http://${CLIENT.hostname}:${CLIENT.port}`],
-//             methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
-//             allowedHeaders: ["Content-Type", "Authorization"],
-//             exposedHeaders: ["X-REFRESH"],
-//             credentials: true,
-//             maxAge: 3000,
-//             preflightContinue: true,
-//             optionsSuccessStatus: 204,
-//       })
-// );
+app.use(cors._$);
 
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: true }));
 
 app.use(req._$);

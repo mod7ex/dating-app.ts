@@ -10,11 +10,11 @@ export const app = express();
 export const httpServer = createServer(app);
 
 export const io = new Server(httpServer, {
-      cors: {
-            // origin: [`http://${CLIENT.hostname}:${CLIENT.port}`],
-            origin: "*",
-            credentials: false,
-      },
+      // cors: {
+      //       // origin: [`http://${CLIENT.hostname}:${CLIENT.port}`],
+      //       origin: "*",
+      //       credentials: false,
+      // },
 });
 
 io.use(async (socket: Socket, next) => {

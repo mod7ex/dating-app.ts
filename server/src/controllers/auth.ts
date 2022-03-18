@@ -37,9 +37,9 @@ class Auth {
             res: Response,
             _: NextFunction
       ): Promise<void> {
-            let { login, password } = req.body;
+            let { email_or_username, password } = req.body;
 
-            let user = await findUserByLogin(login);
+            let user = await findUserByLogin(email_or_username);
 
             if (!user) throw new NotFoundError("invalide credentials");
 
