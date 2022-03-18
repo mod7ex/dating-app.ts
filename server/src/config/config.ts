@@ -18,7 +18,7 @@ const SERVER_HOSTNAME = process.env.SERVER_HOSTNAME || "localhost";
 const SERVER_PORT = Number(process.env.SERVER_PORT) || 3000;
 
 const CLIENT_HOSTNAME = process.env.CLIENT_HOSTNAME || "localhost";
-const CLIENT_PORT = Number(process.env.CLIENT_PORT) || 5000;
+const CLIENT_PORT = Number(process.env.CLIENT_PORT) || 8080;
 
 export const MAX_USER_PHOTOS = Number(process.env.MAX_USER_PHOTOS) || 13;
 

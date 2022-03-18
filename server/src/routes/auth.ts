@@ -5,6 +5,13 @@ import { resourceValidator, auth } from "../middlewares";
 
 const authRouter = Router();
 
+// authRouter.options("/auth/login", function (req, res) {
+//       res.setHeader("Access-Control-Allow-Origin", "*");
+//       res.setHeader("Access-Control-Allow-Methods", "*");
+//       res.setHeader("Access-Control-Allow-Headers", "*");
+//       res.end();
+// });
+
 authRouter.post(
       "/auth/login",
       resourceValidator._$(loginUserSchema),

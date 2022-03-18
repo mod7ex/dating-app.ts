@@ -4,6 +4,7 @@ import { CustomError } from "../errors";
 import path from "path";
 import { APP_PATH, MAX_USER_PHOTOS } from "../config/config";
 let uploadPath = path.resolve(APP_PATH, "uploads");
+import { Request } from "express";
 
 class Upload extends Controller {
       constructor() {
@@ -16,7 +17,7 @@ class Upload extends Controller {
                   fileSize: 1024 * 1024, // in bytes
             },
 
-            fileFilter: function (req, file, cb) {
+            fileFilter: function (req: Request, file, cb) {
                   if (
                         file.mimetype !== "image/png" &&
                         file.mimetype !== "image/jpeg"
@@ -28,13 +29,13 @@ class Upload extends Controller {
             },
 
             storage: multer.diskStorage({
-                  destination: function (req, file, cb) {
+                  destination: function (req: Request, file, cb) {
                         // you should create the folder, multer won't do it
                         cb(null, uploadPath);
                   },
                   // destination: uploadPath,
 
-                  filename: function (req, file, cb) {
+                  filename: function (req: Request, file, cb) {
                         let filename = `${
                               req.user._id
                         }-at-${Date.now()}_photo${path.extname(

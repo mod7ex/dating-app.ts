@@ -3,13 +3,13 @@
             <div id="chat">
                   <div class="messages" ref="messagesArea">
                         <Message
-                              v-for="i in msgNum"
+                              v-for="(msg, i) in messages"
                               :key="i"
-                              :message="messages[i - 1].message"
-                              :time="messages[i - 1].time"
-                              :who="messages[i - 1].who"
-                              :readed="messages[i - 1].readed"
-                              :isInfoMessage="messages[i - 1].isInfoMessage"
+                              :message="msg.message"
+                              :time="msg.time"
+                              :who="msg.who"
+                              :readed="msg.readed"
+                              :isInfoMessage="msg.isInfoMessage"
                         />
                   </div>
 
@@ -32,7 +32,7 @@
 <script>
 import Authenticated from "../../layouts/views/Authenticated.vue";
 import Message from "../../components/Message";
-import { reactive, ref, computed } from "@vue/reactivity";
+import { reactive, ref } from "vue";
 
 export default {
       name: "Chat",
@@ -92,8 +92,6 @@ export default {
                   },
             ]);
 
-            let msgNum = computed(() => messages.length);
-
             let messagesArea = ref(null);
             let messageInput = ref(null);
 
@@ -125,7 +123,6 @@ export default {
 
             return {
                   messages,
-                  msgNum,
                   message,
                   sendMessage,
                   messagesArea,

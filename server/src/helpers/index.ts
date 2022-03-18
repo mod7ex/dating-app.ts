@@ -9,6 +9,8 @@ export const passwordRegex = /^[A-Za-z]\w{7,14}$/;
 
 // https://stackoverflow.com/questions/19605150/regex-for-password-must-contain-at-least-eight-characters-at-least-one-number-a
 
+type FnType = (...args: any[]) => any;
+
 export const wrap = (fn: FnType): FnType => {
       return (...args: any[]) => {
             try {

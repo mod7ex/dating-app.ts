@@ -30,7 +30,7 @@
 <script>
 import Footer from "../../components/Footer.vue";
 import Sidebar from "../../components/Sidebar.vue";
-import { ref, watch, computed } from "vue";
+import { inject, computed, onMounted, onUnmounted } from "vue";
 import { useStore } from "vuex";
 
 export default {
@@ -43,6 +43,19 @@ export default {
 
       setup() {
             let store = useStore();
+
+            let socket = inject("socket");
+
+            onMounted(() => {
+                  socket.auth = {};
+                  socket.connect();
+                  console.log(socket);
+            });
+
+            onUnmounted(() => {
+                  socket.disconnect();
+                  console.log(socket);
+            });
 
             let closeSideBar = () => {
                   store.dispatch("closeSidebar");

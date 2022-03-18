@@ -3,6 +3,7 @@
       "scripts": {
             "build": "npx tsc",
             "watch": "npx tsc -w",
+            "build:declaration": "npx tsc --declaration",
             "serve": "npx nodemon ./src/app.ts",
             "serve:js": "npx nodemon ./dist/app.js"
       },

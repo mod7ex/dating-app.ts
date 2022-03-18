@@ -4,7 +4,7 @@ import { SERVER, CLIENT } from "./config/config";
 import { req, errorHandler, notFound } from "./middlewares";
 import router from "./routes";
 import cors from "cors";
-import { app, httpServer } from "./server";
+import { app, httpServer, initSocket } from "./server";
 
 /******************   security   ******************/
 
@@ -13,25 +13,27 @@ app.disable("x-powered-by");
 /**************************************************/
 
 /*****************   middlewares   *****************/
-app.use(
-      cors({
-            origin: [`http://${CLIENT.hostname}:${CLIENT.port}`],
-            methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-            allowedHeaders: ["Content-Type", "Authorization"],
-            exposedHeaders: ["X-REFRESH"],
-            credentials: true,
-            maxAge: 3000,
-            preflightContinue: false,
-            optionsSuccessStatus: 204,
-      })
-);
+
+// app.use(
+//       cors({
+//             origin: "*",
+//             // origin: [`http://${CLIENT.hostname}:${CLIENT.port}`],
+//             methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
+//             allowedHeaders: ["Content-Type", "Authorization"],
+//             exposedHeaders: ["X-REFRESH"],
+//             credentials: true,
+//             maxAge: 3000,
+//             preflightContinue: true,
+//             optionsSuccessStatus: 204,
+//       })
+// );
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(req._$);
 
-app.use(router);
+app.use("/api", router);
 
 app.use(notFound._$, errorHandler._$);
 
@@ -45,7 +47,13 @@ let start = async (port: number): Promise<void> => {
 
             await trackRedis();
 
-            httpServer.listen(port, (): void => {
+            // httpServer.listen(port, (): void => {
+            //       console.log(
+            //             `Server listening on port; ${port}. visit http://${SERVER.hostname}:${port}`
+            //       );
+            // });
+
+            initSocket(port, (): void => {
                   console.log(
                         `Server listening on port; ${port}. visit http://${SERVER.hostname}:${port}`
                   );

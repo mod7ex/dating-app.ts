@@ -58,6 +58,7 @@ import { reactive } from "vue";
 import { required, password, login_field } from "../../helpers/validators";
 import validationHandler from "../../mixins/validation";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 
 export default {
       name: "Login",
@@ -72,6 +73,8 @@ export default {
 
       setup() {
             const router = useRouter();
+
+            const store = useStore();
 
             let login = reactive({
                   email_or_username: null,
@@ -101,11 +104,13 @@ export default {
             let submit = async () => {
                   formTouch();
                   if (!isValideForm.value) return;
-                  console.log(login);
 
-                  await router.push({
-                        name: "Settings",
-                  });
+                  let responce = await xhrApi.post("/auth/login", login);
+                  console.log(responce);
+
+                  // await router.push({
+                  //       name: "Settings",
+                  // });
             };
 
             // let { email_or_username, password, remember } = toRefs(login);

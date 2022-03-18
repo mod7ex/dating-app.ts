@@ -38,8 +38,11 @@ class Auth extends Controller {
             // if (expired) throw new ForbiddenError(); // refresh it
             if (expired) return res.redirect("/auth/refresh");
 
-            // it would be better to put decoded in req, work on request
-            req.user = { _id: decoded._id, username: decoded.username };
+            req.user = {
+                  _id: decoded._id,
+                  username: decoded.username,
+            };
+
             next();
       };
 }

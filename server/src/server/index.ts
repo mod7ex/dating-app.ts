@@ -7,18 +7,18 @@ import { verifyAccessToken, getUserRefreshToken } from "../services/auth";
 import { UnauthorizedError, ForbiddenError } from "../errors";
 
 export const app = express();
-
 export const httpServer = createServer(app);
 
 export const io = new Server(httpServer, {
       cors: {
-            origin: [`http://${CLIENT.hostname}:${CLIENT.port}`],
-            credentials: true,
+            // origin: [`http://${CLIENT.hostname}:${CLIENT.port}`],
+            origin: "*",
+            credentials: false,
       },
 });
 
 io.use(async (socket: Socket, next) => {
-      console.log(socket.handshake);
+      console.log("handshake", socket.handshake);
 
       let { accessToken } = socket.handshake.auth as {
             [key: string]: string | null | undefined;
@@ -35,10 +35,19 @@ io.use(async (socket: Socket, next) => {
       // check if refresh token is still valide
       if (!refreshToken) return next(new UnauthorizedError("Unauthenticated"));
 
-      // if (expired) throw new ForbiddenError(); // refresh it
       if (expired) return next(new UnauthorizedError("Unauthenticated"));
 
-      // it would be better to put decoded in req, work on request
-      socket.request = { _id: decoded._id, username: decoded.username };
+      // @ts-ignore
+      socket.user = { _id: decoded._id, username: decoded.username };
       next();
 });
+
+export const initSocket = (port: number, cb: () => void) => {
+      io.listen(port);
+
+      io.on("connection", (socket) => {
+            console.log("connected ====> ", socket.id);
+      });
+
+      cb();
+};

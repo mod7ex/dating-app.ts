@@ -1,5 +1,11 @@
 import jwtApp from "../utils/jwt";
 import { RedisClient } from "../db";
+import IUser from "../interfaces/IUser";
+
+type JWTSubject = {
+      _id: IUser["_id"];
+      username: IUser["username"];
+};
 
 export const signAccessToken = (
       payload: JWTSubject,
