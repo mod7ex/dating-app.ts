@@ -28,9 +28,10 @@ class Cors extends Controller {
                   res.header("Access-Control-Allow-Headers", [
                         "Content-Type",
                         "Authorization",
+                        "X-REFRESH",
                   ]);
-                  res.header("Access-Control-Expose-Headers", ["X-REFRESH"]);
-                  res.header("Access-Control-Allow-Credentials", "false");
+                  res.header("Access-Control-Expose-Headers", "*");
+                  res.header("Access-Control-Allow-Credentials", "true");
                   res.header("Access-Control-Max-Age", "60000");
 
                   res.status(204).send();

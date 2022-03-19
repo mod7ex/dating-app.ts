@@ -5,8 +5,6 @@ export default {
             const socket = io("http://localhost:3000", {
                   // withCredentials: true,
                   autoConnect: false,
-                  auth: {},
-                  path: "/",
             });
 
             app.config.globalProperties.$socket = socket;

@@ -3,7 +3,8 @@ import express from "express";
 import { SERVER } from "./config/config";
 import { req, errorHandler, notFound, cors } from "./middlewares";
 import router from "./routes";
-import { app, httpServer, initSocket } from "./server";
+import { app, initSocket, httpServer } from "./server";
+import { db, trackRedis } from "./db";
 
 /******************   security   ******************/
 
@@ -27,25 +28,19 @@ app.use(notFound._$, errorHandler._$);
 
 /***************************************************/
 
-import { db, trackRedis } from "./db";
-
 let start = async (port: number): Promise<void> => {
       try {
             await db.track();
 
             await trackRedis();
 
-            // httpServer.listen(port, (): void => {
-            //       console.log(
-            //             `Server listening on port; ${port}. visit http://${SERVER.hostname}:${port}`
-            //       );
-            // });
-
-            initSocket(port, (): void => {
+            httpServer.listen(port, (): void => {
                   console.log(
                         `Server listening on port; ${port}. visit http://${SERVER.hostname}:${port}`
                   );
             });
+
+            initSocket();
       } catch (error) {
             console.log("error at starting server ==> ", error);
             process.exit(1);

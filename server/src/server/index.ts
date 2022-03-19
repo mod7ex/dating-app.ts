@@ -1,5 +1,5 @@
-import { createServer } from "http";
 import express from "express";
+import { createServer } from "http";
 import { Server, Socket } from "socket.io";
 import { CLIENT } from "../config/config";
 
@@ -7,47 +7,46 @@ import { verifyAccessToken, getUserRefreshToken } from "../services/auth";
 import { UnauthorizedError, ForbiddenError } from "../errors";
 
 export const app = express();
+
 export const httpServer = createServer(app);
 
-export const io = new Server(httpServer, {
-      // cors: {
-      //       // origin: [`http://${CLIENT.hostname}:${CLIENT.port}`],
-      //       origin: "*",
-      //       credentials: false,
-      // },
+const io = new Server(httpServer, {
+      cors: {
+            origin: `http://${CLIENT.hostname}:${CLIENT.port}`,
+            methods: ["GET", "POST"],
+            allowedHeaders: [],
+            credentials: true,
+      },
 });
 
 io.use(async (socket: Socket, next) => {
       console.log("handshake", socket.handshake);
 
-      let { accessToken } = socket.handshake.auth as {
-            [key: string]: string | null | undefined;
-      };
+      // let { accessToken } = socket.handshake.auth as {
+      //       [key: string]: string | null | undefined;
+      // };
 
-      if (!accessToken) return next(new UnauthorizedError("Unauthenticated"));
+      // if (!accessToken) return next(new UnauthorizedError("Unauthenticated"));
 
-      let { decoded, expired } = verifyAccessToken(accessToken);
+      // let { decoded, expired } = verifyAccessToken(accessToken);
 
-      if (!decoded) return next(new ForbiddenError());
+      // if (!decoded) return next(new ForbiddenError());
 
-      let refreshToken = await getUserRefreshToken(decoded._id.toString());
+      // let refreshToken = await getUserRefreshToken(decoded._id.toString());
 
-      // check if refresh token is still valide
-      if (!refreshToken) return next(new UnauthorizedError("Unauthenticated"));
+      // // check if refresh token is still valide
+      // if (!refreshToken) return next(new UnauthorizedError("Unauthenticated"));
 
-      if (expired) return next(new UnauthorizedError("Unauthenticated"));
+      // if (expired) return next(new UnauthorizedError("Unauthenticated"));
 
-      // @ts-ignore
-      socket.user = { _id: decoded._id, username: decoded.username };
+      // // @ts-ignore
+      // socket.user = { _id: decoded._id, username: decoded.username };
+
       next();
 });
 
-export const initSocket = (port: number, cb: () => void) => {
-      io.listen(port);
-
+export const initSocket = () => {
       io.on("connection", (socket) => {
             console.log("connected ====> ", socket.id);
       });
-
-      cb();
 };
