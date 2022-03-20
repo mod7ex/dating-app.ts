@@ -46,10 +46,15 @@ export default {
 
             let socket = inject("socket");
 
-            onMounted(() => {
-                  socket.auth = {};
+            onMounted(async () => {
+                  await store.dispatch("pullUp_access_token");
+                  await store.dispatch("pullUp_refresh_token");
+
+                  socket.auth = {
+                        accessToken: store.getters.access,
+                  };
+
                   socket.connect();
-                  console.log(socket);
             });
 
             onUnmounted(() => {

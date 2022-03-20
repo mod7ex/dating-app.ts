@@ -110,6 +110,21 @@ export default {
                         .then(async (responce) => {
                               console.log(responce.data);
 
+                              let { accessToken, refreshToken } = responce.data;
+
+                              await store.dispatch(
+                                    "set_access_token",
+                                    accessToken
+                              );
+
+                              await store.dispatch(
+                                    "set_refresh_token",
+                                    refreshToken
+                              );
+
+                              await store.dispatch("store_access_token");
+                              await store.dispatch("store_refresh_token");
+
                               await router.push({
                                     name: "Settings",
                               });

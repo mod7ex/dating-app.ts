@@ -12,6 +12,7 @@ const metaSchema = new Schema<IMeta>({
       user_id: {
             type: SchemaTypes.ObjectId,
             ref: "User",
+            unique: true,
       },
 
       phone_number: String,
@@ -19,10 +20,10 @@ const metaSchema = new Schema<IMeta>({
       gender: Boolean,
       media: [String],
       location: {
-            country: Number,
-            region: Number,
-            city: Number,
-            timezone: Number,
+            country: { type: Number, default: null },
+            region: { type: Number, default: null },
+            city: { type: Number, default: null },
+            timezone: { type: Number, default: null },
       },
       marital_status: Number,
       height: Number,
@@ -37,7 +38,16 @@ const metaSchema = new Schema<IMeta>({
       education: String,
       ocupation: String,
       languages: [Number],
-      partner_age: { from: Number, to: Number },
+      partner_age: {
+            from: {
+                  type: Number,
+                  default: null,
+            },
+            to: {
+                  type: Number,
+                  default: null,
+            },
+      },
       about_me: String,
       about_partner: String,
 });

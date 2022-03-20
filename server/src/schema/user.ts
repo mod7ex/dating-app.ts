@@ -28,10 +28,17 @@ export const createUserSchema = object({
             password_confirmation: string({
                   required_error: "password confirmation is required",
             }),
-      }).refine((data) => data.password === data.password_confirmation, {
-            message: "passwords do not match",
-            path: ["password_confirmation"],
-      }),
+
+            agree: boolean(),
+      })
+            .refine((data) => data.password === data.password_confirmation, {
+                  message: "passwords do not match",
+                  path: ["password_confirmation"],
+            })
+            .refine((data) => data.agree == true, {
+                  message: "please read privacy policy",
+                  path: ["agree"],
+            }),
 });
 
 export const loginUserSchema = object({

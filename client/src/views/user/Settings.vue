@@ -25,7 +25,7 @@
                         </ul>
                   </div>
 
-                  <div class="settings area">
+                  <div class="settings area" v-if="showTabs">
                         <KeepAlive :max="3600">
                               <component :is="component" />
                         </KeepAlive>
@@ -35,11 +35,12 @@
 </template>
 
 <script>
-import { reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
 
 import Authenticated from "../../layouts/views/Authenticated.vue";
 import Meta from "../../components/settings/Meta.vue";
 import Main from "../../components/settings/Main.vue";
+import { useStore } from "vuex";
 
 export default {
       name: "Settings",
@@ -51,13 +52,37 @@ export default {
       },
 
       setup() {
-            let component = ref("Meta");
+            let store = useStore();
+
+            let showTabs = computed(() => store.getters.me_ready);
+
+            onMounted(() => {
+                  xhrApi.get("/user/me")
+                        .then((responce) => {
+                              let { user, meta } = responce.data;
+
+                              store.dispatch("set_user", user);
+                              store.dispatch("set_meta", meta);
+                        })
+                        .catch((error) => {
+                              if (error.response) {
+                                    console.log(error.response.data);
+                              } else if (error.request) {
+                                    console.log(error.request);
+                              } else {
+                                    console.log("Error", error.message);
+                              }
+                        });
+            });
+
+            let component = ref("Main");
 
             let tabs = reactive(["Main", "Meta"]);
 
             return {
                   component,
                   tabs,
+                  showTabs,
             };
       },
 };

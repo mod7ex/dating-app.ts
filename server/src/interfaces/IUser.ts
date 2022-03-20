@@ -8,7 +8,7 @@ export default interface IUser extends CreateUserInput, Document {
 
       meta_id: Types.ObjectId;
 
-      verificationCode: string;
+      verificationCode?: string | undefined;
       passwordResetCode?: string | undefined;
       verified: boolean;
 

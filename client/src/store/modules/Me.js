@@ -1,49 +1,34 @@
 export default {
       state: () => ({
-            user: {
-                  first_name: null,
-                  last_name: null,
-                  email: null,
-                  username: null,
-            },
-
-            meta: {
-                  avatar: null,
-                  media: [],
-
-                  gender: null,
-                  dob: null,
-                  phone_number: null,
-                  location: {
-                        country: null,
-                        region: null,
-                        city: null,
-                        timezone: null,
-                  },
-                  marital_status: null,
-                  height: null,
-                  weight: null,
-                  hair_color: null,
-                  eye_color: null,
-                  children: null,
-                  relegion: null,
-
-                  smoking: null,
-                  drinking: null,
-
-                  income: null,
-                  education: null,
-                  ocupation: null,
-                  languages: [],
-                  partner_age: { from: null, to: null },
-                  about_me: null,
-                  about_partner: null,
-            },
+            user: null,
+            meta: null,
       }),
 
-      mutations: {},
+      getters: {
+            me_ready(state) {
+                  if (!state.user) return false;
+                  if (!state.meta) return false;
+                  return true;
+            },
+      },
 
-      actions: {},
+      mutations: {
+            SET_META(state, payload) {
+                  state.meta = payload;
+            },
 
-      getters: {},
+            SET_USER(state, payload) {
+                  state.user = payload;
+            },
+      },
+
+      actions: {
+            set_meta({ commit }, payload) {
+                  commit("SET_META", payload);
+            },
+
+            set_user({ commit }, payload) {
+                  commit("SET_USER", payload);
+            },
+      },
 };

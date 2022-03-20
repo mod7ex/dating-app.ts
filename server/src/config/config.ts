@@ -59,7 +59,7 @@ export const SMTP = {
       host: "smtp.mailtrap.io",
       port: 2525,
       auth: {
-            user: "2b8c6d2e4891e3",
-            pass: "42b0ffb496865c",
+            user: "f774c5db2b92ae",
+            pass: "5013ead5d34552",
       },
 };

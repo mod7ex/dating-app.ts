@@ -8,11 +8,28 @@ import SocketIO from "./plugins/socket";
 window.xhrApi = axios.create({
       baseURL: "http://localhost:3000/api",
       timeout: 2000,
-      // headers: {
-      //       "Content-Type": "application/json",
-      //       Accept: "application/json",
-      // },
+      headers: {
+            // "Content-Type": "application/json",
+            Accept: "application/json",
+      },
 });
+
+xhrApi.interceptors.request.use(
+      function (config) {
+            console.log(config);
+
+            config.headers = {
+                  ...config.headers,
+                  Authorization: `Bearer ${store.getters.access}`,
+                  "X-REFRESH": store.getters.refresh,
+            };
+
+            return config;
+      },
+      function (error) {
+            return Promise.reject(error);
+      }
+);
 
 let app = createApp(App);
 

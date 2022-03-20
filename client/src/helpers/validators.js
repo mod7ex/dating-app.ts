@@ -65,7 +65,8 @@ export const login_field = (val) => {
 
 export const password = (val) => {
       return {
-            valide: cleanOnEmpty((v) => passwordRegex.test(v))(val),
+            // valide: cleanOnEmpty((v) => passwordRegex.test(v))(val),
+            valide: () => true,
             error: "invalide password",
       };
 };

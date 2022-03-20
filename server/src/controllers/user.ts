@@ -42,11 +42,9 @@ class User {
 
             let meta = await user.getMeta();
 
-            console.log(meta);
-
             res.status(StatusCodes.OK).json({
-                  ...omit(user.toObject(), userPrivateFields),
-                  ...omit(meta.toObject(), metaPrivateFields),
+                  user: omit(user.toObject(), userPrivateFields),
+                  meta: omit(meta.toObject(), metaPrivateFields),
             });
       };
 
@@ -76,6 +74,7 @@ class User {
                   throw new CustomError("Could not verify user");
 
             user.verified = true;
+            user.verificationCode = undefined;
             let meta = await user.initMeta();
             user.meta_id = meta._id;
             await user.save();

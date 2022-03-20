@@ -115,6 +115,7 @@ import {
 } from "../../helpers/validators";
 import validationHandler from "../../mixins/validation";
 import { reactive } from "vue";
+import { useRouter } from "vue-router";
 
 export default {
       name: "Register",
@@ -128,6 +129,8 @@ export default {
       },
 
       setup() {
+            let router = useRouter();
+
             let register = reactive({
                   first_name: "",
                   last_name: "",
@@ -159,8 +162,28 @@ export default {
 
             let submit = () => {
                   formTouch();
+
                   if (!isValideForm.value) return;
+
                   console.log(register);
+
+                  xhrApi.post("/auth/register", register)
+                        .then(async (responce) => {
+                              console.log(responce.data);
+
+                              await router.push({
+                                    name: "Home",
+                              });
+                        })
+                        .catch((error) => {
+                              if (error.response) {
+                                    console.log(error.response.data);
+                              } else if (error.request) {
+                                    console.log(error.request);
+                              } else {
+                                    console.log("Error", error.message);
+                              }
+                        });
             };
 
             return {

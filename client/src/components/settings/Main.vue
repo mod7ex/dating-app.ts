@@ -45,7 +45,7 @@ import BaseInput from "../forms/BaseInput.vue";
 import { useStore } from "vuex";
 import { required, name, email } from "../../helpers/validators";
 import validationHandler from "../../mixins/validation";
-import { reactive } from "vue";
+import { computed } from "vue";
 export default {
       name: "Main",
 
@@ -57,7 +57,7 @@ export default {
       setup() {
             let store = useStore();
 
-            let user = reactive(store.state.me.user);
+            let user = computed(() => store.state.me.user);
 
             let rules = {
                   first_name: { required, name },

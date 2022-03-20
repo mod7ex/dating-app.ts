@@ -44,7 +44,9 @@ class Auth {
             if (!user) throw new NotFoundError("invalide credentials");
 
             if (!user.verified)
-                  throw new NotFoundError("check email for account validation");
+                  throw new NotFoundError(
+                        "check email for account verification"
+                  );
 
             let isValidPassword = await user.comparePassword(password);
 
@@ -75,7 +77,7 @@ class Auth {
             res: Response,
             _: NextFunction
       ): Promise<void> => {
-            let providedRefreshToken = get(req.headers, "x-refresh");
+            let providedRefreshToken = get(req.headers, "X-REFRESH");
 
             if (!providedRefreshToken) throw new UnauthorizedError();
 

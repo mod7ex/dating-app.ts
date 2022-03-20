@@ -198,7 +198,7 @@
                   />
             </FormField>
 
-            <FormField class="flex partner-age">
+            <FormField class="flex partner-age" v-if="meta.partner_age">
                   <label>Partner age</label>
 
                   <SelectInput
@@ -226,7 +226,7 @@ import CheckboxList from "../forms/CheckboxList.vue";
 import TextArea from "../forms/TextArea.vue";
 
 import { useStore } from "vuex";
-import { reactive, watch } from "vue";
+import { reactive, computed } from "vue";
 
 import validationHandler from "../../mixins/validation";
 import { phone_number } from "../../helpers/validators";
@@ -245,7 +245,7 @@ export default {
       setup() {
             let store = useStore();
 
-            let meta = reactive(store.state.me.meta);
+            let meta = computed(() => store.state.me.meta);
 
             let appOptions = reactive(store.state.app.appOptions);
 
@@ -256,13 +256,6 @@ export default {
             let { vHandler, isValideForm, formTouch } = validationHandler(
                   rules,
                   meta
-            );
-
-            watch(
-                  () => meta.about_me,
-                  (v) => {
-                        console.log(v);
-                  }
             );
 
             return {

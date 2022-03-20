@@ -8,6 +8,12 @@ const routes = [
       },
 
       {
+            path: "/verify/:id/:verificationCode",
+            name: "Verify",
+            component: () => import("../views/user/Verify.vue"),
+      },
+
+      {
             path: "/login",
             name: "Login",
             component: () => import("../views/auth/Login.vue"),
