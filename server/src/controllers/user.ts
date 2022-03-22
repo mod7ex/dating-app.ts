@@ -306,7 +306,7 @@ class User {
       ): Promise<void> => {
             let users = await searchUsers(req.body);
 
-            res.status(StatusCodes.OK).json(users);
+            res.status(StatusCodes.OK).json({ message: "good" });
       };
 }
 

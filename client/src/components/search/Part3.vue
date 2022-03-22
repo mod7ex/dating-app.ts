@@ -23,14 +23,14 @@
             <SelectInput
                   label=" "
                   name="age_from"
-                  :values="[1, 2, 3]"
+                  :items="appOptions.income"
                   v-model="part3.income"
             />
       </FormField>
 </template>
 
 <script>
-import { reactive, watch } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 
 import FormField from "../forms/FormField.vue";
@@ -52,13 +52,14 @@ export default {
 
       setup() {
             let store = useStore();
-            let part3 = reactive(store.state.app.searchForm);
+            let part3 = computed(() => store.state.app.searchForm);
+
+            let appOptions = store.getters.appOptions;
 
             return {
                   part3,
+                  appOptions,
             };
       },
 };
 </script>
-
-<style lang="scss"></style>

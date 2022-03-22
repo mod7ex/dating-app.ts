@@ -20,8 +20,6 @@ class Auth extends Controller {
                   authHeader.startsWith("Bearer ") &&
                   authHeader.split(" ")[1];
 
-            console.log(accessToken);
-
             if (!accessToken) throw new UnauthorizedError("Unauthenticated");
 
             let { decoded, expired } = verifyAccessToken(accessToken);

@@ -2,13 +2,13 @@ import { Router } from "express";
 import { resourceValidator, auth, upload } from "../middlewares";
 import userController from "../controllers/user";
 import { MAX_USER_PHOTOS } from "../config/config";
+import { metaSchema } from "../schema/meta";
 import {
       verifyUserSchema,
       forgotPasswordSchema,
       resetPasswordSchema,
       updateUserSchema,
 } from "../schema/user";
-import { metaSchema } from "../schema/meta";
 
 const userRouter = Router();
 
@@ -58,5 +58,7 @@ userRouter.delete("/user/photos/:photo", auth._$, userController.delete_photo);
 userRouter.patch("/user/photos/:photo", auth._$, userController.set_main_photo);
 
 userRouter.delete("/user/photos", auth._$, userController.delete_all_photos);
+
+userRouter.post("/user/search", auth._$, userController.search_users);
 
 export default userRouter;

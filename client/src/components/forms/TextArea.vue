@@ -10,7 +10,8 @@
             id=""
             rows="5"
             @input="$emit('update:modelValue', $event.target.value)"
-      ></textarea>
+            >{{ modelValue }}</textarea
+      >
 </template>
 
 <script>

@@ -3,7 +3,7 @@
             <label>Gender:</label>
             <div class="options">
                   <RadioOptions
-                        :options="options"
+                        :options="appOptions.gender"
                         v-model="part1.gender"
                         name="gender"
                   />
@@ -92,16 +92,12 @@
 </template>
 
 <script>
-import { reactive, watch } from "vue";
+import { computed } from "vue";
 import { useStore } from "vuex";
 
 import FormField from "../forms/FormField.vue";
 import BaseInput from "../forms/BaseInput.vue";
 import RadioOptions from "../forms/RadioOptions.vue";
-
-// import validationHandler from "../../mixins/validation";
-
-// import { name, phone_number } from "../../helpers/validators";
 
 export default {
       name: "Part1",
@@ -119,19 +115,13 @@ export default {
       setup() {
             let store = useStore();
 
-            let part1 = reactive(store.state.app.searchForm);
+            let part1 = computed(() => store.state.app.searchForm);
 
-            let options = reactive(store.state.app.genderOptions);
-
-            // let options = [
-            //       { label: "Male", value: "male" },
-            //       { label: "Female", value: "female" },
-            //       { label: "Any", value: "any" },
-            // ];
+            let appOptions = store.getters.appOptions;
 
             return {
                   part1,
-                  options,
+                  appOptions,
             };
       },
 };

@@ -20,8 +20,6 @@ const io = new Server(httpServer, {
 });
 
 io.use(async (socket: Socket, next) => {
-      console.log("handshake", socket.handshake);
-
       // let { accessToken } = socket.handshake.auth as {
       //       [key: string]: string | null | undefined;
       // };

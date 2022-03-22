@@ -17,13 +17,13 @@ const metaSchema = new Schema<IMeta>({
 
       phone_number: String,
       dob: Date,
-      gender: Boolean,
+      gender: Number,
       media: [String],
       location: {
-            country: { type: Number, default: null },
-            region: { type: Number, default: null },
-            city: { type: Number, default: null },
-            timezone: { type: Number, default: null },
+            country: { type: String, default: null },
+            region: { type: String, default: null },
+            city: { type: String, default: null },
+            timezone: { type: String, default: null },
       },
       marital_status: Number,
       height: Number,

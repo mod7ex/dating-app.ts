@@ -29,3 +29,80 @@ export const generateCode = (n = 4) => {
 export const unlinkImg = async (name: string) => {
       await fs.unlink(path.resolve(APP_PATH, "uploads", name));
 };
+
+/**
+ *
+ * this data shouldn't change order
+ *
+ */
+
+export const data = {
+      // weights,
+      min_weight: 5, // weight in pounds
+      max_weight: 1000, // weight in pounds
+
+      // heights,
+      min_height: 55, // height in cm
+      max_height: 280, // height in cm
+
+      children_max: 3,
+
+      min_age: 18,
+      max_age: 70,
+
+      genders: ["Male", "Female", "Other"],
+
+      hair_colors: [
+            "Auburn",
+            "Bald",
+            "Black",
+            "Blonde",
+            "Brown",
+            "Brunette",
+            "Charcoal",
+            "Chestnut",
+            "Golden",
+            "Gray",
+            "Red",
+            "Silver",
+            "White",
+      ],
+
+      eye_colors: ["Black", "Brown", "Blue", "Gray", "Green", "Hazel"],
+
+      relegions: [
+            "Non-believer",
+            "Muslim",
+            "Agnostic",
+            "Another",
+            "Baptist",
+            "Buddhist",
+            "Catholic",
+            "Christian",
+            "Jewish",
+      ],
+
+      habit: ["No", "Rarely", "Often", "Very often"],
+
+      languages: [
+            "Arabic",
+            "English",
+            "Japanese",
+            "German",
+            "Turkish",
+            "French",
+            "Russian",
+            "Italian",
+            "Greek",
+            "Spanish",
+            "Dutch",
+            "Portuguese",
+            "Polish",
+            "Chinese",
+            "Romanian",
+      ],
+
+      marital_status: ["single", "divorced", "separated", "widowed"],
+
+      income: ["Low", "Medium", "Height"],
+};

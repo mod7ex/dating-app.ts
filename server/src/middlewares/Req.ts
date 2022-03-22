@@ -11,7 +11,7 @@ class Req extends Controller {
             _: Response,
             next: NextFunction
       ): Promise<void> => {
-            if (req.method == "POST") {
+            if (req.method == "POST" || req.method == "PATCH") {
                   console.log("body ==> ", req.body);
             }
 

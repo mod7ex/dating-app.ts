@@ -3,14 +3,17 @@
             <label :for="name">{{ label }}</label>
             <select
                   :id="name"
-                  @input="$emit('update:modelValue', $event.target.value)"
+                  @input="
+                        $emit('update:modelValue', Number($event.target.value))
+                  "
             >
-                  <option v-if="notselected" disabled selected>select</option>
+                  <option disabled :selected="!modelValue">select</option>
 
                   <option
                         v-for="item in items"
                         :key="item.value"
                         :value="item.value"
+                        :selected="modelValue == item.value"
                   >
                         {{ item.label }}
                   </option>
@@ -21,6 +24,8 @@
 <script>
 export default {
       name: "SelectInput",
+
+      emits: ["update:modelValue"],
 
       props: {
             name: {
@@ -33,9 +38,9 @@ export default {
                   default: "Field",
             },
 
-            notselected: {
-                  type: Boolean,
-                  default: true,
+            modelValue: {
+                  type: [String, Number, Boolean],
+                  default: "",
             },
 
             items: Array,

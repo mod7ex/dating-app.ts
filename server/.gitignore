@@ -4,3 +4,5 @@ dist
 src/logs
 src/uploads
 dump.rdb
+
+populate.ts

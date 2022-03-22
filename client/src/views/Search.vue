@@ -42,7 +42,7 @@ import Part3 from "../components/search/Part3.vue";
 
 import Authenticated from "../layouts/views/Authenticated.vue";
 
-import { ref, reactive } from "vue";
+import { ref, computed } from "vue";
 import { useStore } from "vuex";
 
 import validationHandler from "../mixins/validation";
@@ -64,10 +64,9 @@ export default {
             let store = useStore();
 
             let tabs = ["Part1", "Part2", "Part3"];
-
             let component = ref("Part1");
 
-            let searchForm = reactive(store.state.app.searchForm);
+            let searchForm = computed(() => store.state.app.searchForm);
 
             let rules = {
                   username: { name },
@@ -77,14 +76,27 @@ export default {
 
             let { vHandler, isValideForm, formTouch } = validationHandler(
                   rules,
-                  searchForm
+                  searchForm.value
             );
 
             let submit = () => {
                   formTouch();
-                  console.log(isValideForm.value);
-                  console.log(searchForm);
+
                   if (!isValideForm.value) return;
+
+                  xhrApi.post("/user/search", searchForm.value)
+                        .then((responce) => {
+                              console.log(responce.data);
+                        })
+                        .catch((error) => {
+                              if (error.response) {
+                                    console.log(error.response.data);
+                              } else if (error.request) {
+                                    console.log(error.request);
+                              } else {
+                                    console.log("Error", error.message);
+                              }
+                        });
             };
 
             return {
@@ -100,6 +112,15 @@ export default {
 <style lang="scss">
 #searchForm {
       @include center($screen-medium);
+
+      .form-field {
+            margin-bottom: 2em;
+            align-items: flex-start;
+
+            select {
+                  min-width: 10em;
+            }
+      }
 
       .form-header {
             @include flex($justify: space-between);

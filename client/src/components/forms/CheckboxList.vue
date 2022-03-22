@@ -6,11 +6,12 @@
 
       <div class="checkbox-list">
             <span class="choice" v-for="val in values" :key="val.value">
-                  <label :for="`option-${val.value}`">
+                  <label :for="name(val)">
                         {{ val.label }}
                   </label>
                   <input
-                        :id="`option-${val.value}`"
+                        :checked="optionsList.includes(val.value)"
+                        :id="name(val)"
                         type="checkbox"
                         v-model="optionsList"
                         :value="val.value"
@@ -21,7 +22,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
 export default {
       name: "CheckboxList",
@@ -34,11 +35,7 @@ export default {
 
             values: {
                   type: Array,
-                  default: [
-                        { label: "Value 1", value: 1 },
-                        { label: "Value 2", value: 2 },
-                        { label: "Value 3", value: 3 },
-                  ],
+                  default: [{ label: "Value 1", value: 1 }],
             },
 
             modelValue: {
@@ -48,16 +45,25 @@ export default {
       },
       emits: ["update:modelValue"],
 
-      setup(_, { emit }) {
+      setup(props, { emit }) {
             let optionsList = ref([]);
+
+            onMounted(() => {
+                  optionsList.value = props.modelValue;
+            });
 
             let foo = () => {
                   emit("update:modelValue", optionsList.value);
             };
 
+            let name = (obj) => {
+                  return `${obj.value}-${obj.label.replace(" ", "-")}`;
+            };
+
             return {
                   optionsList,
                   foo,
+                  name,
             };
       },
 };

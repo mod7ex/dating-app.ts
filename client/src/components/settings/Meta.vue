@@ -4,7 +4,7 @@
                   <label>Gender:</label>
                   <div class="options">
                         <RadioOptions
-                              :options="gender"
+                              :options="appOptions.gender"
                               v-model="meta.gender"
                               name="gender"
                         />
@@ -12,8 +12,7 @@
             </FormField>
 
             <FormField>
-                  <BaseInput
-                        type="date"
+                  <BaseDateInput
                         label="Date of birth"
                         name="dob"
                         v-model="meta.dob"
@@ -51,7 +50,7 @@
                   <SelectInput
                         label="Timezone"
                         name="timezone"
-                        :items="timezone"
+                        :items="[{ label: 'Casa gmt', value: 2 }]"
                         v-model="meta.location.timezone"
                   />
             </FormField>
@@ -72,7 +71,7 @@
                   <SelectInput
                         label="Marital Status"
                         name="marital_status"
-                        :items="maritalStatus"
+                        :items="appOptions.maritalStatus"
                         v-model="meta.marital_status"
                   />
             </FormField>
@@ -81,7 +80,7 @@
                   <SelectInput
                         label="Height"
                         name="height"
-                        :items="height"
+                        :items="appOptions.height"
                         v-model="meta.height"
                   />
             </FormField>
@@ -90,7 +89,7 @@
                   <SelectInput
                         label="Weight"
                         name="weight"
-                        :items="weight"
+                        :items="appOptions.weight"
                         v-model="meta.weight"
                   />
             </FormField>
@@ -99,7 +98,7 @@
                   <SelectInput
                         label="Eye color"
                         name="eye_color"
-                        :items="eyeColor"
+                        :items="appOptions.eyeColor"
                         v-model="meta.eye_color"
                   />
             </FormField>
@@ -108,7 +107,7 @@
                   <SelectInput
                         label="Hair color"
                         name="hair_color"
-                        :items="hairColor"
+                        :items="appOptions.hairColor"
                         v-model="meta.hair_color"
                   />
             </FormField>
@@ -117,7 +116,7 @@
                   <SelectInput
                         label="Number of children"
                         name="children"
-                        :items="children"
+                        :items="appOptions.children"
                         v-model="meta.children"
                   />
             </FormField>
@@ -126,7 +125,7 @@
                   <SelectInput
                         label="Relegion"
                         name="relegion"
-                        :items="relegion"
+                        :items="appOptions.relegion"
                         v-model="meta.relegion"
                   />
             </FormField>
@@ -135,7 +134,7 @@
                   <SelectInput
                         label="Smoking"
                         name="smoking"
-                        :items="habit"
+                        :items="appOptions.habit"
                         v-model="meta.smoking"
                   />
             </FormField>
@@ -144,7 +143,7 @@
                   <SelectInput
                         label="Drinking"
                         name="drinking"
-                        :items="habit"
+                        :items="appOptions.habit"
                         v-model="meta.drinking"
                   />
             </FormField>
@@ -153,7 +152,7 @@
                   <SelectInput
                         label="Income"
                         name="income"
-                        :items="income"
+                        :items="appOptions.income"
                         v-model="meta.income"
                   />
             </FormField>
@@ -177,8 +176,10 @@
             </FormField>
 
             <FormField class="flex checkbox-list languages">
-                  <CheckboxList v-model="meta.languages" :values="language"
-                        >Marital status
+                  <CheckboxList
+                        v-model="meta.languages"
+                        :values="appOptions.languages"
+                        >Languages
                   </CheckboxList>
             </FormField>
 
@@ -204,13 +205,13 @@
                   <SelectInput
                         label="from"
                         name="partner_age_from"
-                        :items="partnerAge"
+                        :items="appOptions.partnerAge"
                         v-model="meta.partner_age.from"
                   />
                   <SelectInput
                         label="to"
                         name="partner_age_to"
-                        :items="partnerAge"
+                        :items="appOptions.partnerAge"
                         v-model="meta.partner_age.to"
                   />
             </FormField>
@@ -223,6 +224,7 @@ import BaseInput from "../forms/BaseInput.vue";
 import SelectInput from "../forms/SelectInput.vue";
 import RadioOptions from "../forms/RadioOptions.vue";
 import CheckboxList from "../forms/CheckboxList.vue";
+import BaseDateInput from "../forms/BaseDateInput.vue";
 import TextArea from "../forms/TextArea.vue";
 
 import { useStore } from "vuex";
@@ -240,6 +242,7 @@ export default {
             SelectInput,
             CheckboxList,
             TextArea,
+            BaseDateInput,
       },
 
       setup() {
@@ -247,7 +250,7 @@ export default {
 
             let meta = computed(() => store.state.me.meta);
 
-            let appOptions = reactive(store.state.app.appOptions);
+            let appOptions = store.getters.appOptions;
 
             let rules = {
                   phone_number: { phone_number },
@@ -259,8 +262,7 @@ export default {
             );
 
             return {
-                  ...appOptions,
-
+                  appOptions,
                   ...vHandler,
                   meta,
             };

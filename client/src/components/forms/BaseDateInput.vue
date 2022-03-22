@@ -4,29 +4,16 @@
             <slot></slot>
             <span v-if="mandatory" class="mandatory"></span>
       </label>
-      <input
-            :id="name"
-            :type="type"
-            :value="modelValue"
-            :placeholder="label"
-            autocomplete="off"
-            v-model="value"
-            @input="foo()"
-      />
+      <input :id="name" type="date" v-model="value" @input="foo()" />
 </template>
 
 <script>
 import { onMounted, ref } from "vue";
 
 export default {
-      name: "BaseInput",
+      name: "BaseDateInput",
 
       props: {
-            type: {
-                  type: String,
-                  default: "text",
-            },
-
             mandatory: {
                   type: Boolean,
                   default: false,
@@ -43,27 +30,22 @@ export default {
             },
 
             modelValue: {
-                  type: [String, Number, Boolean],
+                  type: String,
                   default: "",
             },
       },
+
       emits: ["update:modelValue"],
 
       setup(props, { emit }) {
             let value = ref(null);
 
-            if (props.type == "checkbox") value.value = false;
-
             let foo = () => {
-                  let payload = value.value;
-
-                  if (props.type == "checkbox") payload = !payload;
-
-                  emit("update:modelValue", payload);
+                  emit("update:modelValue", value.value);
             };
 
             onMounted(() => {
-                  value.value = props.modelValue;
+                  value.value = props.modelValue.split("T")[0];
             });
 
             return {

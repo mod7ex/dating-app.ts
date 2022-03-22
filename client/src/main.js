@@ -16,8 +16,6 @@ window.xhrApi = axios.create({
 
 xhrApi.interceptors.request.use(
       function (config) {
-            console.log(config);
-
             config.headers = {
                   ...config.headers,
                   Authorization: `Bearer ${store.getters.access}`,

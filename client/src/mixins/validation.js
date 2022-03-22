@@ -1,6 +1,8 @@
 import { watch, ref, reactive } from "vue";
 import { debounce } from "../helpers/index";
 
+// this is a setup function
+
 export default function (rules, state) {
       // state is a reactive object x = reactive({...})
 

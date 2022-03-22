@@ -49,6 +49,7 @@ export default {
             onMounted(async () => {
                   await store.dispatch("pullUp_access_token");
                   await store.dispatch("pullUp_refresh_token");
+                  await store.dispatch("fetch_me");
 
                   socket.auth = {
                         accessToken: store.getters.access,
@@ -59,7 +60,6 @@ export default {
 
             onUnmounted(() => {
                   socket.disconnect();
-                  console.log(socket);
             });
 
             let closeSideBar = () => {

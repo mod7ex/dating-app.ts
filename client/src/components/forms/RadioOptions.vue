@@ -1,6 +1,7 @@
 <template>
       <label v-for="option in options" :key="option.value" :for="option.value">
             <input
+                  :checked="modelValue === option.value"
                   :id="option.value"
                   name="gender"
                   :value="option.value"

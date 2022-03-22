@@ -2,68 +2,86 @@ export default {
       state: () => ({
             showSidebar: false,
 
-            appOptions: {
-                  gender: [
-                        { label: "Male", value: "male" },
-                        { label: "Female", value: "female" },
-                        { label: "Any", value: "any" },
+            data: {
+                  // weights,
+                  min_weight: 5, // weight in pounds
+                  max_weight: 1000, // weight in pounds
+
+                  // heights,
+                  min_height: 55, // height in cm
+                  max_height: 280, // height in cm
+
+                  children_max: 3,
+
+                  min_age: 18,
+                  max_age: 70,
+
+                  genders: ["Male", "Female", "Other"],
+
+                  habit: ["No", "Rarely", "Often", "Very often"],
+
+                  income: ["Low", "Medium", "Height"],
+
+                  marital_status: [
+                        "single",
+                        "divorced",
+                        "separated",
+                        "widowed",
                   ],
 
-                  maritalStatus: [
-                        { label: "Single", value: "single" },
-                        { label: "Married", value: "married" },
-                        { label: "Complicated", value: "complicated" },
+                  hair_colors: [
+                        "Auburn",
+                        "Bald",
+                        "Black",
+                        "Blonde",
+                        "Brown",
+                        "Brunette",
+                        "Charcoal",
+                        "Chestnut",
+                        "Golden",
+                        "Gray",
+                        "Red",
+                        "Silver",
+                        "White",
                   ],
 
-                  timezone: [
-                        { label: "Casablanca GMT", value: 1 },
-                        { label: "Paris GMT", value: 2 },
-                        { label: "Newyork GMT", value: 3 },
+                  eye_colors: [
+                        "Black",
+                        "Brown",
+                        "Blue",
+                        "Gray",
+                        "Green",
+                        "Hazel",
                   ],
 
-                  height: [1, 2, 3, 4, 5].map((i) => {
-                        return { label: i * 23, value: i };
-                  }),
+                  relegions: [
+                        "Non-believer",
+                        "Muslim",
+                        "Agnostic",
+                        "Another",
+                        "Baptist",
+                        "Buddhist",
+                        "Catholic",
+                        "Christian",
+                        "Jewish",
+                  ],
 
-                  weight: [1, 2, 3, 4, 5].map((i) => {
-                        return { label: i * 23, value: i };
-                  }),
-
-                  eyeColor: [1, 2, 3, 4, 5].map((i) => {
-                        return { label: i * 23, value: i };
-                  }),
-
-                  hairColor: [1, 2, 3, 4, 5].map((i) => {
-                        return { label: i * 23, value: i };
-                  }),
-
-                  children: [1, 2, 3, 4].map((i) => {
-                        return { label: `${i > 3 ? "more" : i}`, value: i };
-                  }),
-
-                  relegion: [1, 2, 3, 4].map((i) => {
-                        return { label: i, value: i };
-                  }),
-
-                  habit: [1, 2, 3, 4].map((i) => {
-                        return { label: i, value: i };
-                  }),
-
-                  income: [1, 2, 3, 4].map((i) => {
-                        return { label: i, value: i };
-                  }),
-
-                  partnerAge: [1, 2, 3, 4].map((i) => {
-                        return { label: i, value: i };
-                  }),
-
-                  language: [
-                        { value: 1, label: "Russian" },
-                        { value: 2, label: "Arabic" },
-                        { value: 3, label: "English" },
-                        { value: 4, label: "French" },
-                        { value: 5, label: "German" },
-                        { value: 6, label: "Chinese" },
+                  languages: [
+                        "Arabic",
+                        "English",
+                        "Japanese",
+                        "German",
+                        "Turkish",
+                        "French",
+                        "Russian",
+                        "Italian",
+                        "Greek",
+                        "Spanish",
+                        "Dutch",
+                        "Portuguese",
+                        "Polish",
+                        "Chinese",
+                        "Romanian",
                   ],
             },
 
@@ -110,6 +128,99 @@ export default {
             },
       }),
 
+      getters: {
+            showSidebar(state) {
+                  return state.showSidebar;
+            },
+
+            appOptions(state) {
+                  return {
+                        gender: state.data.genders.map((item, i) => {
+                              return { label: item, value: i };
+                        }),
+
+                        maritalStatus: state.data.marital_status.map(
+                              (item, i) => {
+                                    return { label: item, value: i };
+                              }
+                        ),
+
+                        weight: Array.from(
+                              Array(
+                                    state.data.max_weight -
+                                          state.data.min_weight +
+                                          1
+                              ).keys()
+                        ).map((i) => {
+                              return {
+                                    label: `${i + state.data.min_weight} pd (${(
+                                          (i + state.data.min_weight) *
+                                          0.453592
+                                    ).toFixed(2)} kg)`,
+                                    value: i + state.data.min_weight,
+                              };
+                        }),
+
+                        height: Array.from(
+                              Array(
+                                    state.data.max_height -
+                                          state.data.min_height +
+                                          1
+                              ).keys()
+                        ).map((i) => {
+                              return {
+                                    label: `${i + state.data.min_height} cm (${(
+                                          (i + state.data.min_height) *
+                                          0.01
+                                    ).toFixed(2)} m)`,
+                                    value: i + state.data.min_height,
+                              };
+                        }),
+
+                        eyeColor: state.data.eye_colors.map((item, i) => {
+                              return { label: item, value: i };
+                        }),
+
+                        hairColor: state.data.hair_colors.map((item, i) => {
+                              return { label: item, value: i };
+                        }),
+
+                        children: Array.from(
+                              Array(state.data.children_max + 1).keys()
+                        ).map((i) => {
+                              return { label: i, value: i };
+                        }),
+
+                        relegion: state.data.relegions.map((item, i) => {
+                              return { label: item, value: i };
+                        }),
+
+                        habit: state.data.habit.map((item, i) => {
+                              return { label: item, value: i };
+                        }),
+
+                        income: state.data.income.map((item, i) => {
+                              return { label: item, value: i };
+                        }),
+
+                        partnerAge: Array.from(
+                              Array(
+                                    state.data.max_age - state.data.min_age + 1
+                              ).keys()
+                        ).map((i) => {
+                              return {
+                                    label: `${i + state.data.min_age} years`,
+                                    value: i + state.data.min_age,
+                              };
+                        }),
+
+                        languages: state.data.languages.map((item, i) => {
+                              return { label: item, value: i };
+                        }),
+                  };
+            },
+      },
+
       mutations: {
             SWITCH_SIDEBAR(state) {
                   state.showSidebar = !state.showSidebar;
@@ -127,12 +238,6 @@ export default {
 
             closeSidebar({ commit }) {
                   commit("CLOSE_SIDEBAR");
-            },
-      },
-
-      getters: {
-            showSidebar(state) {
-                  return state.showSidebar;
             },
       },
 };
