@@ -1,0 +1,12 @@
+{
+      "private": true,
+      "scripts": {
+            "serve": "json-server --watch index.json"
+      },
+      "keywords": [],
+      "author": "",
+      "license": "ISC",
+      "dependencies": {
+            "json-server": "^0.17.0"
+      }
+}

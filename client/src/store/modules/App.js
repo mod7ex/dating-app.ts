@@ -126,6 +126,10 @@ export default {
                   education: null,
                   ocupation: null,
             },
+
+            countries: [],
+            states: [],
+            cities: [],
       }),
 
       getters: {
@@ -219,6 +223,14 @@ export default {
                         }),
                   };
             },
+
+            storeLocation(state) {
+                  return {
+                        countries: state.countries,
+                        states: state.states,
+                        cities: state.cities,
+                  };
+            },
       },
 
       mutations: {
@@ -229,6 +241,18 @@ export default {
             CLOSE_SIDEBAR(state) {
                   state.showSidebar = false;
             },
+
+            SET_COUNTRIES(state, payload) {
+                  state.countries = payload;
+            },
+
+            SET_STATES(state, payload) {
+                  state.states = payload;
+            },
+
+            SET_CITIES(state, payload) {
+                  state.cities = payload;
+            },
       },
 
       actions: {
@@ -238,6 +262,73 @@ export default {
 
             closeSidebar({ commit }) {
                   commit("CLOSE_SIDEBAR");
+            },
+
+            empty_location({ commit }) {
+                  commit("SET_COUNTRIES", []);
+                  commit("SET_STATES", []);
+                  commit("SET_CITIES", []);
+            },
+
+            fetch_countries({ commit }, payload) {
+                  if (!payload) return commit("SET_COUNTRIES", []);
+
+                  xhrApiLocations
+                        .get(`/countries?name_like=${payload}`)
+                        .then((responce) => {
+                              commit("SET_COUNTRIES", responce.data);
+                        })
+                        .catch((error) => {
+                              if (error.response) {
+                                    console.log(error.response.data);
+                              } else if (error.request) {
+                                    console.log(error.request);
+                              } else {
+                                    console.log("Error", error.message);
+                              }
+                        });
+            },
+
+            fetch_states({ commit }, payload) {
+                  if (!payload.v) return commit("SET_STATES", []);
+
+                  xhrApiLocations
+                        .get(
+                              `/states?name_like=${payload.v}&country_code=${payload.country_code}`
+                        )
+                        .then((responce) => {
+                              commit("SET_STATES", responce.data);
+                        })
+                        .catch((error) => {
+                              if (error.response) {
+                                    console.log(error.response.data);
+                              } else if (error.request) {
+                                    console.log(error.request);
+                              } else {
+                                    console.log("Error", error.message);
+                              }
+                        });
+            },
+
+            fetch_cities({ commit }, payload) {
+                  if (!payload) return commit("SET_CITIES", []);
+
+                  xhrApiLocations
+                        .get(
+                              `/cities?name_like=${payload.v}&country_code=${payload.country_code}&state_code=${payload.state_code}`
+                        )
+                        .then((responce) => {
+                              commit("SET_CITIES", responce.data);
+                        })
+                        .catch((error) => {
+                              if (error.response) {
+                                    console.log(error.response.data);
+                              } else if (error.request) {
+                                    console.log(error.request);
+                              } else {
+                                    console.log("Error", error.message);
+                              }
+                        });
             },
       },
 };

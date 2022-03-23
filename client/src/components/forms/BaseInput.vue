@@ -10,7 +10,7 @@
             :value="modelValue"
             :placeholder="label"
             autocomplete="off"
-            v-model="value"
+            v-model.trim="value"
             @input="foo()"
       />
 </template>

@@ -82,33 +82,34 @@ export default {
             let tabs = reactive(["Main", "Meta"]);
 
             let save = () => {
-                  xhrApi.patch("/user/update", store.state.me.user)
-                        .then((responce) => {
-                              console.log(responce.data);
-                        })
-                        .catch((error) => {
-                              if (error.response) {
-                                    console.log(error.response.data);
-                              } else if (error.request) {
-                                    console.log(error.request);
-                              } else {
-                                    console.log("Error", error.message);
-                              }
-                        });
+                  console.log(store.state.me.meta);
+                  // xhrApi.patch("/user/update", store.state.me.user)
+                  //       .then((responce) => {
+                  //             console.log(responce.data);
+                  //       })
+                  //       .catch((error) => {
+                  //             if (error.response) {
+                  //                   console.log(error.response.data);
+                  //             } else if (error.request) {
+                  //                   console.log(error.request);
+                  //             } else {
+                  //                   console.log("Error", error.message);
+                  //             }
+                  //       });
 
-                  xhrApi.patch("/user/update/meta", store.state.me.meta)
-                        .then((responce) => {
-                              console.log(responce.data);
-                        })
-                        .catch((error) => {
-                              if (error.response) {
-                                    console.log(error.response.data);
-                              } else if (error.request) {
-                                    console.log(error.request);
-                              } else {
-                                    console.log("Error", error.message);
-                              }
-                        });
+                  // xhrApi.patch("/user/update/meta", store.state.me.meta)
+                  //       .then((responce) => {
+                  //             console.log(responce.data);
+                  //       })
+                  //       .catch((error) => {
+                  //             if (error.response) {
+                  //                   console.log(error.response.data);
+                  //             } else if (error.request) {
+                  //                   console.log(error.request);
+                  //             } else {
+                  //                   console.log("Error", error.message);
+                  //             }
+                  //       });
             };
 
             return {

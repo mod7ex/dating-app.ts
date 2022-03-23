@@ -24,7 +24,11 @@
                         type="text"
                         label="Country"
                         name="country"
+                        v-model="location.country.name"
+                  />
+                  <OptionsListing
                         v-model="meta.location.country"
+                        :options="storeLocation.countries"
                   />
             </FormField>
 
@@ -33,7 +37,11 @@
                         type="text"
                         label="Region"
                         name="region"
-                        v-model="meta.location.region"
+                        v-model="location.state.name"
+                  />
+                  <OptionsListing
+                        v-model="meta.location.state"
+                        :options="storeLocation.states"
                   />
             </FormField>
 
@@ -42,7 +50,11 @@
                         type="text"
                         label="City"
                         name="city"
+                        v-model="location.city.name"
+                  />
+                  <OptionsListing
                         v-model="meta.location.city"
+                        :options="storeLocation.cities"
                   />
             </FormField>
 
@@ -226,9 +238,10 @@ import RadioOptions from "../forms/RadioOptions.vue";
 import CheckboxList from "../forms/CheckboxList.vue";
 import BaseDateInput from "../forms/BaseDateInput.vue";
 import TextArea from "../forms/TextArea.vue";
+import OptionsListing from "../forms/OptionsListing.vue";
 
 import { useStore } from "vuex";
-import { reactive, computed } from "vue";
+import { watch, computed, reactive } from "vue";
 
 import validationHandler from "../../mixins/validation";
 import { phone_number } from "../../helpers/validators";
@@ -243,12 +256,14 @@ export default {
             CheckboxList,
             TextArea,
             BaseDateInput,
+            OptionsListing,
       },
 
       setup() {
             let store = useStore();
 
             let meta = computed(() => store.state.me.meta);
+            let storeLocation = computed(() => store.getters.storeLocation);
 
             let appOptions = store.getters.appOptions;
 
@@ -261,10 +276,87 @@ export default {
                   meta
             );
 
+            let location = reactive({
+                  country: {},
+                  state: {},
+                  city: {},
+            });
+
+            let meta = computed(() => store.state.me.meta);
+
+            watch(
+                  () => location.country.name,
+                  (v) => {
+                        store.dispatch("fetch_countries", v);
+                  }
+            );
+
+            watch(
+                  () => location.state.name,
+                  (v) => {
+                        store.dispatch("fetch_states", {
+                              v,
+                              country_code: location.country.code,
+                        });
+                  }
+            );
+
+            watch(
+                  () => location.city.name,
+                  (v) => {
+                        store.dispatch("fetch_cities", {
+                              v,
+                              state_code: location.state.code,
+                              country_code: location.country.code,
+                        });
+                  }
+            );
+
+            watch(
+                  () => meta.value.location.country,
+                  (v) => {
+                        location.country = storeLocation.value.countries.find(
+                              (item) => item.id == v
+                        );
+
+                        setTimeout(async () => {
+                              await store.dispatch("empty_location");
+                        }, 300);
+                  }
+            );
+
+            watch(
+                  () => meta.value.location.state,
+                  (v) => {
+                        location.state = storeLocation.value.states.find(
+                              (item) => item.id == v
+                        );
+
+                        setTimeout(async () => {
+                              await store.dispatch("empty_location");
+                        }, 300);
+                  }
+            );
+
+            watch(
+                  () => meta.value.location.city,
+                  (v) => {
+                        location.city = storeLocation.value.cities.find(
+                              (item) => item.id == v
+                        );
+
+                        setTimeout(async () => {
+                              await store.dispatch("empty_location");
+                        }, 300);
+                  }
+            );
+
             return {
                   appOptions,
                   ...vHandler,
                   meta,
+                  location,
+                  storeLocation,
             };
       },
 };
@@ -273,6 +365,7 @@ export default {
 <style lang="scss">
 .user-meta {
       .form-field {
+            position: relative;
             .select-input {
                   margin-right: 0 !important;
                   flex-direction: column !important;

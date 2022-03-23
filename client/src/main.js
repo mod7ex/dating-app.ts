@@ -5,6 +5,15 @@ import router from "./router";
 import store from "./store";
 import SocketIO from "./plugins/socket";
 
+window.xhrApiLocations = axios.create({
+      baseURL: "http://localhost:4000",
+      timeout: 2000,
+      headers: {
+            // "Content-Type": "application/json",
+            Accept: "application/json",
+      },
+});
+
 window.xhrApi = axios.create({
       baseURL: "http://localhost:3000/api",
       timeout: 2000,

@@ -30,6 +30,20 @@ export const unlinkImg = async (name: string) => {
       await fs.unlink(path.resolve(APP_PATH, "uploads", name));
 };
 
+export const writeToFile = async (
+      filePath: string,
+      data: string,
+      mode = "w"
+) => {
+      let fpath = path.resolve(APP_PATH, filePath);
+
+      let file_descriptor = await fs.open(fpath, mode);
+
+      await fs.writeFile(fpath, data, "utf8");
+
+      await file_descriptor.close();
+};
+
 /**
  *
  * this data shouldn't change order
