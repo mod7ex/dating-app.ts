@@ -223,14 +223,6 @@ export default {
                         }),
                   };
             },
-
-            storeLocation(state) {
-                  return {
-                        countries: state.countries,
-                        states: state.states,
-                        cities: state.cities,
-                  };
-            },
       },
 
       mutations: {
@@ -264,17 +256,20 @@ export default {
                   commit("CLOSE_SIDEBAR");
             },
 
-            empty_location({ commit }) {
+            empty_location_options({ commit }) {
                   commit("SET_COUNTRIES", []);
                   commit("SET_STATES", []);
                   commit("SET_CITIES", []);
             },
 
-            fetch_countries({ commit }, payload) {
-                  if (!payload) return commit("SET_COUNTRIES", []);
+            fetch_countries({ commit, rootState }) {
+                  if (!rootState.me.myLocation.country.name)
+                        return commit("SET_COUNTRIES", []);
 
                   xhrApiLocations
-                        .get(`/countries?name_like=${payload}`)
+                        .get(
+                              `/countries?name_like=${rootState.me.myLocation.country.name}`
+                        )
                         .then((responce) => {
                               commit("SET_COUNTRIES", responce.data);
                         })
@@ -289,12 +284,15 @@ export default {
                         });
             },
 
-            fetch_states({ commit }, payload) {
-                  if (!payload.v) return commit("SET_STATES", []);
+            fetch_states({ commit, rootState }) {
+                  if (!rootState.me.myLocation.country.code)
+                        return commit("SET_STATES", []);
+                  if (!rootState.me.myLocation.state.name)
+                        return commit("SET_STATES", []);
 
                   xhrApiLocations
                         .get(
-                              `/states?name_like=${payload.v}&country_code=${payload.country_code}`
+                              `/states?name_like=${rootState.me.myLocation.state.name}&country_code=${rootState.me.myLocation.country.code}`
                         )
                         .then((responce) => {
                               commit("SET_STATES", responce.data);
@@ -310,12 +308,17 @@ export default {
                         });
             },
 
-            fetch_cities({ commit }, payload) {
-                  if (!payload) return commit("SET_CITIES", []);
+            fetch_cities({ commit, rootState }) {
+                  if (!rootState.me.myLocation.country.code)
+                        return commit("SET_CITIES", []);
+                  if (!rootState.me.myLocation.state.code)
+                        return commit("SET_CITIES", []);
+                  if (!rootState.me.myLocation.city.name)
+                        return commit("SET_CITIES", []);
 
                   xhrApiLocations
                         .get(
-                              `/cities?name_like=${payload.v}&country_code=${payload.country_code}&state_code=${payload.state_code}`
+                              `/cities?name_like=${rootState.me.myLocation.city.name}&country_code=${rootState.me.myLocation.country.code}&state_code=${rootState.me.myLocation.state.code}`
                         )
                         .then((responce) => {
                               commit("SET_CITIES", responce.data);

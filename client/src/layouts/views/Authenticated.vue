@@ -30,7 +30,7 @@
 <script>
 import Footer from "../../components/Footer.vue";
 import Sidebar from "../../components/Sidebar.vue";
-import { inject, computed, onMounted, onUnmounted } from "vue";
+import { inject, computed, onMounted, onUnmounted, watch } from "vue";
 import { useStore } from "vuex";
 
 export default {

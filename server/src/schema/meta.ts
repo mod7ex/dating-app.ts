@@ -19,13 +19,10 @@ export const metaSchema = object({
                   .nullable(),
 
             location: object({
-                  country: string().nullable(),
-
-                  region: string().nullable(),
-
-                  city: string().nullable(),
-
-                  timezone: string().nullable(),
+                  country: number().nullable(),
+                  region: number().nullable(),
+                  city: number().nullable(),
+                  timezone: number().nullable(),
             }).nullable(),
 
             marital_status: number()

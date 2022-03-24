@@ -24,11 +24,11 @@
                         type="text"
                         label="Country"
                         name="country"
-                        v-model="location.country.name"
+                        v-model="myLocation.country.name"
                   />
                   <OptionsListing
                         v-model="meta.location.country"
-                        :options="storeLocation.countries"
+                        :options="countriesList"
                   />
             </FormField>
 
@@ -37,11 +37,11 @@
                         type="text"
                         label="Region"
                         name="region"
-                        v-model="location.state.name"
+                        v-model="myLocation.state.name"
                   />
                   <OptionsListing
-                        v-model="meta.location.state"
-                        :options="storeLocation.states"
+                        v-model="meta.location.region"
+                        :options="statesList"
                   />
             </FormField>
 
@@ -50,11 +50,11 @@
                         type="text"
                         label="City"
                         name="city"
-                        v-model="location.city.name"
+                        v-model="myLocation.city.name"
                   />
                   <OptionsListing
                         v-model="meta.location.city"
-                        :options="storeLocation.cities"
+                        :options="citiesList"
                   />
             </FormField>
 
@@ -62,7 +62,7 @@
                   <SelectInput
                         label="Timezone"
                         name="timezone"
-                        :items="[{ label: 'Casa gmt', value: 2 }]"
+                        :items="myTimezones"
                         v-model="meta.location.timezone"
                   />
             </FormField>
@@ -241,7 +241,7 @@ import TextArea from "../forms/TextArea.vue";
 import OptionsListing from "../forms/OptionsListing.vue";
 
 import { useStore } from "vuex";
-import { watch, computed, reactive } from "vue";
+import { watch, computed, reactive, onMounted } from "vue";
 
 import validationHandler from "../../mixins/validation";
 import { phone_number } from "../../helpers/validators";
@@ -263,7 +263,6 @@ export default {
             let store = useStore();
 
             let meta = computed(() => store.state.me.meta);
-            let storeLocation = computed(() => store.getters.storeLocation);
 
             let appOptions = store.getters.appOptions;
 
@@ -276,87 +275,64 @@ export default {
                   meta
             );
 
-            let location = reactive({
-                  country: {},
-                  state: {},
-                  city: {},
+            let countriesList = computed(() => store.state.app.countries);
+            let statesList = computed(() => store.state.app.states);
+            let citiesList = computed(() => store.state.app.cities);
+
+            let myTimezones = computed(() => store.getters.myTimezones);
+
+            let myLocation = computed(() => store.state.me.myLocation);
+
+            let dictionary = {
+                  country: "countries",
+                  state: "states",
+                  city: "cities",
+            };
+
+            onMounted(() => {
+                  store.dispatch("fetch_my_country");
+                  store.dispatch("fetch_my_state");
+                  store.dispatch("fetch_my_city");
+
+                  for (let prop of Object.keys(dictionary)) {
+                        watch(
+                              () => myLocation.value[prop],
+                              (v) => {
+                                    store.dispatch(`fetch_${dictionary[prop]}`);
+                              },
+                              { deep: true }
+                        );
+
+                        watch(
+                              () =>
+                                    meta.value.location[
+                                          prop == "state" ? "region" : prop
+                                    ],
+                              (v) => {
+                                    console.log(v);
+
+                                    store.dispatch(`set_my_${prop}`, v);
+
+                                    setTimeout(() => {
+                                          store.dispatch(
+                                                "empty_location_options"
+                                          );
+                                    }, 300);
+                              },
+                              { deep: true }
+                        );
+                  }
             });
-
-            let meta = computed(() => store.state.me.meta);
-
-            watch(
-                  () => location.country.name,
-                  (v) => {
-                        store.dispatch("fetch_countries", v);
-                  }
-            );
-
-            watch(
-                  () => location.state.name,
-                  (v) => {
-                        store.dispatch("fetch_states", {
-                              v,
-                              country_code: location.country.code,
-                        });
-                  }
-            );
-
-            watch(
-                  () => location.city.name,
-                  (v) => {
-                        store.dispatch("fetch_cities", {
-                              v,
-                              state_code: location.state.code,
-                              country_code: location.country.code,
-                        });
-                  }
-            );
-
-            watch(
-                  () => meta.value.location.country,
-                  (v) => {
-                        location.country = storeLocation.value.countries.find(
-                              (item) => item.id == v
-                        );
-
-                        setTimeout(async () => {
-                              await store.dispatch("empty_location");
-                        }, 300);
-                  }
-            );
-
-            watch(
-                  () => meta.value.location.state,
-                  (v) => {
-                        location.state = storeLocation.value.states.find(
-                              (item) => item.id == v
-                        );
-
-                        setTimeout(async () => {
-                              await store.dispatch("empty_location");
-                        }, 300);
-                  }
-            );
-
-            watch(
-                  () => meta.value.location.city,
-                  (v) => {
-                        location.city = storeLocation.value.cities.find(
-                              (item) => item.id == v
-                        );
-
-                        setTimeout(async () => {
-                              await store.dispatch("empty_location");
-                        }, 300);
-                  }
-            );
 
             return {
                   appOptions,
                   ...vHandler,
                   meta,
-                  location,
-                  storeLocation,
+                  countriesList,
+                  statesList,
+                  citiesList,
+                  myTimezones,
+                  myLocation,
             };
       },
 };

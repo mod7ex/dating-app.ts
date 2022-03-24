@@ -167,7 +167,7 @@ class User {
 
             await user.updateMeta(req.body);
 
-            res.status(StatusCodes.OK).json({ message: "User updated" });
+            res.status(StatusCodes.OK).json({ message: "Meta updated" });
       };
 
       updateUser = async (
