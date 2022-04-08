@@ -1,0 +1,35 @@
+@mixin flex(
+      $align: center,
+      $justify: center,
+      $direction: row,
+      $wrap: nowrap,
+      $gap: 0px
+) {
+      display: flex;
+      align-items: $align;
+      justify-content: $justify;
+      flex-direction: $direction;
+      flex-wrap: $wrap;
+      gap: $gap;
+}
+
+@mixin center($w: $screen-max-width) {
+      max-width: $w;
+      margin: 0 auto;
+      width: 100%;
+}
+
+@mixin shadow(
+      $x: 0px,
+      $y: 0px,
+      $blure: 7px,
+      $spread: 0px,
+      $c: $black,
+      $inset: false
+) {
+      @if $inset {
+            box-shadow: inset $x $y $blure $spread rgba($c, 0.5);
+      } @else {
+            box-shadow: $x $y $blure $spread rgba($c, 0.3);
+      }
+}
