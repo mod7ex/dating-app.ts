@@ -92,6 +92,7 @@ export const useAppStore = defineStore("app", {
             countries: [] as countryType[],
             states: [] as stateType[],
             cities: [] as cityType[],
+            timezones: [{ id: 1, name: "GMT+" }] as cityType[],
       }),
 
       getters: {
@@ -171,20 +172,24 @@ export const useAppStore = defineStore("app", {
                               return { label: item, value: i };
                         }),
 
-                        partnerAge: Array.from(
-                              Array(
-                                    state.base_data.max_age -
-                                          state.base_data.min_age +
-                                          1
-                              ).keys()
-                        ).map((i) => {
-                              return {
-                                    label: `${
-                                          i + state.base_data.min_age
-                                    } years`,
-                                    value: i + state.base_data.min_age,
-                              };
-                        }),
+                        // partnerAge: Array.from(
+                        //       Array(
+                        //             state.base_data.max_age -
+                        //                   state.base_data.min_age +
+                        //                   1
+                        //       ).keys()
+                        // ).map((i) => {
+                        //       return {
+
+                        //             label: `${
+                        //                   i + state.base_data.min_age
+                        //             } years`,
+                        //             value: i + state.base_data.min_age,
+                        //       };
+                        // }),
+
+                        partner_age_max: state.base_data.max_age,
+                        partner_age_min: state.base_data.min_age,
 
                         languages: state.base_data.languages.map((item, i) => {
                               return { label: item, value: i };
@@ -210,6 +215,12 @@ export const useAppStore = defineStore("app", {
                         label: city.name,
                   }));
             },
+            timezoneOptions(state) {
+                  return state.timezones.map((tz) => ({
+                        value: tz.id,
+                        label: tz.name,
+                  }));
+            },
       },
 
       actions: {
@@ -220,7 +231,7 @@ export const useAppStore = defineStore("app", {
             },
 
             async fetch_countries(query: string) {
-                  if (!query) return (this.countries = []);
+                  if (!query) return;
 
                   this.countries = await get<any[]>(
                         `/countries?name_like=${query}`
@@ -228,8 +239,7 @@ export const useAppStore = defineStore("app", {
             },
 
             async fetch_states(query: string) {
-                  if (!meStore.meta.location.country || !query)
-                        return (this.states = []);
+                  if (!meStore.meta.location.country || !query) return;
 
                   this.countries = await get<any[]>(
                         `/states?name_like=${query}&country_id=${meStore.meta.location.country}`
@@ -242,7 +252,7 @@ export const useAppStore = defineStore("app", {
                         !meStore.meta.location.state ||
                         !query
                   )
-                        return (this.cities = []);
+                        return;
 
                   this.countries = await get<any[]>(
                         `/cities?name_like=${query}&country_id=${meStore.meta.location.country}&state_id=${meStore.meta.location.state}`

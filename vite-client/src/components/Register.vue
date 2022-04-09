@@ -34,17 +34,19 @@ let onSubmit = () => {
 
             <el-form-item>
                   <el-input
-                        type="password"
                         v-model="register.password"
+                        type="password"
                         placeholder="Password"
+                        show-password
                   />
             </el-form-item>
 
             <el-form-item>
                   <el-input
+                        v-model="register.password_confirmation"
                         type="password"
-                        v-model="register.password"
                         placeholder="Confirm password"
+                        show-password
                   />
             </el-form-item>
 

@@ -37,9 +37,10 @@ let onSubmit = () => {
 
             <el-form-item>
                   <el-input
-                        type="password"
                         v-model="login.password"
+                        type="password"
                         placeholder="Password"
+                        show-password
                   />
             </el-form-item>
 

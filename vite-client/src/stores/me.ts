@@ -5,9 +5,10 @@ export const useMeStore = defineStore("me", {
             user: {},
             meta: {
                   location: {
-                        country: "",
-                        state: "",
-                        city: "",
+                        country: "" as string | number,
+                        state: "" as string | number,
+                        city: "" as string | number,
+                        timezone: "" as string | number,
                   },
             },
       }),
