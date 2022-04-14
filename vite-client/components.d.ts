@@ -42,6 +42,8 @@ declare module 'vue' {
     IMdiAccountBox: typeof import('~icons/mdi/account-box')['default']
     IMdiChat: typeof import('~icons/mdi/chat')['default']
     IMdiDelete: typeof import('~icons/mdi/delete')['default']
+    IMdiEdit: typeof import('~icons/mdi/edit')['default']
+    IMdiIcon: typeof import('~icons/mdi/icon')['default']
     IMdiIconMenu: typeof import('~icons/mdi/icon-menu')['default']
     IMdiIconUpload: typeof import('~icons/mdi/icon-upload')['default']
     IMdiImage: typeof import('~icons/mdi/image')['default']

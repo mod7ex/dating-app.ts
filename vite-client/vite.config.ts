@@ -28,6 +28,12 @@ export default defineConfig({
             Icons({
                   // expiremental
                   autoInstall: true,
+
+                  scale: 1, // Scale of icons against 1em
+                  defaultStyle: "", // Style apply to icons
+                  defaultClass: "app-icon", // Class names apply to icons
+                  compiler: "vue3", // 'vue2', 'vue3', 'jsx'
+                  jsx: "react", // 'react' or 'preact'
             }),
       ],
 

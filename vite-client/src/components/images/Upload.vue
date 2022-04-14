@@ -1,15 +1,22 @@
 <script setup lang="ts">
 import { ref, defineAsyncComponent } from "vue";
+import type { UploadInstance, UploadUserFile } from "element-plus";
 
 const Preview = defineAsyncComponent(() => import("./UploadPreview.vue"));
 
-import type { UploadInstance, UploadUserFile } from "element-plus";
+const maxFilesNumber = ref(3);
 
-const uploadRef = ref<UploadInstance>();
 const filesList = ref<UploadUserFile[]>([]);
 
+let dropFile = (uid: number | undefined) => {
+      let index = filesList.value.findIndex((file) => file.raw?.uid === uid);
+
+      if (index < 0) return;
+
+      filesList.value.splice(index, 1);
+};
+
 const submitUpload = () => {
-      // uploadRef.value!.submit();
       console.log(filesList.value);
 };
 </script>
@@ -18,11 +25,11 @@ const submitUpload = () => {
       <el-upload
             class="upload-area"
             drag
-            action="https://jsonplaceholder.typicode.com/posts/"
             multiple
+            :disabled="filesList.length >= maxFilesNumber"
             :auto-upload="false"
             :show-file-list="false"
-            :limit="3"
+            :limit="maxFilesNumber - filesList.length"
             :file-list="filesList"
       >
             <i-mdi-upload />
@@ -32,8 +39,15 @@ const submitUpload = () => {
             </div>
             <template #tip>
                   <div class="el-upload__tip">
-                        jpg/png files with a size less than 500kb, less than 3
-                        images
+                        <span
+                              >jpg/png files with a size less than 500kb, less
+                              than 3 images
+                        </span>
+                        <span
+                              class="notice"
+                              v-if="filesList.length == maxFilesNumber"
+                              >({{ maxFilesNumber }} images)</span
+                        >
                   </div>
             </template>
       </el-upload>
@@ -47,9 +61,12 @@ const submitUpload = () => {
       <!-- ****************** -->
 
       <div class="preview-upload">
-            <div v-for="(file, i) in filesList" :key="i">
-                  <Preview :file="file.raw" />
-            </div>
+            <Preview
+                  v-for="(file, i) in filesList"
+                  :key="file.raw.uid"
+                  :file="file.raw"
+                  @dropFile="dropFile(file.raw.uid)"
+            />
       </div>
 </template>
 
@@ -66,6 +83,10 @@ const submitUpload = () => {
 
       .el-upload__tip {
             text-align: center;
+
+            .notice {
+                  color: red;
+            }
       }
 
       .el-upload {

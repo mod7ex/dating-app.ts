@@ -32,12 +32,16 @@ onMounted(() => {
       >
             <img :ref="(el) => (img = el)" />
             <div class="overlay" v-if="mouseIn">
-                  <el-button circle>
-                        <i-mdi-delete />
+                  <el-button circle @click="$emit('dropFile')">
+                        <el-icon color="primary">
+                              <i-mdi-delete />
+                        </el-icon>
                   </el-button>
 
                   <el-button circle>
-                        <i-mdi-zoom-in />
+                        <el-icon color="primary">
+                              <i-mdi-zoom-in />
+                        </el-icon>
                   </el-button>
             </div>
       </div>

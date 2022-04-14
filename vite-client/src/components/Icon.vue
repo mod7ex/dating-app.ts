@@ -1,15 +1,23 @@
 <script setup lang="ts">
-import { h } from "vue";
+import { h, ref } from "vue";
 
 let props = withDefaults(defineProps<{ name: string }>(), {
-      name: "div",
+      name: "edit",
 });
 
 const icon = () => {
       return h(`i-mdi-${props.name}`);
 };
+
+// let component = ref(`i-mdi-${props.name}`);
 </script>
 
 <template>
-      <icon />
+      <!-- <icon /> -->
+
+      <el-icon color="primary">
+            <i-mdi-edit />
+      </el-icon>
+
+      <!-- <component :is="component" /> -->
 </template>

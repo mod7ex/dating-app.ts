@@ -64,7 +64,7 @@ let moveTo = async (name: string) => {
                               @click="moveTo(rt.name)"
                               :index="`${i + 1}`"
                         >
-                              <span>--> <Icon :name="rt.icon" /></span>
+                              <Icon :name="rt.icon" />
                               <span>{{ rt.label }}</span>
                         </el-menu-item>
 

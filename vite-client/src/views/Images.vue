@@ -20,7 +20,7 @@ let comps = [
 
 <template>
       <Auth>
-            <Tabs :comps="comps" :defaultTab="1" />
+            <Tabs :comps="comps" :defaultTab="2" />
       </Auth>
 </template>
 
