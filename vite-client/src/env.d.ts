@@ -17,6 +17,7 @@ declare global {
       interface HeaderPage {
             name: string;
             label: string;
+            icon?: string;
       }
 
       type countryType = {

@@ -1,24 +1,26 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { ref, defineAsyncComponent } from "vue";
+
+let comps = [
+      {
+            label: "Upload new images",
+            comp: defineAsyncComponent(
+                  () => import("@/components/images/Upload.vue")
+            ),
+      },
+
+      {
+            label: "Preview images",
+            comp: defineAsyncComponent(
+                  () => import("@/components/images/Preview.vue")
+            ),
+      },
+];
+</script>
 
 <template>
       <Auth>
-            <!-- <div class="auth-form">
-                  <el-menu
-                        :default-active="activeTab"
-                        class="el-menu-demo"
-                        mode="horizontal"
-                        @select="handleSelect"
-                  >
-                        <el-menu-item index="1">Login</el-menu-item>
-                        <el-menu-item index="2">Sign-Up</el-menu-item>
-                  </el-menu>
-
-                  <!-- the form -->
-
-                  <KeepAlive :max="3600">
-                        <component :is="currentTab" />
-                  </KeepAlive> -->
-            </div>
+            <Tabs :comps="comps" :defaultTab="1" />
       </Auth>
 </template>
 

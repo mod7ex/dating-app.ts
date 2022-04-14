@@ -14,6 +14,12 @@ const routes = [
             name: "Settings",
             component: () => import("../views/Settings.vue"),
       },
+
+      {
+            path: "/images",
+            name: "Images",
+            component: () => import("../views/Images.vue"),
+      },
 ];
 
 export default createRouter({

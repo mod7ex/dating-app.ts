@@ -18,7 +18,7 @@ let drawer = ref(false);
 
             <Sidebar v-model="drawer" />
 
-            <!-- inside default id -->
+            <!-- inside default id passed to base -->
 
             <div class="container">
                   <slot>default content</slot>

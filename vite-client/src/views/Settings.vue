@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, defineAsyncComponent } from "vue";
+import { defineAsyncComponent } from "vue";
 
 let comps = [
       {

@@ -1,7 +1,23 @@
 <script setup lang="ts">
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
+
+let router = useRouter();
+let route = useRoute();
+
+console.log();
+
+let routes: HeaderPage[] = [
+      { name: "Settings", label: "Settings", icon: "settings" },
+      { name: "Images", label: "Photos", icon: "image" },
+      { name: "Chats", label: "Chats", icon: "chat" },
+      { name: "Search", label: "Search", icon: "search" },
+];
+
+let defaultActive = computed(
+      () => routes.findIndex((rt) => rt.name === route.name) + 1
+);
 
 let props = defineProps<{ modelValue: boolean }>();
 
@@ -16,8 +32,6 @@ let emit = defineEmits<{
 //             emit("update:modelValue", drawer.value);
 //       }
 // );
-
-let router = useRouter();
 
 let moveTo = async (name: string) => {
       await router.push({ name });
@@ -41,15 +55,25 @@ let moveTo = async (name: string) => {
             <template #default>
                   <el-menu
                         active-text-color="#409eff"
-                        default-active="2"
+                        :default-active="`${defaultActive}`"
                         text-color="#000"
                   >
-                        <el-menu-item @click="moveTo('Settings')" index="1">
+                        <el-menu-item
+                              v-for="(rt, i) in routes"
+                              :key="i"
+                              @click="moveTo(rt.name)"
+                              :index="`${i + 1}`"
+                        >
+                              <span>--> <Icon :name="rt.icon" /></span>
+                              <span>{{ rt.label }}</span>
+                        </el-menu-item>
+
+                        <!-- <el-menu-item @click="moveTo('Settings')" index="1">
                               <i-mdi-settings />
                               <span>Settings</span>
                         </el-menu-item>
 
-                        <el-menu-item @click="moveTo('Settings')" index="2">
+                        <el-menu-item @click="moveTo('Images')" index="2">
                               <i-mdi-image />
                               <span>Photos</span>
                         </el-menu-item>
@@ -62,7 +86,7 @@ let moveTo = async (name: string) => {
                         <el-menu-item @click="moveTo('Settings')" index="4">
                               <i-mdi-search />
                               <span>Find matches</span>
-                        </el-menu-item>
+                        </el-menu-item> -->
                   </el-menu>
             </template>
 

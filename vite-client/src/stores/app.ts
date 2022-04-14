@@ -172,22 +172,6 @@ export const useAppStore = defineStore("app", {
                               return { label: item, value: i };
                         }),
 
-                        // partnerAge: Array.from(
-                        //       Array(
-                        //             state.base_data.max_age -
-                        //                   state.base_data.min_age +
-                        //                   1
-                        //       ).keys()
-                        // ).map((i) => {
-                        //       return {
-
-                        //             label: `${
-                        //                   i + state.base_data.min_age
-                        //             } years`,
-                        //             value: i + state.base_data.min_age,
-                        //       };
-                        // }),
-
                         partner_age_max: state.base_data.max_age,
                         partner_age_min: state.base_data.min_age,
 
