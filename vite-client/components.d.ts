@@ -60,6 +60,8 @@ declare module 'vue' {
     IMdiZoonIn: typeof import('~icons/mdi/zoon-in')['default']
     Login: typeof import('./src/components/Login.vue')['default']
     Meta: typeof import('./src/components/settings/Meta.vue')['default']
+    Overlay: typeof import('./src/components/Overlay.vue')['default']
+    Photo: typeof import('./src/components/images/Photo.vue')['default']
     Preview: typeof import('./src/components/images/Preview.vue')['default']
     Register: typeof import('./src/components/Register.vue')['default']
     Tabs: typeof import('./src/components/Tabs.vue')['default']

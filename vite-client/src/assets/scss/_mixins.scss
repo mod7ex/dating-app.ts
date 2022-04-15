@@ -10,7 +10,7 @@
       justify-content: $justify;
       flex-direction: $direction;
       flex-wrap: $wrap;
-      gap: $gap;
+      gap: $gap !important;
 }
 
 @mixin center($w: $screen-max-width) {

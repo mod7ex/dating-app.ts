@@ -26,6 +26,7 @@ const submitUpload = () => {
             class="upload-area"
             drag
             multiple
+            action="/"
             :disabled="filesList.length >= maxFilesNumber"
             :auto-upload="false"
             :show-file-list="false"
