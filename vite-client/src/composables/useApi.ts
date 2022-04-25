@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosRequestConfig } from 'axios';
+import axios, { AxiosResponse, AxiosRequestConfig, AxiosError } from 'axios';
 import { ref, computed, reactive } from 'vue';
 
 interface IApiRequestConfig<D> extends AxiosRequestConfig<D> {
@@ -19,8 +19,19 @@ const apiAxiosInstance = axios.create(apiConfig);
 export const useApi = <T, D>(url: string, config: IApiRequestConfig<D> = { skip: true, ...apiConfig }) => {
    const data = ref<T>();
    const responce = ref<AxiosResponse>();
-   const error = ref<Error>();
+   const error = ref<unknown>();
    const loading = ref<boolean>(false);
+
+   const errorMsg = computed(() => {
+      if (!error.value) return null;
+
+      if ((error.value as AxiosError).response) {
+         return (error.value as AxiosError).response?.data?.message;
+      } if ((error.value as AxiosError).request) {
+         return 'Something went wrong!';
+      }
+      return (error.value as Error).message;
+   });
 
    const fetch = async () => {
       loading.value = true;
@@ -33,9 +44,10 @@ export const useApi = <T, D>(url: string, config: IApiRequestConfig<D> = { skip:
 
          responce.value = result;
          data.value = result.data;
-      } catch (e :any) {
-         error.value = e;
+      } catch (e :unknown) {
+         error.value = e as Error;
          console.log('Api call error; ', e);
+         console.log('Error message; ', errorMsg.value);
       } finally {
          loading.value = false;
       }
