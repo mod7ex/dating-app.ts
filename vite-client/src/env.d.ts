@@ -1,8 +1,8 @@
 /// <reference types="vite/client" />
-import { AxiosInstance } from "axios";
+import { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-declare module "*.vue" {
-      import type { DefineComponent } from "vue";
+declare module '*.vue' {
+      import type { DefineComponent } from 'vue';
       // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
       const component: DefineComponent<{}, {}, any>;
       export default component;
@@ -40,4 +40,8 @@ declare global {
             state_code: string;
             country_code: string;
       };
+
+      interface IApiRequestConfig extends AxiosRequestConfig {
+            skip?: boolean
+      }
 }
